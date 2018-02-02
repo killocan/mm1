@@ -1,0 +1,13 @@
+BUGS:
+
+- Ajustar corrida para come�ar com 1 px depois passar para 3 quando j� correndo.
+- Escada a entrada pela direita t� errado.
+- Passar para float o x,y,velx,vely...
+- Mudar velocidade do scroll vertical da tela.
+
+X Velocidade de salto tanto pra cima quanto a queda � maior que no jogo (influencia colisao com o mapa).
+--- Parece estar ok, mudei altura do personagem no salto.
+
+- Camera fodida quando sala � protegida de visao dos dois lados (gutsman stage principalmente)
+--- Colocar ela em "trilhos" e corrigir sempre q for sair fora.
+----- ACHO Q CORRIGI :D

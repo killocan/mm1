@@ -1,0 +1,7 @@
+*~
+*.swp
+*.o
+megaman
+map_viewer
+map_test
+map_editor

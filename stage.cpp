@@ -1,0 +1,988 @@
+/*
+ * Killocan 2013
+ * http://killocan.blogspot.com
+*/
+
+#include <stdio.h>
+
+#include "stage.h"
+
+#include "tileactions.h"
+#include "spritefiles.h"
+#include "defines.h"
+#include "globalgamestate.h"
+#include "globals.h"
+
+#include "blader.h"
+#include "beak.h"
+#include "supercutter.h"
+#include "flyingshell.h"
+#include "killerbullet.h"
+#include "spine.h"
+#include "met.h"
+#include "picketman.h"
+#include "sniperjoe.h"
+#include "peng.h"
+#include "bigeye.h"
+#include "flea.h"
+#include "octopusbattery.h"
+#include "screwbomber.h"
+#include "bombomb.h"
+#include "crazyrazy.h"
+#include "tacklefire.h"
+#include "moveplatform.h"
+#include "lightningwall.h"
+#include "sparkle.h"
+#include "firepillar.h"
+#include "firebolt.h"
+#include "lifechargerbig.h"
+#include "lifechargerlittle.h"
+#include "weaponchargerbig.h"
+#include "weaponchargerlittle.h"
+#include "gutsmanrock.h"
+#include "newlifeitem.h"
+#include "bonuspoint.h"
+#include "bossdoor.h"
+#include "sparkleenm.h"
+#include "watcher.h"
+
+#include "hitexplosion.h"
+#include "explosionlittle.h"
+#include "megamanexplosion.h"
+
+#include "gutsman.h"
+
+static volatile int update_scroll = 0;
+static void screenscroll_timer()
+{
+  update_scroll = 1;
+}
+END_OF_FUNCTION(screenscroll_timer);
+
+Stage::Stage(std::string stage_path, Camera & camera, Player ** player)//, std::vector<Character *> & characters_vec)
+{
+  cur_waypoint = 0;
+  horz_scroll  = false;
+  has_fg_tiles = false;
+
+  hasMovingPlatform = false;
+
+  reach_max_x = false;
+
+  scroll_count = 0;
+
+  load(stage_path, camera, player);
+
+  LOCK_VARIABLE(update_scroll);
+  LOCK_FUNCTION(screenscroll_timer);
+  install_int(screenscroll_timer, 110);
+}
+
+Stage::~Stage()
+{
+  remove_int(screenscroll_timer);
+
+  unload();
+}
+
+unsigned char Stage::tileAction(int x, int y) const
+{
+  //NOTE: Not supposed to happen, remove on final version.
+  //if (x < 0 || y < 0) return mm_tile_actions::TILE_SOLID;
+
+  return map[y][x].action;
+}
+
+unsigned char Stage::tileNumber(int x, int y) const
+{
+  //NOTE: Not supposed to happen, remove on final version.
+  //if (x < 0 || y < 0) return mm_tile_actions::TILE_SOLID;
+
+  return map[y][x].tile_number;
+}
+
+unsigned char Stage::tileActionUnnormalized(int x, int y) const
+{
+  x /= mm_graphs_defs::TILE_SIZE;
+  y /= mm_graphs_defs::TILE_SIZE;
+  return map[y][x].action;
+}
+
+unsigned char Stage::tileNumberUnnormalized(int x, int y) const
+{
+  x /= mm_graphs_defs::TILE_SIZE;
+  y /= mm_graphs_defs::TILE_SIZE;
+  return map[y][x].tile_number;
+}
+
+void Stage::setTileAction(int x, int y, unsigned char action)
+{
+  map[y][x].action = action;
+}
+
+void Stage::setTileNumber(int x, int y, unsigned char tile_number)
+{
+  map[y][x].tile_number = tile_number;
+}
+
+int Stage::unload()
+{
+#if 0
+  std::vector<RLE_SPRITE*>::iterator i;
+  for (i = tiles.tile_img_rle.begin(); i != tiles.tile_img_rle.end(); ++i)
+  {
+    destroy_rle_sprite(*i);
+  }
+  tiles.tile_img_rle.clear();
+#endif
+  std::vector<BITMAP*>::iterator i;
+  for (i = tiles.tile_img.begin(); i != tiles.tile_img.end(); ++i)
+  {
+    destroy_bitmap(*i);
+  }
+  tiles.tile_img.clear();
+
+  destroy_bitmap(tileset);
+  tileset = NULL;
+
+  free(sectors);
+  sectors = NULL;
+
+  for(int i = 0; i < max_y; i++)
+  {
+    free(map[i]);
+    map[i] = NULL;
+  }
+
+  free(map);
+  map = NULL;
+
+  std::map<unsigned int, AnimSequence *>::iterator it;
+  for (it = preLoadedSprites.begin(); it != preLoadedSprites.end(); ++it)
+  {
+    delete it->second;
+  }
+
+  return 0;
+}
+
+void Stage::setWaypoint(Player * player)
+{
+  player->x = waypoints[cur_waypoint].x;
+  player->y = waypoints[cur_waypoint].y;
+  scroll_count = 0;
+}
+
+void Stage::defineCameraSector(int x, int y, bool state)
+{
+  int ydesl = y / mm_graphs_defs::TILES_Y;
+  int xdesl = x / mm_graphs_defs::TILES_X;
+  int sector = ydesl*(max_x/mm_graphs_defs::TILES_X)+xdesl;
+
+  sectors[sector].scroll_forbid = state;
+}
+
+//#define ignore_result(x) ({ __typeof__(x) z = x; (void)sizeof z; })
+int Stage::load(const std::string & stage_path, Camera & camera, Player ** player)
+{
+  FILE *fp;
+
+  std::string stage_file = stage_path + "/stage.dat";
+  if ((fp = fopen(stage_file.c_str(), "rb")) == NULL)
+  {
+    return -1;
+  }
+
+  size_t result = fread(&max_x, sizeof(int), 1, fp);
+  result = fread(&max_y, sizeof(int), 1, fp);
+  result = fread(&default_tile, sizeof(unsigned char), 1, fp);
+  if (result == 42) // Compiler, please, just stop complaining T.T i don't care about this result, if it fails, fuck it! 
+  {
+    result = 0;
+  }
+  
+  int sectors_num = (max_x/mm_graphs_defs::TILES_X) * (max_y/mm_graphs_defs::TILES_Y);
+  sectors = (sector_t*) malloc(sizeof(sector_t) * sectors_num);
+  memset(sectors, 0, sizeof(sector_t) * sectors_num);
+
+  map = (MAP_INFO**) malloc(sizeof(MAP_INFO*) * max_y);
+  for(int i = 0; i < max_y; i++)
+  {
+    map[i] = (MAP_INFO*) malloc(sizeof(MAP_INFO) * max_x);
+    result = fread(&(map[i][0]), sizeof(MAP_INFO), max_x, fp);
+  }
+
+  result = 0;
+
+  fclose(fp);
+
+  bool hasPicketMan = false;
+  bool hasCrazyRazy = false;
+  bool hasWatcher   = false;
+
+  for (int y = 0; y < max_y; ++y)
+  {
+    for (int x = 0; x < max_x; ++x)
+    {
+      if (map[y][x].action == mm_tile_actions::TILE_MEGAMAN_WAYPOINT)
+      {
+        int waypointX = x*mm_graphs_defs::TILE_SIZE+map[y][x].xOffset;
+        waypoint_t waypoint = {waypointX, y*mm_graphs_defs::TILE_SIZE};
+        waypoints.push_back(waypoint);
+      }
+      else if (map[y][x].action == mm_tile_actions::TILE_MAP_BEGIN)
+      {
+        camera.x = x*mm_graphs_defs::TILE_SIZE;
+        camera.y = y*mm_graphs_defs::TILE_SIZE;
+      }
+      else if (map[y][x].action == mm_tile_actions::TILE_SCROLL_LIMIT)
+      {
+        int ydesl = y / mm_graphs_defs::TILES_Y;
+        int xdesl = x / mm_graphs_defs::TILES_X;
+        int sector = ydesl*(max_x/mm_graphs_defs::TILES_X)+xdesl;
+
+        sectors[sector].scroll_forbid = true;
+      }
+      else if (map[y][x].action == mm_tile_actions::TILE_BOSS)
+      {
+        int ydesl = y / mm_graphs_defs::TILES_Y;
+        int xdesl = x / mm_graphs_defs::TILES_X;
+        int sector = ydesl*(max_x/mm_graphs_defs::TILES_X)+xdesl;
+
+        sectors[sector].has_boss = true;
+      }
+      //else if (map[y][x].action == mm_tile_actions::TILE_FOREGROUND)
+      else if (map[y][x].isForeground == true)
+      {
+        int ydesl = y / mm_graphs_defs::TILES_Y;
+        int xdesl = x / mm_graphs_defs::TILES_X;
+        int sector = ydesl*(max_x/mm_graphs_defs::TILES_X)+xdesl;
+
+        sectors[sector].has_fg_tiles = true;
+        this->has_fg_tiles = true;
+      }
+      else
+      {
+        unsigned char tile_action = map[y][x].action;
+        if ((tile_action > mm_tile_actions::TILE_DEATH) && (tile_action < mm_tile_actions::TILE_TIMER))
+        {
+          if (tile_action == mm_tile_actions::TILE_ENEMY_PICKETMAN)
+            hasPicketMan = true;
+          else if (tile_action == mm_tile_actions::TILE_ENEMY_CRAZYRAZY)
+            hasCrazyRazy = true;
+          else if (tile_action == mm_tile_actions::TILE_ENEMY_WATCHER)
+            hasWatcher = true;
+
+          if (preLoadedSprites.find(tile_action) == preLoadedSprites.end())
+          {
+#ifdef DEBUG
+            fprintf(stderr,"Preload: [%s]\n", mm_spritefiles::sprite_files[tile_action]);
+#endif
+            preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+              (tile_action, new AnimSequence(mm_spritefiles::sprite_files[tile_action])));
+          }
+        }
+      }
+    }
+  }
+
+#ifdef DEBUG
+  fprintf(stderr,"Preload: [megaman]\n");
+#endif
+  // Megaman, keep a copy for weapon color change.
+  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+    (mm_spritefiles::MEGAMAN_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::MEGAMAN_SPRITES], true)));
+
+#ifdef DEBUG
+  fprintf(stderr,"Preload: [bullets]\n");
+#endif
+  // Weapons
+  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+    (mm_spritefiles::WEAPONS_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_SPRITES])));
+  // Iceman TODO: load bassed in megaman curr avaliable weapons
+  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+    (mm_spritefiles::WEAPONS_ICEMAN, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_ICEMAN])));
+
+#ifdef DEBUG
+  fprintf(stderr,"Preload: [explosion]\n");
+#endif
+  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+    (mm_spritefiles::HITEXPLOSION_SPRITES,     new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::HITEXPLOSION_SPRITES])));
+  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+    (mm_spritefiles::EXPLOSIONLITTLE_SPRITES,  new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::EXPLOSIONLITTLE_SPRITES])));
+  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+    (mm_spritefiles::MEGAMANEXPLOSION_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::MEGAMANEXPLOSION_SPRITES])));
+
+  if (hasPicketMan == true)
+  {
+#ifdef DEBUG
+    fprintf(stderr,"Preload: [PicketMan Hammer]\n");
+#endif
+    preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+      (mm_spritefiles::PICKETMANHAMMER_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::PICKETMANHAMMER_SPRITES])));
+  }
+
+  if (hasCrazyRazy == true)
+  {
+#ifdef DEBUG
+    fprintf(stderr,"Preload: [CrazyRazy Upper and Lower parts]\n");
+#endif
+    preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+      (mm_spritefiles::CRAZYRAZY_LOWER_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::CRAZYRAZY_LOWER_SPRITES])));
+    preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+      (mm_spritefiles::CRAZYRAZY_UPPER_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::CRAZYRAZY_UPPER_SPRITES])));
+  }
+
+  if (hasWatcher == true)
+  {
+#ifdef DEBUG
+    fprintf(stderr,"Preload: [Watcher gun]\n");
+#endif
+    preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+      (mm_spritefiles::SPARKLE_ENM_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::SPARKLE_ENM_SPRITES])));
+  }
+
+#ifdef DEBUG
+    fprintf(stderr,"Preload: [Bonus Point]\n");
+#endif
+  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *>
+    (mm_spritefiles::BONUS_POINT_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::BONUS_POINT_SPRITES])));
+
+#ifdef DEBUG
+  fprintf(stderr,"Preload: [BossDoor]\n");
+#endif
+  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+      (mm_spritefiles::BOSSDOOR_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::BOSSDOOR_SPRITES])));
+
+#ifdef DEBUG
+  fprintf(stderr,"Preload OK.\n");
+#endif
+
+  *player = new Player(*this);
+  Player * cur_player = m_player = *player;
+  cur_player->sx = 0;
+  cur_player->sy = 0;
+  cur_player->x = waypoints[cur_waypoint].x;
+  cur_player->y = waypoints[cur_waypoint].y;
+  cur_player->old_x = cur_player->x;
+  cur_player->old_y = cur_player->y;
+  cur_player->h = mm_player_defs::PLAYERHEIGHT;
+  cur_player->w = mm_player_defs::PLAYERWIDTH;
+  cur_player->velx = mm_player_defs::VELMOVING;
+  cur_player->vely = 0;
+  cur_player->isFacingRight  = true;
+  cur_player->isFacingDown   = false;
+  cur_player->lockjump   = false;
+  cur_player->grabstair  = false;
+  cur_player->overstair  = false;
+
+#ifdef DEBUG
+  fprintf(stderr,"Load weapons.\n");
+#endif
+  cur_player->weapons.insert(std::pair<mm_weapons::WEAPONS, int>(mm_weapons::W_MEGA_BUSTER, 100)); // +Inf :)
+  if (GlobalGameState::hasPlatformGun)
+  {
+    cur_player->weapons.insert(std::pair<mm_weapons::WEAPONS, int>(mm_weapons::W_PLATFORM_CREATOR, 28));
+  }
+  for (int i = 0; i < 6; i++) // bosses.
+  {
+    if (GlobalGameState::enemyDefeated[i] == true)
+    {
+      cur_player->weapons.insert(std::pair<mm_weapons::WEAPONS, int>((mm_weapons::WEAPONS)(i + 2), 28));
+    }
+    else
+    {
+      cur_player->weapons.insert(std::pair<mm_weapons::WEAPONS, int>((mm_weapons::WEAPONS)(i + 2), 0));
+    }
+  }
+#ifdef DEBUG
+  fprintf(stderr,"Load weapons OK.\n");
+#endif
+
+  camera.w = mm_graphs_defs::UTIL_W;
+  camera.h = mm_graphs_defs::UTIL_H;
+
+  std::string tiles_file = stage_path + "/tileset.bmp";
+  loadTiles(tiles_file);
+
+  return 0;
+}
+
+void Stage::runtimeLoadCharacter(mm_spritefiles::SPRT_TYPE characterSprite)
+{
+  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *>
+    (characterSprite, new AnimSequence(mm_spritefiles::sprite_files[characterSprite])));
+}
+
+void Stage::createEnemies(std::vector<Character *> & characters_vec)
+{
+  for (int y = 0; y < max_y; ++y)
+  {
+    for (int x = 0; x < max_x; ++x)
+    {
+      unsigned char tile_action = map[y][x].action;
+      Character * cur_char = NULL;
+      if (((tile_action > mm_tile_actions::TILE_DEATH) && (tile_action < mm_tile_actions::TILE_TIMER)) || 
+          (tile_action == mm_tile_actions::TILE_DOOR))
+      {
+        int xpos, ypos;
+        xpos = x * mm_graphs_defs::TILE_SIZE;
+        ypos = y * mm_graphs_defs::TILE_SIZE;
+        xpos += map[y][x].xOffset;
+        if ((cur_char = createCharacter(tile_action, xpos, ypos)) != NULL)
+        {
+#ifdef DEBUG
+          fprintf(stderr,"Enemy add: [%s]\n", mm_spritefiles::sprite_files[tile_action]);
+#endif
+          characters_vec.push_back(cur_char);
+        }
+      }
+    }
+  }
+}
+
+AnimSequence * Stage::getAnimSeq(unsigned int TYPE)
+{
+  return preLoadedSprites[TYPE];
+}
+
+BITMAP * Stage::getTileSet()
+{
+  return tileset;
+}
+
+void Stage::setOffset(int type, int offset)
+{
+  offsetMap.insert(std::pair<int,int>(type, offset));
+}
+
+int Stage::getOffset(int type)
+{
+  return (offsetMap[type]);
+}
+
+//inline void Stage::tileDraw(BITMAP * bmp, int tile_number, int x, int y)
+//{
+  //draw_sprite(bmp, tiles.tile_img[tile_number], x, y);
+  //blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, 32,32);
+  //draw_rle_sprite(bmp, tiles.tile_img_rle[tile_number], x, y);
+//}
+
+//void Stage::draw(BITMAP * bmp, const Camera & camera, bool hasFg, bool bg_only, bool bg)
+void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
+{
+  int i, j;
+  int mapx, mapy;
+  int map_xoff, map_yoff;
+
+  mapx = GlobalCamera::mm_camera->x / mm_graphs_defs::TILE_SIZE;
+  mapy = GlobalCamera::mm_camera->y / mm_graphs_defs::TILE_SIZE;
+
+  map_xoff = GlobalCamera::mm_camera->x & (mm_graphs_defs::TILE_SIZE-1);
+  map_yoff = GlobalCamera::mm_camera->y & (mm_graphs_defs::TILE_SIZE-1);
+
+  int x,y;
+  int xdisp = mapx + mm_graphs_defs::TILES_X==max_x ? 0 : 1;
+  int ydisp = mapy + mm_graphs_defs::TILES_Y==max_y ? 0 : 1;
+
+  xdisp += mm_graphs_defs::TILES_X;
+  ydisp += mm_graphs_defs::TILES_Y;
+
+  map_yoff = -map_yoff;
+  map_xoff = -map_xoff;
+
+  MAP_INFO * map_line;
+
+  int tile_number = 0;
+
+  if (hasFg == false)
+  {
+    y = map_yoff;
+
+    // This inner-loop is not being unrolled, maybe because of mapx being non determinist... so, unroll it by factor 4
+    if (!(mapx&1))
+    {
+      for(i = 0; i < ydisp; ++i)
+      {
+        x = map_xoff;
+        map_line = &map[mapy+i][mapx];
+        for(j = 0; j < (xdisp>>2); ++j)
+        {
+          tile_number = (*(map_line++)).tile_number;blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);x += mm_graphs_defs::TILE_SIZE;
+          tile_number = (*(map_line++)).tile_number;blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);x += mm_graphs_defs::TILE_SIZE;
+          tile_number = (*(map_line++)).tile_number;blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);x += mm_graphs_defs::TILE_SIZE;
+          tile_number = (*(map_line++)).tile_number;blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);x += mm_graphs_defs::TILE_SIZE;
+        }
+        y += mm_graphs_defs::TILE_SIZE;
+      }
+    }
+    else
+    {
+      for(i = 0; i < ydisp; ++i)
+      {
+        x = map_xoff;
+        map_line = &map[mapy+i][mapx];
+        for(j = 0; j < xdisp; ++j)
+        {
+          tile_number = (*(map_line++)).tile_number;
+          blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
+          x += mm_graphs_defs::TILE_SIZE;
+        }
+        y += mm_graphs_defs::TILE_SIZE;
+      }
+    }
+  }
+  else
+  {
+    if (bg_only == true)
+    {
+      y = map_yoff;
+      for(i = 0; i < ydisp; ++i)
+      {
+        x = map_xoff;
+        map_line = &map[mapy+i][mapx];
+        for(j = 0; j < xdisp; ++j)
+        {       
+          tile_number = (*(map_line++)).tile_number;
+          masked_blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
+          x += mm_graphs_defs::TILE_SIZE;
+        }
+        y += mm_graphs_defs::TILE_SIZE;
+      }
+    }
+    else
+    {
+      y = map_yoff;
+      for(i = 0; i < ydisp; ++i) 
+      {
+        x = map_xoff;
+        map_line = &map[mapy+i][mapx];
+        for(j = 0; j < +xdisp; ++j)
+        {
+          if ((bg == false && map[mapy + i][mapx + j].isForeground == false) ||
+              (bg == true  && map[mapy + i][mapx + j].isForeground == true))
+          {
+            x+=mm_graphs_defs::TILE_SIZE;
+            ++map_line;
+            continue;
+          }
+
+          tile_number = (*(map_line++)).tile_number;
+          masked_blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
+          x += mm_graphs_defs::TILE_SIZE;
+        }
+        y += mm_graphs_defs::TILE_SIZE;
+      }
+    }
+  }
+}
+
+bool Stage::checkForBoss(int x, int y)
+{
+  int yd = y/mm_graphs_defs::TILE_SIZE;
+  int xd = x/mm_graphs_defs::TILE_SIZE;
+  
+  int ydesl = yd / mm_graphs_defs::TILES_Y;
+  int xdesl = xd / mm_graphs_defs::TILES_X;
+  int sector = ydesl*(max_x/mm_graphs_defs::TILES_X)+xdesl;
+
+  return (sectors[sector].has_boss);
+}
+
+bool Stage::cameraSectorHasFgTiles(Camera & camera, Player & player)
+{
+  int camerax = player.x;
+
+  if (camerax < 0)
+  {
+    camerax = 0;
+  }
+  else if (camerax + camera.w >= (this->max_x*mm_graphs_defs::TILE_SIZE)) 
+  {
+    camerax = (this->max_x*mm_graphs_defs::TILE_SIZE)-camera.w;
+  }
+
+  // TODO: I think this is overdone, just divide x,y by screensize 
+  //       in each direction should do.
+  int y = camera.y/mm_graphs_defs::TILE_SIZE;
+  int x = camerax/mm_graphs_defs::TILE_SIZE;
+  
+  int ydesl = y / mm_graphs_defs::TILES_Y;
+  int xdesl = x / mm_graphs_defs::TILES_X;
+  int sector = ydesl*(this->max_x/mm_graphs_defs::TILES_X)+xdesl;
+
+  return (sectors[sector].has_fg_tiles);
+}
+
+void Stage::scrollForbid(Camera & camera)
+{
+  const int xline = (this->max_x/mm_graphs_defs::TILES_X);
+  int y      = camera.y / mm_graphs_defs::TILE_SIZE;
+
+  int x_rght = camera.x + camera.w;
+  int x_left = camera.x;
+
+  x_rght /= mm_graphs_defs::TILE_SIZE;
+  x_left /= mm_graphs_defs::TILE_SIZE;
+
+  if (x_rght >= this->max_x)
+  {
+    camera.x = (this->max_x*mm_graphs_defs::TILE_SIZE) - camera.w;
+    return;
+  }
+  else if (x_left < 0)
+  {
+    camera.x = 0;
+    return;
+  }
+
+  int ydesl  = y / mm_graphs_defs::TILES_Y;
+
+  int xDesl       = x_rght / mm_graphs_defs::TILES_X;
+  int rght_sector = ydesl*xline+xDesl;
+  int xDeslLeft   = x_left / mm_graphs_defs::TILES_X;
+  int left_sector = ydesl*xline+xDeslLeft;
+
+  if (sectors[rght_sector].scroll_forbid == true)
+  {
+    camera.x = (camera.x / mm_graphs_defs::UTIL_W) * mm_graphs_defs::UTIL_W;
+  }
+  else if (sectors[left_sector].scroll_forbid == true)
+  {
+    camera.x = ((camera.x / mm_graphs_defs::UTIL_W) * mm_graphs_defs::UTIL_W) + camera.w;
+  }
+}
+
+void Stage::doCamera(Camera & camera)
+{
+  static int dir = 0;
+
+  int camerax = (m_player->x + mm_player_defs::HALFPLAYERWIDTH) - mm_graphs_defs::UTIL_W/2;
+  if (camerax < 0)
+  {
+    camerax = 0;
+  }
+  else if (camerax + camera.w >= (this->max_x*mm_graphs_defs::TILE_SIZE)) 
+  {
+    camerax = (this->max_x*mm_graphs_defs::TILE_SIZE)-camera.w;
+  }
+
+  if (horz_scroll == false)
+  {
+    if ((m_player->sy + mm_graphs_defs::TILE_SIZE / 2) > mm_graphs_defs::UTIL_H)
+    {
+      horz_scroll = true;
+      dir = 1;
+    }
+    else if (m_player->sy < 0 && camera.y != 0)
+    {
+      //#warning TODO: VER COM CUIDADO!
+      // Only scroll UP if megaman is using the stair.
+      if (m_player->grabstair == true)
+      {
+        horz_scroll = true;
+        dir = -1;
+      }
+    }
+
+    if (horz_scroll == true)
+    {
+      GlobalGameState::playerShots.clear();
+      GlobalGameState::enemyShots.clear();
+    }
+  }
+  else if (update_scroll == 1)
+  {
+#ifdef DEBUG
+    //fprintf(stderr,"Stage::doCamera - atualizando scrool vertical [%d]\n", scroll_count);
+#endif
+
+    update_scroll = 0;
+
+    if (scroll_count < mm_graphs_defs::TILES_Y)
+    {
+      ++scroll_count;
+      camera.y += (dir*mm_graphs_defs::TILE_SIZE);
+
+      if (m_player->grabstair == true)
+      {
+        m_player->y += (dir * 2);
+        m_player->forceAnimation();
+      }
+      else
+      {
+        //#warning TODO: VER COM CUIDADO!
+        //player.y+=dir;
+      }
+    }
+    else
+    {
+      horz_scroll = false;
+      scroll_count = 0;
+    }
+  }
+
+  if (horz_scroll == false)
+  {
+    camera.x = camerax;
+    scrollForbid(camera);
+  }
+
+  m_player->calcScreenCoords();
+}
+
+void Stage::resetReachMaxX()
+{
+  reach_max_x = false;
+}
+
+void Stage::loadTiles(const std::string & stage_file)
+{
+  tileset = load_bitmap(stage_file.c_str(), NULL);
+
+  int w,h;
+  w = tileset->w - mm_graphs_defs::TILE_SIZE;
+  h = tileset->h - mm_graphs_defs::TILE_SIZE;
+  for (int y = 2; y < h; y+=mm_graphs_defs::TILE_SIZE+2)
+  {
+    for (int x = 2; x < w; x+=mm_graphs_defs::TILE_SIZE+2)
+    {
+      tiles.tile_img.push_back(create_sub_bitmap(tileset, x, y, mm_graphs_defs::TILE_SIZE, mm_graphs_defs::TILE_SIZE));
+      tiles.x_pos.push_back(0);
+    }
+  }
+}
+
+Character * Stage::createCharacter(unsigned int TYPE, int x, int y, int vx, int vy, void * param)
+{
+  Character * cur_character = NULL;
+
+  switch(TYPE)
+  {
+    case mm_tile_actions::TILE_ENEMY_BLADER:
+    {
+      cur_character = new Blader(*this, x, y, param);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_BEAK:
+    {
+      cur_character = new Beak(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_SUPERCUTTER:
+    {
+      cur_character = new SuperCutter(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_FLYINGSHELL:
+    {
+      cur_character = new FlyingShell(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_KILLERBULLET:
+    {
+      cur_character = new KillerBullet(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_SPINE:
+    {
+      cur_character = new Spine(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_MET:
+    {
+      cur_character = new Met(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_PICKETMAN:
+    {
+      cur_character = new PicketMan(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_SNIPERJOE:
+    {
+      cur_character = new SniperJoe(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_WATCHER:
+    {
+      cur_character = new Watcher(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_TACKLEFIRE:
+    {
+      cur_character = new TackleFire(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_PENG:
+    {
+      cur_character = new Peng(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_BIGEYE:
+    {
+      cur_character = new BigEye(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_FLEA:
+    {
+      cur_character = new Flea(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_BOMBOMB:
+    {
+      cur_character = new Bombomb(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_OCTOPUSBATTERY_V:
+    {
+      cur_character = new OctopusBattery(*this, x, y, OctopusBattery::VERTICAL);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_OCTOPUSBATTERY_H:
+    {
+      cur_character = new OctopusBattery(*this, x, y, OctopusBattery::HORIZONTAL);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_SCREWBOMBER:
+    {
+      cur_character = new ScrewBomber(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_ENEMY_CRAZYRAZY:
+    {
+      cur_character = new CrazyRazy(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_MOVING_PLATFORM:
+    {
+      cur_character = new MovePlatform(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_LIGHTNING_WALL:
+    {
+      cur_character = new LightningWall(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_FIRE_H_WALL:
+    {
+      cur_character = new FireBolt(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_FIRE_V_WALL:
+    {
+      cur_character = new FirePillar(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_BIG_LIFE_RECHARGE:
+    {
+      cur_character = new LifeChargerBig(*this, x, y, param);
+    }
+    break;
+    case mm_tile_actions::TILE_LITTLE_LIFE_RECHARGE:
+    {
+      cur_character = new LifeChargerLittle(*this, x, y, param);
+    }
+    break;
+    case mm_tile_actions::TILE_BIG_WEAPON_RECHARGE:
+    {
+      cur_character = new WeaponChargerBig(*this, x, y, param);
+    }
+    break;
+    case mm_tile_actions::TILE_LITTLE_WEAPON_RECHARGE:
+    {
+      cur_character = new WeaponChargerLittle(*this, x, y, param);
+    }
+    break;
+    case mm_tile_actions::TILE_GUTSMAN_ROCK:
+    {
+      cur_character = new GutsmanRock(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_NEW_LIFE:
+    {
+      cur_character = new NewLifeItem(*this, x, y, param);
+    }
+    break;
+    case mm_tile_actions::TILE_SPARKLE:
+    {
+      cur_character = new Sparkle(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TILE_DOOR:
+    {
+      cur_character = new BossDoor(*this, x, y, param);
+    }
+    break;
+    case mm_tile_actions::HIT_EXPLOSION_CHAR:
+    {
+      cur_character = new HitExplosion(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::EXPLOSION_LITTLE_CHAR:
+    {
+      cur_character = new ExplosionLittle(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::MEGAMAN_EXPLOSION_CHAR:
+    {
+      cur_character = new MegamanExplosion(*this, x, y, param);
+      cur_character->velx = vx;
+      cur_character->vely = vy;
+    }
+    break;
+    case mm_tile_actions::BOMBOMB_FRAGMENT_CHAR:
+    {
+      cur_character = new Bombomb::BombombFragment(*this, x, y);
+      cur_character->velx = vx;
+      cur_character->vely = vy;
+    }
+    break;
+    case mm_tile_actions::PICKETMAN_HAMMER_CHAR:
+    {
+      cur_character = new PicketMan::PicketManHammer(*this, x, y);
+      cur_character->velx = vx;
+      cur_character->vely = vy;
+    }
+    break;
+    case mm_tile_actions::CRAZYRAZY_LOWER_CHAR:
+    {
+      cur_character = new CrazyRazy::CrazyRazyFragmentLowerHalf(*this, x, y);
+      cur_character->velx = vx;
+    }
+    break;
+    case mm_tile_actions::CRAZYRAZY_UPPER_CHAR:
+    {
+      cur_character = new CrazyRazy::CrazyRazyFragmentUpperHalf(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::TACKLEFIRE_FRAGMENT:
+    {
+      cur_character = new TackleFire::TackleFireFragment(*this, x, y, param);
+    }
+    break;
+    case mm_tile_actions::SPARKLE_ENM_CHAR:
+    {
+      cur_character = new SparkleEnm(*this, x, y);
+      cur_character->velx = vx;
+    }
+    break;
+    case mm_tile_actions::WATCHER_FRAGMENT:
+    {
+      cur_character = new Watcher::WatcherFragment(*this, x, y);
+    }
+    break;
+    case mm_tile_actions::BONUS_POINT_CHAR:
+    {
+      cur_character = new BonusPoint(*this, x, y, param);
+    }
+    break;
+    case mm_tile_actions::GUTSMAN:
+    {
+      cur_character = new Gutsman(*this, x, y, param);
+    }
+    break;
+  }
+
+  return (cur_character);
+}
