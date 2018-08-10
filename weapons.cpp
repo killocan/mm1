@@ -14,6 +14,20 @@
 #include "camera.h"
 #include "animsequence.h"
 
+static void handleBomb(mm_weapons::weapon_st * pWeapon, Stage * stage)
+{
+  int tilecoordx, tilecoordy;
+
+  if (!stage->genericColHor(pWeapon->x, pWeapon->w, pWeapon->y + pWeapon->vy + (pWeapon->vy > 0 ? pWeapon->h : 0), tilecoordx, tilecoordy, pWeapon->vy > 0))
+  {
+    pWeapon->y += pWeapon->vy;
+  }
+  if (!stage->genericColVer(pWeapon->x + pWeapon->vx + (pWeapon->vx > 0 ? pWeapon->w : 0), pWeapon->y, pWeapon->h, tilecoordx, tilecoordy))
+  {
+    pWeapon->x += pWeapon->vx;
+  }
+}
+
 static void doWeaponSpecifics(mm_weapons::weapon_st * pWeapon, Stage * stage)
 {
   switch(pWeapon->weapon)
@@ -54,7 +68,7 @@ static void doWeaponSpecifics(mm_weapons::weapon_st * pWeapon, Stage * stage)
     break;
     case mm_weapons::W_BOMBMAN_GUN:
     {
-      ;
+      handleBomb(pWeapon, stage);
     }
     break;
     case mm_weapons::W_FIREMAN_GUN:
@@ -199,7 +213,6 @@ void mm_weapons::createMegaBuster(Player * player)
   mega_buster.bulletSpriteShet = player->cur_stage->getAnimSeq(mm_spritefiles::WEAPONS_SPRITES);
   mega_buster.weapon = mm_weapons::W_MEGA_BUSTER;
 
-  //TODO: Useless, since the game use perfect pixel collision.
   mega_buster.w = mega_buster.bulletSpriteShet->getFrame(mega_buster.frameOffset)->w;
   mega_buster.h = mega_buster.bulletSpriteShet->getFrame(mega_buster.frameOffset)->h;
 
@@ -270,7 +283,6 @@ void mm_weapons::createIceSlasher(Player * player)
   ice_slasher.bulletSpriteShet = player->cur_stage->getAnimSeq(mm_spritefiles::WEAPONS_ICEMAN);
   ice_slasher.weapon = mm_weapons::W_ICEMAN_GUN;
 
-  //TODO: Useless, since the game use perfect pixel collision.
   ice_slasher.w = ice_slasher.bulletSpriteShet->getFrame(ice_slasher.frameOffset)->w;
   ice_slasher.h = ice_slasher.bulletSpriteShet->getFrame(ice_slasher.frameOffset)->h;
 
@@ -278,6 +290,61 @@ void mm_weapons::createIceSlasher(Player * player)
 }
 
 void mm_weapons::createIceSlasher(Character * character, int x, int y, float vx, float vy, int offset)
+{
+  return;
+}
+
+void mm_weapons::createBomb(Player * player)
+{
+  mm_weapons::weapon_st bomb;
+  if (player->grabstair == false)
+  {
+    bomb.x = (float)(player->x + 58);
+    if (player->isFacingRight == false)
+    {
+      bomb.x -= 64.0f;
+    }
+
+    if (player->onground == true)
+    {
+      bomb.y = (float)(player->y + 22.0f);
+    }
+    else
+    {
+      bomb.y = (float)(player->y + 12.0f);
+    }
+  }
+  else
+  {
+    bomb.x = (float)(player->x + 52.0f);
+    if (player->isFacingRight == false)
+    {
+      bomb.x -= 48.0f;
+    }
+
+    bomb.y = (float)(player->y + 12.0f);
+  }
+
+  bomb.vx = 6.5f;
+  if (player->isFacingRight == false)
+  {
+    bomb.vx *= -1.0f;
+  }
+  bomb.vy = 0.0f;
+
+  bomb.alive  = true;
+
+  bomb.frameOffset = 0;
+  bomb.bulletSpriteShet = player->cur_stage->getAnimSeq(mm_spritefiles::WEAPONS_BOMBMAN);
+  bomb.weapon = mm_weapons::W_BOMBMAN_GUN;
+
+  bomb.w = bomb.bulletSpriteShet->getFrame(bomb.frameOffset)->w;
+  bomb.h = bomb.bulletSpriteShet->getFrame(bomb.frameOffset)->h;
+
+  GlobalGameState::playerShots.push_back(bomb);
+}
+
+void mm_weapons::createBomb(Character * character, int x, int y, float vx, float vy, int offset)
 {
   return;
 }

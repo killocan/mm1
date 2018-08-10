@@ -196,7 +196,7 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
   size_t result = fread(&max_x, sizeof(int), 1, fp);
   result = fread(&max_y, sizeof(int), 1, fp);
   result = fread(&default_tile, sizeof(unsigned char), 1, fp);
-  if (result == 42) // Compiler, please, just stop complaining T.T i don't care about this result, if it fails, fuck it! 
+  if (result == 42)
   {
     result = 0;
   }
@@ -451,6 +451,66 @@ BITMAP * Stage::getTileSet()
   return tileset;
 }
 
+bool Stage::genericColHor(int x, int w, int y, int &tilecoordx, int &tilecoordy, bool going_down)
+{
+  int tiletype = 0;
+  int tilexpixels = x - (x % mm_graphs_defs::TILE_SIZE);
+  int testend     = x + w;
+
+  tilecoordy = y / mm_graphs_defs::TILE_SIZE;
+  tilecoordx = tilexpixels/mm_graphs_defs::TILE_SIZE;
+  while(tilexpixels <= testend)
+  {
+    tiletype = this->tileAction(tilecoordx, tilecoordy);
+
+    if (going_down == false)
+    {
+      if(tiletype == mm_tile_actions::TILE_SOLID)
+        return true;
+    }
+    else
+    {
+
+      if((tiletype == mm_tile_actions::TILE_SOLID) ||
+         (tiletype == mm_tile_actions::TILE_STAIR_BEGIN))
+        return true;
+    }
+
+    ++tilecoordx;
+    tilexpixels += mm_graphs_defs::TILE_SIZE;
+  }
+
+  return false;
+}
+
+bool Stage::genericColVer(int x, int y, int h, int &tilecoordx, int &tilecoordy)
+{
+  int tiletype = 0;
+  int realFrameHeight = h;
+  y = (y + (h-realFrameHeight));
+
+  int tileypixels = y-(y%mm_graphs_defs::TILE_SIZE);
+  int testend     = y + realFrameHeight;
+
+  tilecoordx = x / mm_graphs_defs::TILE_SIZE;
+
+  tilecoordy = tileypixels/mm_graphs_defs::TILE_SIZE;
+  while(tileypixels <= testend)
+  {
+    tiletype = this->tileAction(tilecoordx, tilecoordy);
+
+    if(tiletype == mm_tile_actions::TILE_SOLID)
+    {
+      return true;
+    }
+
+    tilecoordy++;
+    tileypixels += mm_graphs_defs::TILE_SIZE;
+  }
+
+  return false;
+}
+
 void Stage::setOffset(int type, int offset)
 {
   offsetMap.insert(std::pair<int,int>(type, offset));
@@ -468,7 +528,6 @@ int Stage::getOffset(int type)
   //draw_rle_sprite(bmp, tiles.tile_img_rle[tile_number], x, y);
 //}
 
-//void Stage::draw(BITMAP * bmp, const Camera & camera, bool hasFg, bool bg_only, bool bg)
 void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
 {
   int i, j;
@@ -499,37 +558,25 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
   {
     y = map_yoff;
 
-    // This inner-loop is not being unrolled, maybe because of mapx being non determinist... so, unroll it by factor 4
-    if (!(mapx&1))
+    for(i = 0; i < ydisp; ++i)
     {
-      for(i = 0; i < ydisp; ++i)
+      x = map_xoff;
+      map_line = &map[mapy+i][mapx];
+
+      for(j = 0; j < (xdisp>>2); ++j)
       {
-        x = map_xoff;
-        map_line = &map[mapy+i][mapx];
-        for(j = 0; j < (xdisp>>2); ++j)
-        {
-          tile_number = (*(map_line++)).tile_number;blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);x += mm_graphs_defs::TILE_SIZE;
-          tile_number = (*(map_line++)).tile_number;blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);x += mm_graphs_defs::TILE_SIZE;
-          tile_number = (*(map_line++)).tile_number;blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);x += mm_graphs_defs::TILE_SIZE;
-          tile_number = (*(map_line++)).tile_number;blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);x += mm_graphs_defs::TILE_SIZE;
-        }
-        y += mm_graphs_defs::TILE_SIZE;
+        tile_number = (*(map_line++)).tile_number;blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);x += mm_graphs_defs::TILE_SIZE;
+        tile_number = (*(map_line++)).tile_number;blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);x += mm_graphs_defs::TILE_SIZE;
+        tile_number = (*(map_line++)).tile_number;blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);x += mm_graphs_defs::TILE_SIZE;
+        tile_number = (*(map_line++)).tile_number;blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);x += mm_graphs_defs::TILE_SIZE;
       }
-    }
-    else
-    {
-      for(i = 0; i < ydisp; ++i)
+      if (xdisp&1)
       {
-        x = map_xoff;
-        map_line = &map[mapy+i][mapx];
-        for(j = 0; j < xdisp; ++j)
-        {
-          tile_number = (*(map_line++)).tile_number;
-          blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
-          x += mm_graphs_defs::TILE_SIZE;
-        }
-        y += mm_graphs_defs::TILE_SIZE;
+        tile_number = (*(map_line++)).tile_number;
+        blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
       }
+
+      y += mm_graphs_defs::TILE_SIZE;
     }
   }
   else
@@ -542,7 +589,7 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
         x = map_xoff;
         map_line = &map[mapy+i][mapx];
         for(j = 0; j < xdisp; ++j)
-        {       
+        {
           tile_number = (*(map_line++)).tile_number;
           masked_blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
           x += mm_graphs_defs::TILE_SIZE;
@@ -553,7 +600,7 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
     else
     {
       y = map_yoff;
-      for(i = 0; i < ydisp; ++i) 
+      for(i = 0; i < ydisp; ++i)
       {
         x = map_xoff;
         map_line = &map[mapy+i][mapx];

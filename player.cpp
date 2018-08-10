@@ -516,7 +516,7 @@ void Player::normalLogic()
 
       spacePressed = true;
       static int jumpHigh = 0;
-                                                                         //Cur: 56 Shold be: 65
+      //Cur: 56 Shold be: 65??
       if (isFacingDown == false && lockJumpAccel == false && (jumpHigh-y < 65))
       {
         onPlatform = false;

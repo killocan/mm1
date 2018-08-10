@@ -451,7 +451,7 @@ void StageManager::play()
             curr_character->doGravitation();
             curr_character->doLogic();
 
-            //TODO: ver se tá colidindo com o megaman em blinking... e mover isso pra um lugar só :D
+            //TODO: ver se tï¿½ colidindo com o megaman em blinking... e mover isso pra um lugar sï¿½ :D
             if (curr_character->canCollidePlayer == true)
             {
               if (Collision::pixelCollision(curr_character->x, curr_character->y, curr_character->getFrame(),
@@ -721,6 +721,7 @@ void StageManager::doStageSpecifics()
         ssm->stopAll();
 
         if (sboos->isPlaying() == false) sboos->play(0, true);
+        break;
       }
 
       std::vector<Character *>::iterator it;

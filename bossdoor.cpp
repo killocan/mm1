@@ -25,8 +25,6 @@ BossDoor::BossDoor(const Stage & stage, int x, int y, void * param) : Character(
   this->x = x;
   this->y = y;
 
-
-
   config = *((BossDoorSetupParam*)param);
 
   vely          = 1;

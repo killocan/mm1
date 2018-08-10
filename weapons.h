@@ -55,4 +55,7 @@ namespace mm_weapons
 
   void createIceSlasher(Player * player);
   void createIceSlasher(Character * character, int x, int y, float vx, float vy, int offset);
+
+  void createBomb(Player * player);
+  void createBomb(Character * character, int x, int y, float vx, float vy, int offset);
 }
