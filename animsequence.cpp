@@ -178,9 +178,9 @@ AnimSequence::~AnimSequence()
   unload();
 }
 
-int * AnimSequence::getUtilXInfo() 
+int * AnimSequence::getUtilXInfo()
 { 
-  return utilXSize; 
+  return utilXSize;
 }
 
 void AnimSequence::unload()

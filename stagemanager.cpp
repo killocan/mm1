@@ -127,7 +127,7 @@ void StageManager::doMegamanSpawning(BITMAP * buffer, FONT * mm_font)
         }
 
         player->y = y_goal;
-        
+
         if (player->curAnimFrameDuration == 0)
         {
           player->nextAnimFrame();
@@ -163,7 +163,7 @@ void StageManager::doMegamanSpawning(BITMAP * buffer, FONT * mm_font)
     blit(buffer,screen,0,0,0,0,SCREEN_W,SCREEN_H);
     clear_bitmap(buffer);
   }
-  
+
   player->y = y_goal;
   //Stand still sequence.
   player->setAnimSeq(Player::STANDSTILL);
@@ -240,7 +240,7 @@ void StageManager::checkColissionPlayerEnemyBullets()
     {
       mm_weapons::weapon_st * pWeapon = &(*it_w);
 
-      if (Collision::pixelCollision((int)pWeapon->x, (int)pWeapon->y, 
+      if (Collision::pixelCollision((int)pWeapon->x, (int)pWeapon->y,
                                     pWeapon->bulletSpriteShet->getFrame(pWeapon->frameOffset),
                                     player->x, player->y, player->getFrame()) == true)
       {
@@ -304,8 +304,8 @@ static void tvmode(BITMAP * bmp)
 }
 #endif
 
-static bool tempCharacterDone(const Character* value) 
-{ 
+static bool tempCharacterDone(const Character* value)
+{
   if (value->alive == false)
   {
     delete value;
@@ -314,7 +314,7 @@ static bool tempCharacterDone(const Character* value)
 
   return false;
 }
-static bool tempCharacterKill(const Character* value) 
+static bool tempCharacterKill(const Character* value)
 {
   delete value;
   return true;
@@ -390,7 +390,7 @@ void StageManager::play()
     playing = true;
     while(playing == true)
     {
-      if (key[KEY_Q]) 
+      if (key[KEY_Q])
       {
         playing = !(game_over = true);
         break;
@@ -406,7 +406,7 @@ void StageManager::play()
         game_pause = !game_pause;
         while(key[KEY_P]);
       }
-      
+
       if (key[KEY_ENTER] && game_pause == false)
       {
         Sounds::mm_sounds->play(PAUSE);
@@ -468,7 +468,7 @@ void StageManager::play()
                    ++it_w)
               {
                 mm_weapons::weapon_st * pWeapon = &(*it_w);
-                if (Collision::pixelCollision((int)pWeapon->x, (int)pWeapon->y, 
+                if (Collision::pixelCollision((int)pWeapon->x, (int)pWeapon->y,
                                                pWeapon->bulletSpriteShet->getFrame(pWeapon->frameOffset),
                                                curr_character->x, curr_character->y, curr_character->getFrame(),
                                                &curr_character->xcol, &curr_character->ycol) == true)
@@ -501,7 +501,7 @@ void StageManager::play()
 
       if (player->alive == false)
       {
-        //if (ssm->isPlaying() == true) 
+        //if (ssm->isPlaying() == true)
         //{
         ssm->stopAll();
         //}
@@ -512,7 +512,7 @@ void StageManager::play()
         }
       }
 
-      if (player->lives == 0) 
+      if (player->lives == 0)
       {
         game_over = false;
       }
@@ -522,7 +522,7 @@ void StageManager::play()
       {
         //stage->draw(m_buffer, *camera, false);
         stage->draw(m_buffer, false);
-        
+
         for (it = characters_vec.begin(); it != characters_vec.end(); ++it)
         {
           curr_character = *it;
@@ -573,7 +573,7 @@ void StageManager::play()
         clear_bitmap(m_buffer);
         //stage->draw(m_buffer, *camera, true);
         stage->draw(m_buffer, true);
-        
+
         for (it = characters_vec.begin(); it != characters_vec.end(); ++it)
         {
           curr_character = *it;
@@ -619,9 +619,9 @@ void StageManager::play()
       //tvmode(m_buffer);
       //bhmode(m_buffer);
 #ifdef DEBUG
-      textprintf_ex(m_buffer, font, 1, 10, makecol(255,255,255), 0, "X: [%d]  Y: [%d]  VELX: [%d]  VELY: [%d]", 
+      textprintf_ex(m_buffer, font, 1, 10, makecol(255,255,255), 0, "X: [%d]  Y: [%d]  VELX: [%d]  VELY: [%d]",
                     player->x, player->y, player->velx, player->vely);
-      textprintf_ex(m_buffer, font, 1, 20, makecol(255,255,255), 0, "camera.x: [%d]  camera.y: [%d]", 
+      textprintf_ex(m_buffer, font, 1, 20, makecol(255,255,255), 0, "camera.x: [%d]  camera.y: [%d]",
                     camera->x, camera->y);
 #endif
 
@@ -714,7 +714,7 @@ void StageManager::doStageSpecifics()
         cur_stage_state = StageManager::BOSS_WARNING;
 
         handlingDoor = true;
-        
+
         initBossFight = true;
 
         Sounds::mm_sounds->stopAll();
@@ -740,7 +740,7 @@ void StageManager::doStageSpecifics()
               door->openDoor();
 
               killThemAll();
-              
+
               cur_stage_state = StageManager::HANDLING_DOOR;
               handlingDoor = true;
               stopAnimations = true;

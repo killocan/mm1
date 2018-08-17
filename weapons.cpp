@@ -18,14 +18,21 @@ static void handleBomb(mm_weapons::weapon_st * pWeapon, Stage * stage)
 {
   int tilecoordx, tilecoordy;
 
+  pWeapon->vy += mm_player_defs::GRAVITATION;
+
   if (!stage->genericColHor(pWeapon->x, pWeapon->w, pWeapon->y + pWeapon->vy + (pWeapon->vy > 0 ? pWeapon->h : 0), tilecoordx, tilecoordy, pWeapon->vy > 0))
   {
     pWeapon->y += pWeapon->vy;
   }
+  else
+    pWeapon->vy *= -1;
+
   if (!stage->genericColVer(pWeapon->x + pWeapon->vx + (pWeapon->vx > 0 ? pWeapon->w : 0), pWeapon->y, pWeapon->h, tilecoordx, tilecoordy))
   {
     pWeapon->x += pWeapon->vx;
   }
+  else
+    pWeapon->vx *= -1;
 }
 
 static void doWeaponSpecifics(mm_weapons::weapon_st * pWeapon, Stage * stage)
@@ -199,9 +206,9 @@ void mm_weapons::createMegaBuster(Player * player)
 
     mega_buster.y = (float)(player->y + 22.0f);
   }
-  
+
   mega_buster.vx = 7.5f;
-  if (player->isFacingRight == false) 
+  if (player->isFacingRight == false)
   {
     mega_buster.vx *= -1.0f;
   }
@@ -269,9 +276,9 @@ void mm_weapons::createIceSlasher(Player * player)
 
     ice_slasher.y = (float)(player->y + 12.0f);
   }
-  
+
   ice_slasher.vx = 6.5f;
-  if (player->isFacingRight == false) 
+  if (player->isFacingRight == false)
   {
     ice_slasher.vx *= -1.0f;
   }
@@ -330,7 +337,7 @@ void mm_weapons::createBomb(Player * player)
   {
     bomb.vx *= -1.0f;
   }
-  bomb.vy = 0.0f;
+  bomb.vy = -4.0f;
 
   bomb.alive  = true;
 
