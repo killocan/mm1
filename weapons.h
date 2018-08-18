@@ -40,6 +40,10 @@ namespace mm_weapons
 
     float iceman_x_dist;
 
+    int hyper_bomb_lifetime;
+    int hyper_bomb_bounce_count;
+    bool hyper_bomb_should_bounce;
+
     bool alive; // if false, will be removed from list.
 
     int frameOffset;

@@ -523,11 +523,11 @@ void menu()
 
       Sounds::mm_sounds->stopSample(MENU_BG);
 
-      install_int(update_menu_tick, 120);
-      boss_show(buffer, mm_font);
-      remove_int(update_menu_tick);
+      //install_int(update_menu_tick, 120);
+      //boss_show(buffer, mm_font);
+      //remove_int(update_menu_tick);
       goToStage();
-      install_int(update_menu_tick, 300);
+      //install_int(update_menu_tick, 300);
       
       Sounds::mm_sounds->play(MENU_BG, true);
     }

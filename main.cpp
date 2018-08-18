@@ -101,7 +101,7 @@ int main()
   
   clear(Buffer::buffer);
 
-  intro();
+  //intro();
   menu();
 
   if (Sounds::mm_sounds) delete Sounds::mm_sounds;
