@@ -45,6 +45,7 @@ namespace mm_weapons
     bool hyper_bomb_should_bounce;
 
     bool alive; // if false, will be removed from list.
+    bool can_hurt; // if false, dont hurt player or enemy, just to see.
 
     int frameOffset;
     AnimSequence * bulletSpriteShet;

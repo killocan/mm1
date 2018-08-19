@@ -207,14 +207,19 @@ void StageManager::checkColissionAgainstEnemy()
         {
           mm_weapons::weapon_st * pWeapon = &(*it_w);
 
-          if (Collision::pixelCollision((int)pWeapon->x,    (int)pWeapon->y,   pWeapon->bulletSpriteShet->getFrame(pWeapon->frameOffset),
-                                         curr_character->x, curr_character->y, curr_character->getFrame(),
-                                         &pWeapon->xcol, &pWeapon->ycol) == true)
+          if (pWeapon->can_hurt)
           {
-            curr_character->hit(pWeapon);
+            if (Collision::pixelCollision((int) pWeapon->x, (int) pWeapon->y,
+                                          pWeapon->bulletSpriteShet->getFrame(pWeapon->frameOffset),
+                                          curr_character->x, curr_character->y, curr_character->getFrame(),
+                                          &pWeapon->xcol, &pWeapon->ycol) == true)
+            {
+              curr_character->hit(pWeapon);
+            }
           }
         }
 
+        // TIRAR PARA PODER ATINGIR O MEGAMAN
         if (false && player->isInvincible == false)
         {
           if (Collision::pixelCollision((int)player->x,    (int)player->y,   player->getFrame(),

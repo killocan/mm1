@@ -54,7 +54,9 @@ static void handleBomb(mm_weapons::weapon_st * pWeapon, Stage * stage)
 
   pWeapon->hyper_bomb_lifetime--;
   if (pWeapon->hyper_bomb_lifetime <= 0)
-      pWeapon->alive = false;
+  {
+    pWeapon->alive = false;
+  }
 }
 
 static void doWeaponSpecifics(mm_weapons::weapon_st * pWeapon, Stage * stage)
@@ -201,6 +203,7 @@ void mm_weapons::drawWeapons(BITMAP * buffer)
 void mm_weapons::createMegaBuster(Player * player)
 {
   mm_weapons::weapon_st mega_buster;
+  mega_buster.can_hurt = true;
   if (player->grabstair == false)
   {
     mega_buster.x = (float)(player->x + 58);
@@ -256,6 +259,7 @@ void mm_weapons::createMegaBuster(Player * player)
 void mm_weapons::createMegaBuster(Character * character, int x, int y, float vx, float vy, int offset)
 {
   mm_weapons::weapon_st mega_buster;
+  mega_buster.can_hurt = true;
   mega_buster.x  = x;
   mega_buster.y  = y;
   mega_buster.vx = vx;
@@ -276,6 +280,7 @@ void mm_weapons::createMegaBuster(Character * character, int x, int y, float vx,
 void mm_weapons::createIceSlasher(Player * player)
 {
   mm_weapons::weapon_st ice_slasher;
+  ice_slasher.can_hurt = true;
   if (player->grabstair == false)
   {
     ice_slasher.x = (float)(player->x + 58);
@@ -331,6 +336,7 @@ void mm_weapons::createIceSlasher(Character * character, int x, int y, float vx,
 void mm_weapons::createBomb(Player * player)
 {
   mm_weapons::weapon_st bomb;
+  bomb.can_hurt = false;
 
   bomb.hyper_bomb_should_bounce = true;
   bomb.hyper_bomb_lifetime = 200;
@@ -363,12 +369,12 @@ void mm_weapons::createBomb(Player * player)
     bomb.y = (float)(player->y + 12.0f);
   }
 
-  bomb.vx = 5.5f;
+  bomb.vx = 4.5f;
   if (player->isFacingRight == false)
   {
     bomb.vx *= -1.0f;
   }
-  bomb.vy = -10.0f;
+  bomb.vy = -9.0f;
 
   bomb.alive  = true;
 
