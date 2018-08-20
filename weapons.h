@@ -29,6 +29,38 @@ namespace mm_weapons
 
   struct weapon_st
   {
+    weapon_st()
+    {
+      sx = 0;
+      sy = 0;
+      w = 0;
+      h = 0;
+
+      x = 0.0f;
+      y = 0.0f;
+      vx = 0.0f;
+      vy = 0.0f;
+
+      xcol = 0;
+      ycol = 0;
+
+      ticks = 0;
+
+      iceman_x_dist = 0.0f;
+
+      hyper_bomb_lifetime = 0;
+      hyper_bomb_bounce_count = 0;
+      hyper_bomb_should_bounce = false;
+      bomb_fragment_life = 0;
+
+      alive = true;
+      can_hurt = true;
+      subtype = false;
+
+      subtype_num = 0;
+      frameOffset = 0;
+      bulletSpriteShet = NULL;
+    }
     int sx, sy;
     int w, h;
 
@@ -38,15 +70,20 @@ namespace mm_weapons
     // x,y coord where collision happen.
     int xcol, ycol;
 
+    unsigned long ticks; // to control time related stuff
+
     float iceman_x_dist;
 
     int hyper_bomb_lifetime;
     int hyper_bomb_bounce_count;
     bool hyper_bomb_should_bounce;
+    int bomb_fragment_life; // How far have the fragment lived?
 
     bool alive; // if false, will be removed from list.
     bool can_hurt; // if false, dont hurt player or enemy, just to see.
+    bool subtype; // is it created by other weapon?
 
+    int subtype_num; // witch subtype is it?
     int frameOffset;
     AnimSequence * bulletSpriteShet;
     mm_weapons::WEAPONS weapon;

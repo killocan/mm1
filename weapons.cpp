@@ -14,6 +14,88 @@
 #include "camera.h"
 #include "animsequence.h"
 
+static int bomb_fragment_frames[][14] = {{0,0,2,3,3,3,1,2,3,3,0,1,2,3},{0,0,2,1,2,3,4,3,0,1,4,2,4,3}};
+
+static void handleBombFragment(mm_weapons::weapon_st * pWeapon)
+{
+  if ((Clock::clockTicks - pWeapon->ticks) > 1)
+  {
+    pWeapon->ticks = Clock::clockTicks;
+
+    if (pWeapon->bomb_fragment_life > 0)
+    {
+      pWeapon->x += pWeapon->vx;
+      pWeapon->y += pWeapon->vy;
+
+      pWeapon->frameOffset = bomb_fragment_frames[pWeapon->subtype_num][14 - pWeapon->bomb_fragment_life];
+
+      pWeapon->bomb_fragment_life--;
+    }
+    else
+      pWeapon->alive = false;
+  }
+}
+
+static float vx_0[] = {2.0f, -2.0f, 0.0f,  0.0f, 4.0f, 4.0f,  -4.0f, -4.0f};
+static float vy_0[] = {0.0f, 0.0f,  -2.0f, 2.0f, 4.0f, -4.0f, 4.0f,  -4.0f};
+static float vx_1[] = {5.0f, -5.0f, 0.0f,  0.0f};
+static float vy_1[] = {0.0f, 0.0f,  -5.0f, 5.0f};
+static void createExplosionParts(Stage * stage, float x, float y, bool player_created)
+{
+  for (int i = 0; i < 8; ++i)
+  {
+    mm_weapons::weapon_st explosion_part;
+
+    explosion_part.x = x;
+    explosion_part.y = y;
+
+    explosion_part.vx = vx_0[i];
+    explosion_part.vy = vy_0[i];
+
+    explosion_part.can_hurt = true;
+    explosion_part.subtype = true;
+    explosion_part.subtype_num = 0;
+    explosion_part.alive = true;
+    explosion_part.bomb_fragment_life = 14;
+    explosion_part.ticks = Clock::clockTicks;
+
+    explosion_part.frameOffset = 0;
+    explosion_part.bulletSpriteShet = stage->getAnimSeq(mm_spritefiles::EXPLOSIONLITTLE_SPRITES);
+    explosion_part.weapon = mm_weapons::W_BOMBMAN_GUN;
+
+    explosion_part.w = explosion_part.bulletSpriteShet->getFrame(explosion_part.frameOffset)->w;
+    explosion_part.h = explosion_part.bulletSpriteShet->getFrame(explosion_part.frameOffset)->h;
+
+    GlobalGameState::playerShots.push_back(explosion_part);
+  }
+  for (int i = 0; i < 4; ++i)
+  {
+    mm_weapons::weapon_st explosion_part;
+
+    explosion_part.x = x;
+    explosion_part.y = y;
+
+    explosion_part.vx = vx_1[i];
+    explosion_part.vy = vy_1[i];
+
+    explosion_part.can_hurt = true;
+    explosion_part.subtype = true;
+    explosion_part.subtype_num = 1;
+    explosion_part.alive = true;
+    explosion_part.bomb_fragment_life = 14;
+    explosion_part.ticks = Clock::clockTicks;
+
+    explosion_part.frameOffset = 0;
+    explosion_part.bulletSpriteShet = stage->getAnimSeq(mm_spritefiles::EXPLOSIONLITTLE_SPRITES);
+    explosion_part.weapon = mm_weapons::W_BOMBMAN_GUN;
+
+    explosion_part.w = explosion_part.bulletSpriteShet->getFrame(explosion_part.frameOffset)->w;
+    explosion_part.h = explosion_part.bulletSpriteShet->getFrame(explosion_part.frameOffset)->h;
+
+    GlobalGameState::playerShots.push_back(explosion_part);
+  }
+}
+
 static void handleBomb(mm_weapons::weapon_st * pWeapon, Stage * stage)
 {
   int tilecoordx, tilecoordy;
@@ -44,18 +126,14 @@ static void handleBomb(mm_weapons::weapon_st * pWeapon, Stage * stage)
   }
   else
   {
-    if (pWeapon->hyper_bomb_should_bounce)
-      pWeapon->vx *= -1;
-    else
-    {
-      pWeapon->vx = pWeapon->vy = 0.0f;
-    }
+    pWeapon->vx = 0.0f;
   }
 
   pWeapon->hyper_bomb_lifetime--;
   if (pWeapon->hyper_bomb_lifetime <= 0)
   {
     pWeapon->alive = false;
+    createExplosionParts(stage, pWeapon->x, pWeapon->y, true);
   }
 }
 
@@ -99,7 +177,10 @@ static void doWeaponSpecifics(mm_weapons::weapon_st * pWeapon, Stage * stage)
     break;
     case mm_weapons::W_BOMBMAN_GUN:
     {
-      handleBomb(pWeapon, stage);
+      if (pWeapon->subtype == false)
+        handleBomb(pWeapon, stage);
+      else
+        handleBombFragment(pWeapon);
     }
     break;
     case mm_weapons::W_FIREMAN_GUN:
