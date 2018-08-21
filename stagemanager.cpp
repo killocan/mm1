@@ -525,7 +525,6 @@ void StageManager::play()
       //Most of time there are no FG tiles.
       if (stage->has_fg_tiles == false)
       {
-        //stage->draw(m_buffer, *camera, false);
         stage->draw(m_buffer, false);
 
         for (it = characters_vec.begin(); it != characters_vec.end(); ++it)
@@ -534,7 +533,7 @@ void StageManager::play()
 
           if (curr_character->alive == true)
           {
-            curr_character->calcScreenCoords();//*camera);
+            curr_character->calcScreenCoords();
             curr_character->drawCharacter(m_buffer);
           }
         }
@@ -543,14 +542,14 @@ void StageManager::play()
              ++i)
         {
           curr_character = *i;
-          curr_character->calcScreenCoords();//*camera);
+          curr_character->calcScreenCoords();
           curr_character->drawCharacter(m_buffer);
         }
       }
       else if (stage->cameraSectorHasFgTiles(*camera, *player) == true)
       {
         clear_bitmap(m_buffer);
-        //stage->draw(m_buffer, *camera, true, false, true);
+
         stage->draw(m_buffer, true, false, true);
         for (it = characters_vec.begin(); it != characters_vec.end(); ++it)
         {
@@ -570,13 +569,12 @@ void StageManager::play()
           curr_character->calcScreenCoords();//*camera);
           curr_character->drawCharacter(m_buffer);
         }
-        //stage->draw(m_buffer, *camera, true, false, false);
+
         stage->draw(m_buffer, true, false, false);
       }
       else
       {
         clear_bitmap(m_buffer);
-        //stage->draw(m_buffer, *camera, true);
         stage->draw(m_buffer, true);
 
         for (it = characters_vec.begin(); it != characters_vec.end(); ++it)
@@ -585,7 +583,7 @@ void StageManager::play()
 
           if (curr_character->alive == true)
           {
-            curr_character->calcScreenCoords();//*camera);
+            curr_character->calcScreenCoords();
             curr_character->drawCharacter(m_buffer);
           }
         }
@@ -594,7 +592,7 @@ void StageManager::play()
              ++i)
         {
           curr_character = *i;
-          curr_character->calcScreenCoords();//*camera);
+          curr_character->calcScreenCoords();
           curr_character->drawCharacter(m_buffer);
         }
       }
