@@ -36,10 +36,10 @@ static void handleBombFragment(mm_weapons::weapon_st * pWeapon)
   }
 }
 
-static float vx_0[] = {2.0f, -2.0f, 0.0f,  0.0f, 4.0f, 4.0f,  -4.0f, -4.0f};
-static float vy_0[] = {0.0f, 0.0f,  -2.0f, 2.0f, 4.0f, -4.0f, 4.0f,  -4.0f};
-static float vx_1[] = {5.0f, -5.0f, 0.0f,  0.0f};
-static float vy_1[] = {0.0f, 0.0f,  -5.0f, 5.0f};
+static float vx_0[] = {1.0f, -1.0f, 0.0f,  0.0f, 3.0f, 3.0f,  -3.0f, -3.0f};
+static float vy_0[] = {0.0f, 0.0f,  -1.0f, 1.0f, 3.0f, -3.0f, 3.0f,  -3.0f};
+static float vx_1[] = {4.0f, -4.0f, 0.0f,  0.0f};
+static float vy_1[] = {0.0f, 0.0f,  -4.0f, 4.0f};
 static void createExplosionParts(Stage * stage, float x, float y, bool player_created)
 {
   for (int i = 0; i < 8; ++i)
