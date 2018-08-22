@@ -43,7 +43,7 @@ AnimSequence::AnimSequence(const char * seqFile, bool keepCopy)
 
 void AnimSequence::loadSequences(const char * def_file)
 {
-  char temp_buf[128];
+  char temp_buf[256];
 
   FILE * fp = fopen(def_file, "r");
   if (fp == NULL)
