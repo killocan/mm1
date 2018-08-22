@@ -49,3 +49,4 @@ class AnimSequence
 
     std::vector<std::vector<FrameInfoSt> > anim_seqs;
 };
+
