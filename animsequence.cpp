@@ -16,7 +16,7 @@ AnimSequence::AnimSequence(const char * seqFile, bool keepCopy)
 
 void AnimSequence::loadSequences(const char * def_file)
 {
-  char temp_buf[100];
+  char temp_buf[256];
 
   FILE * fp = fopen(def_file, "r");
   if (fp == NULL)
@@ -24,7 +24,7 @@ void AnimSequence::loadSequences(const char * def_file)
     fprintf(stderr, "ERRO LOADING Char Def File: [%s]\n", def_file);
     exit(-1);
   }
-  if (fgets(temp_buf, 100, fp) == NULL)
+  if (fgets(temp_buf, sizeof(temp_buf)*sizeof(char), fp) == NULL)
   {
     fprintf(stderr, "ERRO Char Def File: [%s] format error\n", def_file);
     exit(-1); 
@@ -43,7 +43,7 @@ void AnimSequence::loadSequences(const char * def_file)
   //and use std::find to load it all, but i'm fucking lazy and refuse to redo 
   //the code, maybe one day.
   std::vector<std::string> tmp_pairs;
-  while(fgets(temp_buf, 100, fp) != NULL)
+  while(fgets(temp_buf, sizeof(temp_buf)*sizeof(char), fp) != NULL)
   {
     tmp_pairs.clear();
 
@@ -283,3 +283,4 @@ void AnimSequence::changeSprite(mm_weapons::WEAPONS weapon)
     blit(seqBmpCopy, seqBmp, 0,0,0,0, seqBmpCopy->w, seqBmpCopy->h);
   }
 }
+
