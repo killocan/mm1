@@ -22,14 +22,14 @@ static void handleBombFragment(mm_weapons::weapon_st * pWeapon)
   {
     pWeapon->ticks = Clock::clockTicks;
 
-    if (pWeapon->bomb_fragment_life > 0)
+    if (pWeapon->life > 0)
     {
       pWeapon->x += pWeapon->vx;
       pWeapon->y += pWeapon->vy;
 
-      pWeapon->frameOffset = bomb_fragment_frames[pWeapon->subtype_num][14 - pWeapon->bomb_fragment_life];
+      pWeapon->frameOffset = bomb_fragment_frames[pWeapon->subtype_num][14 - pWeapon->life];
 
-      pWeapon->bomb_fragment_life--;
+      pWeapon->life--;
     }
     else
       pWeapon->alive = false;
@@ -56,7 +56,7 @@ static void createExplosionParts(Stage * stage, float x, float y, bool player_cr
     explosion_part.subtype = true;
     explosion_part.subtype_num = 0;
     explosion_part.alive = true;
-    explosion_part.bomb_fragment_life = 14;
+    explosion_part.life = 14;
     explosion_part.ticks = Clock::clockTicks;
 
     explosion_part.frameOffset = 0;
@@ -82,7 +82,7 @@ static void createExplosionParts(Stage * stage, float x, float y, bool player_cr
     explosion_part.subtype = true;
     explosion_part.subtype_num = 1;
     explosion_part.alive = true;
-    explosion_part.bomb_fragment_life = 14;
+    explosion_part.life = 14;
     explosion_part.ticks = Clock::clockTicks;
 
     explosion_part.frameOffset = 0;
@@ -129,12 +129,30 @@ static void handleBomb(mm_weapons::weapon_st * pWeapon, Stage * stage)
     pWeapon->vx = 0.0f;
   }
 
-  pWeapon->hyper_bomb_lifetime--;
-  if (pWeapon->hyper_bomb_lifetime <= 0)
+  pWeapon->life--;
+  if (pWeapon->life <= 0)
   {
     pWeapon->alive = false;
     createExplosionParts(stage, pWeapon->x, pWeapon->y, true);
   }
+}
+
+static int thunder_beam_frames[][7] = {{0,1,2},{5,6,7,8,9,3,4}};
+static void handleThunderBeam(mm_weapons::weapon_st * pWeapon)
+{
+  if ((Clock::clockTicks - pWeapon->ticks) > 5)
+  {
+    pWeapon->ticks = Clock::clockTicks;
+
+    pWeapon->frameOffset = thunder_beam_frames[pWeapon->vy == 0.0f][pWeapon->current_frame];
+    ++pWeapon->current_frame;
+
+    if (pWeapon->current_frame >= pWeapon->frames)
+      pWeapon->current_frame = 0;
+  }
+
+  pWeapon->x += pWeapon->vx;
+  pWeapon->y += pWeapon->vy;
 }
 
 static void doWeaponSpecifics(mm_weapons::weapon_st * pWeapon, Stage * stage)
@@ -154,7 +172,7 @@ static void doWeaponSpecifics(mm_weapons::weapon_st * pWeapon, Stage * stage)
     break;
     case mm_weapons::W_CUTMAN_GUN:
     {
-      stage;
+      ;
     }
     break;
     case mm_weapons::W_GUTSMAN_GUN:
@@ -190,7 +208,7 @@ static void doWeaponSpecifics(mm_weapons::weapon_st * pWeapon, Stage * stage)
     break;
     case mm_weapons::W_ELECMAN_GUN:
     {
-      ;
+      handleThunderBeam(pWeapon);
     }
     break;
     default:
@@ -414,13 +432,13 @@ void mm_weapons::createIceSlasher(Character * character, int x, int y, float vx,
   return;
 }
 
-void mm_weapons::createBomb(Player * player)
+void mm_weapons::createHyperBomb(Player * player)
 {
   mm_weapons::weapon_st bomb;
   bomb.can_hurt = false;
 
   bomb.hyper_bomb_should_bounce = true;
-  bomb.hyper_bomb_lifetime = 200;
+  bomb.life = 200;
 
   if (player->grabstair == false)
   {
@@ -469,7 +487,81 @@ void mm_weapons::createBomb(Player * player)
   GlobalGameState::playerShots.push_back(bomb);
 }
 
-void mm_weapons::createBomb(Character * character, int x, int y, float vx, float vy, int offset)
+void mm_weapons::createHyperBomb(Character * character, int x, int y, float vx, float vy, int offset)
+{
+  return;
+}
+
+void mm_weapons::createThunderBeam(Player * player)
+{
+  mm_weapons::weapon_st thunder_beam[3];
+  thunder_beam[1].can_hurt = thunder_beam[2].can_hurt = thunder_beam[3].can_hurt = true;
+
+  float x, y;
+
+  if (player->grabstair == false)
+  {
+    x = (float)(player->x + 54);
+    if (player->isFacingRight == false)
+    {
+      x -= 120.0f;
+    }
+
+    if (player->onground == true)
+    {
+      y = (float)(player->y + 22.0f);
+    }
+    else
+    {
+      y = (float)(player->y + 12.0f);
+    }
+  }
+  else
+  {
+    x = (float)(player->x + 52.0f);
+    if (player->isFacingRight == false)
+    {
+      x -= 58.0f;
+    }
+
+    y = (float)(player->y + 12.0f);
+  }
+
+  thunder_beam[0].frames = 7;
+  thunder_beam[1].frames = thunder_beam[2].frames = 3;
+
+  thunder_beam[0].ticks = thunder_beam[1].ticks = thunder_beam[2].ticks = Clock::clockTicks;
+
+  thunder_beam[0].x = x;
+  thunder_beam[1].x = thunder_beam[2].x = x + ((player->isFacingRight == false) ? 18 : 0);
+
+  thunder_beam[0].y = thunder_beam[1].y = y;
+  thunder_beam[2].y = y - 55;
+
+  thunder_beam[0].vx = 6.5f;
+  if (player->isFacingRight == false)
+  {
+    thunder_beam[0].vx *= -1.0f;
+  }
+  thunder_beam[1].vy = 4.5f;
+  thunder_beam[2].vy = -4.5f;
+
+  thunder_beam[0].alive = thunder_beam[1].alive = thunder_beam[2].alive = true;
+
+  for (int i = 0; i < 3; ++i)
+  {
+    thunder_beam[i].frameOffset = (i == 0) ? 5 : 0;
+    thunder_beam[i].bulletSpriteShet = player->cur_stage->getAnimSeq(mm_spritefiles::WEAPONS_ELECMAN);
+    thunder_beam[i].weapon = mm_weapons::W_ELECMAN_GUN;
+
+    thunder_beam[i].w = thunder_beam[i].bulletSpriteShet->getFrame(thunder_beam[i].frameOffset)->w;
+    thunder_beam[i].h = thunder_beam[i].bulletSpriteShet->getFrame(thunder_beam[i].frameOffset)->h;
+
+    GlobalGameState::playerShots.push_back(thunder_beam[i]);
+  }
+}
+
+void mm_weapons::createThunderBeam(Character * character, int x, int y, float vx, float vy, int offset)
 {
   return;
 }

@@ -48,10 +48,10 @@ namespace mm_weapons
 
       iceman_x_dist = 0.0f;
 
-      hyper_bomb_lifetime = 0;
+      //hyper_bomb_lifetime = 0;
       hyper_bomb_bounce_count = 0;
       hyper_bomb_should_bounce = false;
-      bomb_fragment_life = 0;
+      life = 0;
 
       alive = true;
       can_hurt = true;
@@ -59,6 +59,9 @@ namespace mm_weapons
 
       subtype_num = 0;
       frameOffset = 0;
+      frames = 0;
+      current_frame = 0;
+
       bulletSpriteShet = NULL;
     }
     int sx, sy;
@@ -70,21 +73,25 @@ namespace mm_weapons
     // x,y coord where collision happen.
     int xcol, ycol;
 
+    int life; // How far the weapon should live?
+
     unsigned long ticks; // to control time related stuff
 
     float iceman_x_dist;
 
-    int hyper_bomb_lifetime;
+    //int hyper_bomb_lifetime;
     int hyper_bomb_bounce_count;
     bool hyper_bomb_should_bounce;
-    int bomb_fragment_life; // How far have the fragment lived?
 
     bool alive; // if false, will be removed from list.
     bool can_hurt; // if false, dont hurt player or enemy, just to see.
     bool subtype; // is it created by other weapon?
-
     int subtype_num; // witch subtype is it?
-    int frameOffset;
+
+    int frameOffset; // initial frame
+    int frames; // number of frames
+    int current_frame;
+
     AnimSequence * bulletSpriteShet;
     mm_weapons::WEAPONS weapon;
   };
@@ -98,6 +105,9 @@ namespace mm_weapons
   void createIceSlasher(Player * player);
   void createIceSlasher(Character * character, int x, int y, float vx, float vy, int offset);
 
-  void createBomb(Player * player);
-  void createBomb(Character * character, int x, int y, float vx, float vy, int offset);
+  void createHyperBomb(Player *player);
+  void createHyperBomb(Character * character, int x, int y, float vx, float vy, int offset);
+
+  void createThunderBeam(Player *player);
+  void createThunderBeam(Character * character, int x, int y, float vx, float vy, int offset);
 }

@@ -52,7 +52,7 @@ namespace mm_spritefiles
     "./game_data/ice_slasher_seq.dat",
     "./game_data/hyper_bomb_seq.dat",
     "./game_data/bullets_seq.dat",
-    "./game_data/bullets_seq.dat",
+    "./game_data/thunder_beam_seq.dat",
     "./game_data/bossdoor_seq.dat",
     "./game_data/hit_explosion_seq.dat",
     "./game_data/explosion_little_seq.dat",

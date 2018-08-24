@@ -756,7 +756,20 @@ void Player::fire()
       {
         weapons[mm_weapons::W_BOMBMAN_GUN]--;
 
-        mm_weapons::createBomb(this);
+        mm_weapons::createHyperBomb(this);
+
+        firing = true;
+        lastShot = Clock::clockTicks;
+      }
+    }
+    break;
+    case mm_weapons::W_ELECMAN_GUN:
+    {
+      if ((GlobalGameState::playerShots.size() == 0) && (weapons[mm_weapons::W_ELECMAN_GUN] > 0))
+      {
+        weapons[mm_weapons::W_ELECMAN_GUN]--;
+
+        mm_weapons::createThunderBeam(this);
 
         firing = true;
         lastShot = Clock::clockTicks;
