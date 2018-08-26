@@ -227,6 +227,7 @@ int main(int argc, char ** argv)
 {
 	BITMAP * buffer;
 	char anim_file[80];
+	bool invertDraw = false;
 
 	if (argc < 2)
 	{
@@ -248,7 +249,7 @@ int main(int argc, char ** argv)
 	buffer = create_bitmap(SCREEN_W, SCREEN_H);
 	clear_bitmap(buffer);
 
-  AnimSequence * seq = new AnimSequence(anim_file);
+	AnimSequence * seq = new AnimSequence(anim_file);
 	int w,h;
 	w = seq->getFrame(0)->w;
 	h = seq->getFrame(0)->h;
@@ -287,8 +288,17 @@ int main(int argc, char ** argv)
 			cur_frame_duration = seq->getAnimSeq()[cur_seq][cur_frame_num].frameDuration;
 		}
 
+		if (key[KEY_A])
+		{
+			while(key[KEY_A]);
+			invertDraw = !invertDraw;
+		}
+
 		cur_frame = seq->getAnimSeq()[cur_seq][cur_frame_num].frameNumber;
-		draw_sprite(buffer, seq->getFrame(cur_frame), (SCREEN_W/2) - (w/2), (SCREEN_H/2) - (h/2));
+		if(!invertDraw)
+			draw_sprite(buffer, seq->getFrame(cur_frame), (SCREEN_W/2) - (w/2), (SCREEN_H/2) - (h/2));
+		else
+			draw_sprite_h_flip(buffer, seq->getFrame(cur_frame), (SCREEN_W/2) - (w/2), (SCREEN_H/2) - (h/2));
 
 		textprintf_ex(buffer, font, 5, 5,  makecol(255,255,255), -1, "N de Sequencias: [%d]", num_seqs);
 		textprintf_ex(buffer, font, 5, 15, makecol(255,255,255), -1, "Sequencia atual: [%d]", cur_seq);
@@ -296,6 +306,7 @@ int main(int argc, char ** argv)
 		textprintf_ex(buffer, font, 5, 35, makecol(255,255,255), -1, "Frame Atual na Sequencia: [%d]", cur_frame_num);
 		textprintf_ex(buffer, font, 5, 45, makecol(255,255,255), -1, "Duração do Frame Atual: [%d]", cur_frame_duration);
 		textprintf_ex(buffer, font, 5, 55, makecol(255,255,255), -1, "Frame na Sequencia: [%d]", cur_frame);
+		textprintf_ex(buffer, font, 5, 65, makecol(255,255,255), -1, "Sentido Direita: [%d]", !invertDraw);
 
 		blit(buffer, screen, 0,0,0,0, SCREEN_W, SCREEN_H);
 		clear_bitmap(buffer);
