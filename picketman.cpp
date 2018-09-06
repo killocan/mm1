@@ -93,7 +93,7 @@ void PicketMan::fire()
 {
   int centerX = this->x+w/2;
   int centerY = this->y+h/2;
-  int px      = cur_stage->m_player->x;
+  int px      = cur_stage->m_player->x - cur_stage->m_player->utilX;
   int py      = cur_stage->m_player->y;
 
   // Handle the work around ahwuhawuahw

@@ -14,10 +14,10 @@
 #include "camera.h"
 #include "animsequence.h"
 
-static int bomb_fragment_frames[][14] = {{0,0,2,3,3,3,1,2,3,3,0,1,2,3},{0,0,2,1,2,3,4,3,0,1,4,2,4,3}};
-
 static void handleBombFragment(mm_weapons::weapon_st * pWeapon)
 {
+  static int bomb_fragment_frames[][14] = {{0,0,2,3,3,3,1,2,3,3,0,1,2,3},{0,0,2,1,2,3,4,3,0,1,4,2,4,3}};
+
   if ((Clock::clockTicks - pWeapon->ticks) > 1)
   {
     pWeapon->ticks = Clock::clockTicks;
@@ -36,12 +36,13 @@ static void handleBombFragment(mm_weapons::weapon_st * pWeapon)
   }
 }
 
-static float vx_0[] = {1.0f, -1.0f, 0.0f,  0.0f, 3.0f, 3.0f,  -3.0f, -3.0f};
-static float vy_0[] = {0.0f, 0.0f,  -1.0f, 1.0f, 3.0f, -3.0f, 3.0f,  -3.0f};
-static float vx_1[] = {4.0f, -4.0f, 0.0f,  0.0f};
-static float vy_1[] = {0.0f, 0.0f,  -4.0f, 4.0f};
 static void createExplosionParts(Stage * stage, float x, float y, bool player_created)
 {
+  static float vx_0[] = {1.0f, -1.0f, 0.0f,  0.0f, 3.0f, 3.0f,  -3.0f, -3.0f};
+  static float vy_0[] = {0.0f, 0.0f,  -1.0f, 1.0f, 3.0f, -3.0f, 3.0f,  -3.0f};
+  static float vx_1[] = {4.0f, -4.0f, 0.0f,  0.0f};
+  static float vy_1[] = {0.0f, 0.0f,  -4.0f, 4.0f};
+
   for (int i = 0; i < 8; ++i)
   {
     mm_weapons::weapon_st explosion_part;
@@ -137,9 +138,10 @@ static void handleBomb(mm_weapons::weapon_st * pWeapon, Stage * stage)
   }
 }
 
-static int thunder_beam_frames[][7] = {{0,1,2},{5,6,7,8,9,3,4}};
 static void handleThunderBeam(mm_weapons::weapon_st * pWeapon)
 {
+  static int thunder_beam_frames[][7] = {{0,1,2},{5,6,7,8,9,3,4}};
+
   if ((Clock::clockTicks - pWeapon->ticks) > 5)
   {
     pWeapon->ticks = Clock::clockTicks;
@@ -153,6 +155,67 @@ static void handleThunderBeam(mm_weapons::weapon_st * pWeapon)
 
   pWeapon->x += pWeapon->vx;
   pWeapon->y += pWeapon->vy;
+}
+
+static void handleRollingCutter(mm_weapons::weapon_st * pWeapon, Stage * stage)
+{
+  if (recalc)
+  {
+    if (foward)
+    {
+      CURVE_PNTS = 30;
+      recalc = false;
+      calculed = false;
+
+      x2 = x+disp;
+      y2 = y;
+
+      mid_x1 = x + (disp/2);
+      mid_y1 = y - yh;
+
+      CTRL_POINTS[0] = x;
+      CTRL_POINTS[1] = y;
+      CTRL_POINTS[2] = x;//;
+      CTRL_POINTS[3] = y;//mid_y1;
+      CTRL_POINTS[4] = mid_x1;//x2;
+      CTRL_POINTS[5] = mid_y1;//y2;
+      CTRL_POINTS[6] = x2;
+      CTRL_POINTS[7] = y2;
+
+      calc_spline(CTRL_POINTS, CURVE_PNTS, curveX, curveY);
+    }
+    else
+    {
+      int distance = sqrt(pow(x2 - x, 2) + pow(y2 - y, 2));
+      //printf("distancia: [%d]\n", distance);
+      //if (distance < disp/2 && calculed == false)
+      //{	calculed = true; current_point += 2; }
+
+      mid_x1 = x + (disp/2);
+      mid_y1 = y + yh;
+
+      CTRL_POINTS[0] = x2;
+      CTRL_POINTS[1] = y2;
+      CTRL_POINTS[2] = mid_x1;
+      CTRL_POINTS[3] = mid_y1;
+      CTRL_POINTS[4] = x-40;
+      CTRL_POINTS[5] = y;
+      CTRL_POINTS[6] = x;
+      CTRL_POINTS[7] = y;
+      calc_spline(CTRL_POINTS, CURVE_PNTS, curveX, curveY);
+    }
+  }
+
+  xobj = curveX[current_point];
+  yobj = curveY[current_point];
+
+  ++current_point;
+  if (current_point >= CURVE_PNTS)
+  {
+    current_point = 0;
+    recalc = true;
+    foward = !foward;
+  }
 }
 
 static void doWeaponSpecifics(mm_weapons::weapon_st * pWeapon, Stage * stage)
@@ -172,7 +235,7 @@ static void doWeaponSpecifics(mm_weapons::weapon_st * pWeapon, Stage * stage)
     break;
     case mm_weapons::W_CUTMAN_GUN:
     {
-      ;
+      handleRollingCutter(pWeapon, stage);
     }
     break;
     case mm_weapons::W_GUTSMAN_GUN:
@@ -562,6 +625,62 @@ void mm_weapons::createThunderBeam(Player * player)
 }
 
 void mm_weapons::createThunderBeam(Character * character, int x, int y, float vx, float vy, int offset)
+{
+  return;
+}
+
+void mm_weapons::createRollingCutter(Player * player)
+{
+  mm_weapons::weapon_st cutter;
+
+  if (player->grabstair == false)
+  {
+    cutter.x = (float)(player->x + 38);
+    if (player->isFacingRight == false)
+    {
+      cutter.x -= 44.0f;
+    }
+
+    if (player->onground == true)
+    {
+      cutter.y = (float)(player->y + 22.0f);
+    }
+    else
+    {
+      cutter.y = (float)(player->y + 12.0f);
+    }
+  }
+  else
+  {
+    cutter.x = (float)(player->x + 52.0f);
+    if (player->isFacingRight == false)
+    {
+      cutter.x -= 48.0f;
+    }
+
+    cutter.y = (float)(player->y + 12.0f);
+  }
+
+  cutter.vx = 4.5f;
+  if (player->isFacingRight == false)
+  {
+    cutter.vx *= -1.0f;
+  }
+  cutter.vy = -9.0f;
+
+  cutter.alive  = true;
+
+  cutter.frameOffset = 0;
+  cutter.bulletSpriteShet = player->cur_stage->getAnimSeq(mm_spritefiles::WEAPONS_CUTMAN);
+  cutter.weapon = mm_weapons::W_CUTMAN_GUN;
+
+  cutter.h = cutter.bulletSpriteShet->getFrame(cutter.frameOffset)->h;
+  cutter.w = cutter.bulletSpriteShet->getFrame(cutter.frameOffset)->w;
+
+  GlobalGameState::playerShots.push_back(cutter);
+}
+
+void mm_weapons::createRollingCutter(Character * character, int x, int y, float vx, float vy, int offset)
 {
   return;
 }

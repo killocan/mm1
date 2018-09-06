@@ -47,7 +47,7 @@ namespace mm_spritefiles
     "./game_data/gutsman_rock_seq.dat",
     "./game_data/new_life_item_seq.dat",
     "./game_data/bullets_seq.dat",
-    "./game_data/bullets_seq.dat",
+    "./game_data/rolling_cutter_seq.dat",
     "./game_data/bullets_seq.dat",
     "./game_data/ice_slasher_seq.dat",
     "./game_data/hyper_bomb_seq.dat",

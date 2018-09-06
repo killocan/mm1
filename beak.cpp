@@ -27,11 +27,6 @@ Beak::Beak(const Stage & stage, int x_map, int y_map) : Character(stage, mm_spri
 
   this->old_y = this->y;
 
-  //old_map_x = x_map;
-  //old_map_y = y_map;
-
-  //
-
   vely = velx   = 0;
   overstair     = false;
   isFacingRight = true;

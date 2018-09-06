@@ -83,6 +83,13 @@ namespace mm_weapons
     int hyper_bomb_bounce_count;
     bool hyper_bomb_should_bounce;
 
+    int CURVE_PNTS = 50;
+    int cutter_current_point = 0;
+    int cutter_curve_X[CURVE_PNTS];
+    int cutter_curve_Y[CURVE_PNTS];
+    int cutter_ctrl_points[8];
+
+
     bool alive; // if false, will be removed from list.
     bool can_hurt; // if false, dont hurt player or enemy, just to see.
     bool subtype; // is it created by other weapon?
@@ -110,4 +117,7 @@ namespace mm_weapons
 
   void createThunderBeam(Player *player);
   void createThunderBeam(Character * character, int x, int y, float vx, float vy, int offset);
+
+  void createRollingCutter(Player *player);
+  void createRollingCutter(Character * character, int x, int y, float vx, float vy, int offset);
 }

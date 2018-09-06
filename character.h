@@ -70,7 +70,6 @@ class Character
     void freeze();
     virtual void defrost(); // Is there something to do the moment it leaves the freeze state?
 
-    // TODO: this camera pointer is global, remove from this function call.
     virtual void checkOnCamera();
     virtual bool canJumpAgain();
 

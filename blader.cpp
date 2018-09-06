@@ -31,8 +31,6 @@ Blader::Blader(const Stage & stage, int x, int y, void * pSpecialCase)
   this->old_x = this->x;
   this->old_y = this->y;
 
-
-
   curPoint = 0;
 
   velx          = 2;

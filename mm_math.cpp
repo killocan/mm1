@@ -30,10 +30,6 @@ void MM_Math::CalculateVector2D(int p1x, int p1y, int p2x, int p2y, double & vel
   double v0      = onecos * sqrt( (0.5 * 1 * pow(dist,2.0)) / (dist * tan(angle) + y0) );
   double mag     = v0;
 
-  fprintf(stderr,"\n\nPicketMan - Dist (%f) Mag(%f) y0(%f)\n"
-                 "co(%f) ca(%f) hip(%f) sinang(%f) angreal(%f) angle(%f) dist(%f)\n", dist, mag, y0,
-                 co,ca,hip,sinang,angreal,angle,dist);
-
   if (!isnan(mag))
   {
     vely = mag * sin(angle);
