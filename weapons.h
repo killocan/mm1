@@ -13,6 +13,8 @@ class Camera;
 class AnimSequence;
 class Stage;
 
+#define CUTTER_CURVE_PNTS 40
+
 // 0 CUTMAN
 // 1 GUTSMAN
 // 2 ICEMAN
@@ -48,10 +50,15 @@ namespace mm_weapons
 
       iceman_x_dist = 0.0f;
 
-      //hyper_bomb_lifetime = 0;
       hyper_bomb_bounce_count = 0;
       hyper_bomb_should_bounce = false;
       life = 0;
+
+      cutter_current_point = 0;
+      cutter_target_x = cutter_target_y = 0;
+      cutter_origin_x = cutter_origin_y = 0;
+      cutter_foward = false;
+      cutter_recalc = false;
 
       alive = true;
       can_hurt = true;
@@ -79,16 +86,17 @@ namespace mm_weapons
 
     float iceman_x_dist;
 
-    //int hyper_bomb_lifetime;
     int hyper_bomb_bounce_count;
     bool hyper_bomb_should_bounce;
 
-    int CURVE_PNTS = 50;
-    int cutter_current_point = 0;
-    int cutter_curve_X[CURVE_PNTS];
-    int cutter_curve_Y[CURVE_PNTS];
+    int cutter_current_point;
+    int cutter_curve_X[CUTTER_CURVE_PNTS];
+    int cutter_curve_Y[CUTTER_CURVE_PNTS];
     int cutter_ctrl_points[8];
-
+    int cutter_target_x, cutter_target_y;
+    int cutter_origin_x, cutter_origin_y;
+    bool cutter_foward;
+    bool cutter_recalc;
 
     bool alive; // if false, will be removed from list.
     bool can_hurt; // if false, dont hurt player or enemy, just to see.

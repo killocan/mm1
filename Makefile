@@ -22,10 +22,10 @@ ifdef PROFILING
 endif
 
 ifdef FINAL
-	LDFLAGS += -mtune=native -O3
+	LDFLAGS += -no-pie -mtune=native -O3
 	CFLAGS += -O3
 else
-	LDFLAGS += -g
+	LDFLAGS += -no-pie -g
 	CFLAGS += -g -DDEBUG
 endif
 

@@ -13,6 +13,7 @@
 #include "player.h"
 #include "camera.h"
 #include "animsequence.h"
+#include "collision.h"
 
 static void handleBombFragment(mm_weapons::weapon_st * pWeapon)
 {
@@ -159,62 +160,86 @@ static void handleThunderBeam(mm_weapons::weapon_st * pWeapon)
 
 static void handleRollingCutter(mm_weapons::weapon_st * pWeapon, Stage * stage)
 {
-  if (recalc)
+  if (pWeapon->cutter_recalc)
   {
-    if (foward)
+    if (pWeapon->cutter_foward)
     {
-      CURVE_PNTS = 30;
-      recalc = false;
-      calculed = false;
+      pWeapon->cutter_recalc = false;
 
-      x2 = x+disp;
-      y2 = y;
+      pWeapon->cutter_target_x = pWeapon->vx > 0.0f ? pWeapon->x + 140 : pWeapon->x - 140; // 140 - Distance to target
+      pWeapon->cutter_target_y = pWeapon->y;
 
-      mid_x1 = x + (disp/2);
-      mid_y1 = y - yh;
+      int mid_x1 = pWeapon->vx > 0.0f ? pWeapon->x + (140 / 2) : pWeapon->x - (140 / 2);
+      int mid_y1 = pWeapon->y - 100; // Radius
 
-      CTRL_POINTS[0] = x;
-      CTRL_POINTS[1] = y;
-      CTRL_POINTS[2] = x;//;
-      CTRL_POINTS[3] = y;//mid_y1;
-      CTRL_POINTS[4] = mid_x1;//x2;
-      CTRL_POINTS[5] = mid_y1;//y2;
-      CTRL_POINTS[6] = x2;
-      CTRL_POINTS[7] = y2;
+      pWeapon->cutter_ctrl_points[0] = pWeapon->x;
+      pWeapon->cutter_ctrl_points[1] = pWeapon->y;
+      pWeapon->cutter_ctrl_points[2] = pWeapon->x;
+      pWeapon->cutter_ctrl_points[3] = pWeapon->y;
+      pWeapon->cutter_ctrl_points[4] = mid_x1;
+      pWeapon->cutter_ctrl_points[5] = mid_y1;
+      pWeapon->cutter_ctrl_points[6] = pWeapon->cutter_target_x;
+      pWeapon->cutter_ctrl_points[7] = pWeapon->cutter_target_y;
 
-      calc_spline(CTRL_POINTS, CURVE_PNTS, curveX, curveY);
+      calc_spline(pWeapon->cutter_ctrl_points, CUTTER_CURVE_PNTS, pWeapon->cutter_curve_X, pWeapon->cutter_curve_Y);
     }
     else
     {
-      int distance = sqrt(pow(x2 - x, 2) + pow(y2 - y, 2));
-      //printf("distancia: [%d]\n", distance);
-      //if (distance < disp/2 && calculed == false)
-      //{	calculed = true; current_point += 2; }
+      //int distance = sqrt(pow(x2 - x, 2) + pow(y2 - y, 2));
 
-      mid_x1 = x + (disp/2);
-      mid_y1 = y + yh;
+      int mid_x1 = pWeapon->vx > 0.0f ? pWeapon->x + (140 / 2) : pWeapon->x - (140 / 2);
+      int mid_y1 = pWeapon->cutter_origin_y + 100;
 
-      CTRL_POINTS[0] = x2;
-      CTRL_POINTS[1] = y2;
-      CTRL_POINTS[2] = mid_x1;
-      CTRL_POINTS[3] = mid_y1;
-      CTRL_POINTS[4] = x-40;
-      CTRL_POINTS[5] = y;
-      CTRL_POINTS[6] = x;
-      CTRL_POINTS[7] = y;
-      calc_spline(CTRL_POINTS, CURVE_PNTS, curveX, curveY);
+      pWeapon->cutter_ctrl_points[0] = pWeapon->cutter_target_x;
+      pWeapon->cutter_ctrl_points[1] = pWeapon->cutter_target_y;
+      pWeapon->cutter_ctrl_points[2] = mid_x1;
+      pWeapon->cutter_ctrl_points[3] = mid_y1;
+      pWeapon->cutter_ctrl_points[4] = stage->m_player->x;
+      pWeapon->cutter_ctrl_points[5] = stage->m_player->y + 20;
+      pWeapon->cutter_ctrl_points[6] = stage->m_player->x;
+      pWeapon->cutter_ctrl_points[7] = stage->m_player->y + 20;
+      calc_spline(pWeapon->cutter_ctrl_points, CUTTER_CURVE_PNTS, pWeapon->cutter_curve_X, pWeapon->cutter_curve_Y);
     }
   }
 
-  xobj = curveX[current_point];
-  yobj = curveY[current_point];
-
-  ++current_point;
-  if (current_point >= CURVE_PNTS)
+  if (pWeapon->cutter_foward == false && (CUTTER_CURVE_PNTS - pWeapon->cutter_current_point) < 15)
   {
-    current_point = 0;
-    recalc = true;
-    foward = !foward;
+    if (Collision::pixelCollision((int) pWeapon->x, (int) pWeapon->y,
+                                  pWeapon->bulletSpriteShet->getFrame(pWeapon->frameOffset),
+                                  stage->m_player->x, stage->m_player->y, stage->m_player->getFrame()))
+    {
+      pWeapon->alive = false;
+    }
+  }
+
+  pWeapon->x = pWeapon->cutter_curve_X[pWeapon->cutter_current_point];
+  pWeapon->y = pWeapon->cutter_curve_Y[pWeapon->cutter_current_point];
+
+  ++pWeapon->cutter_current_point;
+  if (pWeapon->cutter_current_point >= CUTTER_CURVE_PNTS)
+  {
+    pWeapon->cutter_current_point = 0;
+    pWeapon->cutter_recalc = true;
+    pWeapon->cutter_foward = !pWeapon->cutter_foward;
+    pWeapon->life--;
+  }
+
+  if (pWeapon->life == 0)
+  {
+    pWeapon->alive = false;
+  }
+
+  static int rolling_cutter_frames[4] = {0,1,2,3};
+
+  if ((Clock::clockTicks - pWeapon->ticks) > 4)
+  {
+    pWeapon->ticks = Clock::clockTicks;
+
+    pWeapon->frameOffset = rolling_cutter_frames[pWeapon->current_frame];
+    ++pWeapon->current_frame;
+
+    if (pWeapon->current_frame >= pWeapon->frames)
+      pWeapon->current_frame = 0;
   }
 }
 
@@ -661,13 +686,13 @@ void mm_weapons::createRollingCutter(Player * player)
     cutter.y = (float)(player->y + 12.0f);
   }
 
-  cutter.vx = 4.5f;
+  cutter.vx = 1.0f;
   if (player->isFacingRight == false)
   {
-    cutter.vx *= -1.0f;
+    cutter.vx = -1.0f;
   }
-  cutter.vy = -9.0f;
 
+  cutter.life = 2;
   cutter.alive  = true;
 
   cutter.frameOffset = 0;
@@ -677,6 +702,15 @@ void mm_weapons::createRollingCutter(Player * player)
   cutter.h = cutter.bulletSpriteShet->getFrame(cutter.frameOffset)->h;
   cutter.w = cutter.bulletSpriteShet->getFrame(cutter.frameOffset)->w;
 
+  cutter.cutter_origin_x = cutter.x;
+  cutter.cutter_origin_y = cutter.y;
+
+  cutter.ticks = Clock::clockTicks;
+  cutter.frames = 4;
+
+  cutter.cutter_recalc = true;
+  cutter.cutter_foward = true;
+  cutter.cutter_current_point = 5;
   GlobalGameState::playerShots.push_back(cutter);
 }
 
