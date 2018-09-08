@@ -192,7 +192,7 @@ void Character::doGravitation()
 
         // 1 so we test against the ground again 
         // in the next frame (0 would test against the ground in the next+1 frame)
-        vely = 1; 
+        vely = 1;
 
         if(canJumpAgain())
         {

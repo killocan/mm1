@@ -110,21 +110,26 @@ static void handleBomb(mm_weapons::weapon_st * pWeapon, Stage * stage)
   }
   else
   {
-    if (pWeapon->hyper_bomb_should_bounce)
+    if (pWeapon->hyper_bomb_should_bounce && pWeapon->hyper_bomb_bounce_count < 4)
     {
-      pWeapon->vy *= 0.6f;
+      if (pWeapon->vy > 0.0f)
+        pWeapon->y = tilecoordy * mm_graphs_defs::TILE_SIZE - pWeapon->h-1;
+
+      pWeapon->hyper_bomb_bounce_count++;
+      pWeapon->vy *= 0.70f;
       pWeapon->vx *= 0.6f;
       pWeapon->vy *= -1;
     }
     else
     {
-      pWeapon->vx = pWeapon->vy = 0.0f;
+      pWeapon->vy = 0.0f;
     }
   }
 
   if (!stage->genericColVer(pWeapon->x + pWeapon->vx + (pWeapon->vx > 0 ? pWeapon->w : 0), pWeapon->y, pWeapon->h, tilecoordx, tilecoordy))
   {
-    pWeapon->x += pWeapon->vx;
+    if (pWeapon->hyper_bomb_bounce_count < 4)
+      pWeapon->x += pWeapon->vx;
   }
   else
   {
@@ -562,7 +567,7 @@ void mm_weapons::createHyperBomb(Player * player)
   {
     bomb.vx *= -1.0f;
   }
-  bomb.vy = -9.0f;
+  bomb.vy = -9.2f;
 
   bomb.alive  = true;
 
@@ -598,7 +603,7 @@ void mm_weapons::createThunderBeam(Player * player)
 
     if (player->onground == true)
     {
-      y = (float)(player->y + 22.0f);
+      y = (float)(player->y + 12.0f);
     }
     else
     {
@@ -632,8 +637,8 @@ void mm_weapons::createThunderBeam(Player * player)
   {
     thunder_beam[0].vx *= -1.0f;
   }
-  thunder_beam[1].vy = 4.5f;
-  thunder_beam[2].vy = -4.5f;
+  thunder_beam[1].vy = 7.5f;
+  thunder_beam[2].vy = -7.5f;
 
   thunder_beam[0].alive = thunder_beam[1].alive = thunder_beam[2].alive = true;
 

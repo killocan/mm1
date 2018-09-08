@@ -712,7 +712,6 @@ bool Player::canJumpAgain()
 void Player::fire()
 {
   //TODO: Check if we are shoting in the air (sync animation and bullet)
-  //NOTE: max 3 bullets on screen for MEGABUSTER and only 1 for others.
   switch(curWeapon)
   {
     case mm_weapons::W_MEGA_BUSTER:
