@@ -194,15 +194,16 @@ static void handleRollingCutter(mm_weapons::weapon_st * pWeapon, Stage * stage)
       pWeapon->cutter_ctrl_points[1] = pWeapon->cutter_target_y;
       pWeapon->cutter_ctrl_points[2] = mid_x1;
       pWeapon->cutter_ctrl_points[3] = mid_y1;
-      pWeapon->cutter_ctrl_points[4] = stage->m_player->x;
+      pWeapon->cutter_ctrl_points[4] = stage->m_player->x + (pWeapon->vx<0.0f?20:0);
       pWeapon->cutter_ctrl_points[5] = stage->m_player->y + 20;
-      pWeapon->cutter_ctrl_points[6] = stage->m_player->x;
+      pWeapon->cutter_ctrl_points[6] = stage->m_player->x + (pWeapon->vx<0.0f?20:0);
       pWeapon->cutter_ctrl_points[7] = stage->m_player->y + 20;
       calc_spline(pWeapon->cutter_ctrl_points, CUTTER_CURVE_PNTS, pWeapon->cutter_curve_X, pWeapon->cutter_curve_Y);
     }
   }
 
-  if (pWeapon->cutter_foward == false && (CUTTER_CURVE_PNTS - pWeapon->cutter_current_point) < 15)
+  if ((pWeapon->cutter_foward == false) &&
+      (CUTTER_CURVE_PNTS - pWeapon->cutter_current_point) < 14)
   {
     if (Collision::pixelCollision((int) pWeapon->x, (int) pWeapon->y,
                                   pWeapon->bulletSpriteShet->getFrame(pWeapon->frameOffset),

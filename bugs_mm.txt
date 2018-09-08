@@ -4,6 +4,9 @@ BUGS:
 - Escada a entrada pela direita t� errado.
 - Passar para float o x,y,velx,vely...
 - Mudar velocidade do scroll vertical da tela.
+- ao saltar sobre uma escada muito proxima de um teto megaman passa direto, altura do sprite
+  faz detectar sprite abaixo do inicio da escada, arrumar um jeito de colidir com altura modificada
+  somente neste caso ou arrumar um altura real em hor e em ver... algo assim.
 
 X Velocidade de salto tanto pra cima quanto a queda � maior que no jogo (influencia colisao com o mapa).
 --- Parece estar ok, mudei altura do personagem no salto.
