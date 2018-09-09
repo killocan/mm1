@@ -3,6 +3,8 @@
  * http://killocan.blogspot.com
 */
 
+#include <math.h>
+
 #include "weapons.h"
 #include "globalgamestate.h"
 #include "globals.h"
@@ -190,9 +192,7 @@ static void handleRollingCutter(mm_weapons::weapon_st * pWeapon, Stage * stage)
     }
     else
     {
-      //int distance = sqrt(pow(x2 - x, 2) + pow(y2 - y, 2));
-
-      int mid_x1 = pWeapon->vx > 0.0f ? pWeapon->x + (140 / 2) : pWeapon->x - (140 / 2);
+      int mid_x1 = pWeapon->vx > 0.0f ? pWeapon->cutter_origin_x + (140 / 2) : pWeapon->cutter_origin_x - (140 / 2);
       int mid_y1 = pWeapon->cutter_origin_y + 100;
 
       pWeapon->cutter_ctrl_points[0] = pWeapon->cutter_target_x;
@@ -203,14 +203,22 @@ static void handleRollingCutter(mm_weapons::weapon_st * pWeapon, Stage * stage)
       pWeapon->cutter_ctrl_points[5] = stage->m_player->y + 20;
       pWeapon->cutter_ctrl_points[6] = stage->m_player->x + (pWeapon->vx<0.0f?20:0);
       pWeapon->cutter_ctrl_points[7] = stage->m_player->y + 20;
+
       calc_spline(pWeapon->cutter_ctrl_points, CUTTER_CURVE_PNTS, pWeapon->cutter_curve_X, pWeapon->cutter_curve_Y);
     }
   }
 
-  if ((pWeapon->cutter_foward == false) &&
-      (CUTTER_CURVE_PNTS - pWeapon->cutter_current_point) < 14)
+  if (pWeapon->cutter_foward == false)
   {
-    if (Collision::pixelCollision((int) pWeapon->x, (int) pWeapon->y,
+    float x1 = pWeapon->x + (pWeapon->w/2);
+    float y1 = pWeapon->y + (pWeapon->h/2);
+    float x2 = stage->m_player->x + (stage->m_player->w/2);
+    float y2 = stage->m_player->y + (stage->m_player->h/2);
+
+    int distance = sqrt( pow(x2 - x1, 2) + pow(y2 - y1, 2) );
+
+    if ((distance > 15 && distance < 30) &&
+        Collision::pixelCollision((int) pWeapon->x, (int) pWeapon->y,
                                   pWeapon->bulletSpriteShet->getFrame(pWeapon->frameOffset),
                                   stage->m_player->x, stage->m_player->y, stage->m_player->getFrame()))
     {
@@ -713,6 +721,23 @@ void mm_weapons::createRollingCutter(Player * player)
 
   cutter.ticks = Clock::clockTicks;
   cutter.frames = 4;
+
+  cutter.cutter_target_x = cutter.vx > 0.0f ? cutter.x + 140 : cutter.x - 140; // 140 - Distance to target
+  cutter.cutter_target_y = cutter.y;
+
+  int mid_x1 = cutter.vx > 0.0f ? cutter.x + (140 / 2) : cutter.x - (140 / 2);
+  int mid_y1 = cutter.y - 100; // Radius
+
+  cutter.cutter_ctrl_points[0] = cutter.x;
+  cutter.cutter_ctrl_points[1] = cutter.y;
+  cutter.cutter_ctrl_points[2] = cutter.x;
+  cutter.cutter_ctrl_points[3] = cutter.y;
+  cutter.cutter_ctrl_points[4] = mid_x1;
+  cutter.cutter_ctrl_points[5] = mid_y1;
+  cutter.cutter_ctrl_points[6] = cutter.cutter_target_x;
+  cutter.cutter_ctrl_points[7] = cutter.cutter_target_y;
+
+  calc_spline(cutter.cutter_ctrl_points, CUTTER_CURVE_PNTS, cutter.cutter_curve_X, cutter.cutter_curve_Y);
 
   cutter.cutter_recalc = true;
   cutter.cutter_foward = true;
