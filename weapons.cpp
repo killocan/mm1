@@ -223,16 +223,17 @@ static void handleRollingCutter(mm_weapons::weapon_st * pWeapon, Stage * stage)
                                   stage->m_player->x, stage->m_player->y, stage->m_player->getFrame()))
     {
       pWeapon->alive = false;
+      return;
     }
   }
 
-  pWeapon->x = pWeapon->cutter_curve_X[pWeapon->cutter_current_point];
-  pWeapon->y = pWeapon->cutter_curve_Y[pWeapon->cutter_current_point];
+  pWeapon->x = pWeapon->cutter_curve_X[pWeapon->current_point];
+  pWeapon->y = pWeapon->cutter_curve_Y[pWeapon->current_point];
 
-  ++pWeapon->cutter_current_point;
-  if (pWeapon->cutter_current_point >= CUTTER_CURVE_PNTS)
+  ++pWeapon->current_point;
+  if (pWeapon->current_point >= CUTTER_CURVE_PNTS)
   {
-    pWeapon->cutter_current_point = 0;
+    pWeapon->current_point = 0;
     pWeapon->cutter_recalc = true;
     pWeapon->cutter_foward = !pWeapon->cutter_foward;
     pWeapon->life--;
@@ -241,6 +242,7 @@ static void handleRollingCutter(mm_weapons::weapon_st * pWeapon, Stage * stage)
   if (pWeapon->life == 0)
   {
     pWeapon->alive = false;
+    return;
   }
 
   static int rolling_cutter_frames[4] = {0,1,2,3};
@@ -254,6 +256,63 @@ static void handleRollingCutter(mm_weapons::weapon_st * pWeapon, Stage * stage)
 
     if (pWeapon->current_frame >= pWeapon->frames)
       pWeapon->current_frame = 0;
+  }
+}
+
+static void handleFireStormProjectile(mm_weapons::weapon_st * pWeapon)
+{
+  pWeapon->x += pWeapon->vx;
+
+  pWeapon->x_dist += pWeapon->vx;
+  if (abs((int)pWeapon->x_dist) > 128)
+  {
+    pWeapon->x_dist = 0;
+
+    ++pWeapon->current_frame;
+    if (pWeapon->current_frame >= pWeapon->frames)
+      pWeapon->current_frame = 0;
+
+    pWeapon->frameOffset = pWeapon->frames + pWeapon->current_frame;
+  }
+}
+
+static void handleFireStormShield(mm_weapons::weapon_st * pWeapon, Stage * stage)
+{
+  static float x_0[] = {0.0f, 0.0f, 0.0f, 0.0f, 20.0f, 20.0f, 20.0f, 20.0f};
+  static float y_0[] = {30.0f, 20.0f, 10.0f, 0.0f, 0.0f, 10.0f, 20.0f, 30.0f};
+  int num_elements = sizeof(x_0) / sizeof(float);
+
+  if ((Clock::clockTicks - pWeapon->ticks) > 1)
+  {
+    pWeapon->ticks = Clock::clockTicks;
+
+    pWeapon->x = (stage->m_player->x + (stage->m_player->w/2)) + x_0[pWeapon->current_point];
+    pWeapon->y = (stage->m_player->y + (stage->m_player->h/2)) + y_0[pWeapon->current_point];
+
+    ++pWeapon->current_point;
+    if (pWeapon->current_point == num_elements)
+    {
+      pWeapon->alive = false;
+      return;
+    }
+
+    ++pWeapon->current_frame;
+    if (pWeapon->current_frame >= pWeapon->frames)
+    pWeapon->current_frame = 0;
+
+    pWeapon->frameOffset = pWeapon->current_frame;
+  }
+}
+
+static void handleIceSlasher(mm_weapons::weapon_st * pWeapon)
+{
+  pWeapon->x += pWeapon->vx;
+
+  pWeapon->x_dist += pWeapon->vx;
+  if (abs((int)pWeapon->x_dist) > 128)
+  {
+    pWeapon->x_dist = 0;
+    pWeapon->frameOffset = 1 - pWeapon->frameOffset;
   }
 }
 
@@ -284,15 +343,7 @@ static void doWeaponSpecifics(mm_weapons::weapon_st * pWeapon, Stage * stage)
     break;
     case mm_weapons::W_ICEMAN_GUN:
     {
-      pWeapon->x += pWeapon->vx;
-      pWeapon->y += pWeapon->vy;
-
-      pWeapon->iceman_x_dist += pWeapon->vx;
-      if (abs((int)pWeapon->iceman_x_dist) > 128)
-      {
-        pWeapon->iceman_x_dist = 0;
-        pWeapon->frameOffset = 1 - pWeapon->frameOffset;
-      }
+      handleIceSlasher(pWeapon);
     }
     break;
     case mm_weapons::W_BOMBMAN_GUN:
@@ -305,7 +356,10 @@ static void doWeaponSpecifics(mm_weapons::weapon_st * pWeapon, Stage * stage)
     break;
     case mm_weapons::W_FIREMAN_GUN:
     {
-      ;
+      if (pWeapon->subtype)
+        handleFireStormProjectile(pWeapon);
+      else
+        handleFireStormShield(pWeapon, stage);
     }
     break;
     case mm_weapons::W_ELECMAN_GUN:
@@ -741,11 +795,83 @@ void mm_weapons::createRollingCutter(Player * player)
 
   cutter.cutter_recalc = true;
   cutter.cutter_foward = true;
-  cutter.cutter_current_point = 5;
+  cutter.current_point = 5;
   GlobalGameState::playerShots.push_back(cutter);
 }
 
 void mm_weapons::createRollingCutter(Character * character, int x, int y, float vx, float vy, int offset)
 {
   return;
+}
+
+void mm_weapons::createFireStorm(Player *player)
+{
+  mm_weapons::weapon_st fire_storm[2];
+  fire_storm[1].can_hurt = fire_storm[2].can_hurt = true;
+
+  float x, y;
+
+  if (player->grabstair == false)
+  {
+    x = (float)(player->x + 54);
+    if (player->isFacingRight == false)
+    {
+      x -= 120.0f;
+    }
+
+    if (player->onground == true)
+    {
+      y = (float)(player->y + 12.0f);
+    }
+    else
+    {
+      y = (float)(player->y + 12.0f);
+    }
+  }
+  else
+  {
+    x = (float)(player->x + 52.0f);
+    if (player->isFacingRight == false)
+    {
+      x -= 58.0f;
+    }
+
+    y = (float)(player->y + 12.0f);
+  }
+
+  fire_storm[1].subtype = true;
+
+  fire_storm[0].frames = fire_storm[1].frames = 3;
+  fire_storm[0].ticks = fire_storm[1].ticks = Clock::clockTicks;
+
+  fire_storm[0].x = x;
+  fire_storm[1].x = player->x;
+
+  fire_storm[0].y = y;
+  fire_storm[2].y = player->y;
+
+  fire_storm[0].vx = 6.5f;
+  if (player->isFacingRight == false)
+  {
+    fire_storm[0].vx *= -1.0f;
+  }
+
+  fire_storm[0].alive = fire_storm[1].alive = true;
+
+  for (int i = 0; i < 2; ++i)
+  {
+    fire_storm[i].frameOffset = (i == 0) ? 3 : 0;
+    fire_storm[i].frames = 3;
+    fire_storm[i].bulletSpriteShet = player->cur_stage->getAnimSeq(mm_spritefiles::WEAPONS_FIREMAN);
+    fire_storm[i].weapon = mm_weapons::W_FIREMAN_GUN;
+
+    fire_storm[i].w = fire_storm[i].bulletSpriteShet->getFrame(fire_storm[i].frameOffset)->w;
+    fire_storm[i].h = fire_storm[i].bulletSpriteShet->getFrame(fire_storm[i].frameOffset)->h;
+
+    GlobalGameState::playerShots.push_back(fire_storm[i]);
+  }
+}
+
+void createFireStorm(Character * character, int x, int y, float vx, float vy, int offset)
+{
 }

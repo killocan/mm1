@@ -788,6 +788,19 @@ void Player::fire()
       }
     }
     break;
+    case mm_weapons::W_FIREMAN_GUN:
+    {
+      if ((GlobalGameState::playerShots.size() == 0) && (weapons[mm_weapons::W_FIREMAN_GUN] > 0))
+      {
+        weapons[mm_weapons::W_FIREMAN_GUN]--;
+
+        mm_weapons::createFireStorm(this);
+
+        firing = true;
+        lastShot = Clock::clockTicks;
+      }
+    }
+    break;
     default:
       if (GlobalGameState::playerShots.size() == 0)
       {

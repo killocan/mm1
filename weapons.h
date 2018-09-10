@@ -48,13 +48,13 @@ namespace mm_weapons
 
       ticks = 0;
 
-      iceman_x_dist = 0.0f;
+      x_dist = 0.0f;
 
       hyper_bomb_bounce_count = 0;
       hyper_bomb_should_bounce = false;
       life = 0;
 
-      cutter_current_point = 0;
+      current_point = 0;
       cutter_target_x = cutter_target_y = 0;
       cutter_origin_x = cutter_origin_y = 0;
       cutter_foward = false;
@@ -84,12 +84,12 @@ namespace mm_weapons
 
     unsigned long ticks; // to control time related stuff
 
-    float iceman_x_dist;
+    float x_dist; // Used to calculate horizontal displacement
 
     int hyper_bomb_bounce_count;
     bool hyper_bomb_should_bounce;
+    int current_point;
 
-    int cutter_current_point;
     int cutter_curve_X[CUTTER_CURVE_PNTS];
     int cutter_curve_Y[CUTTER_CURVE_PNTS];
     int cutter_ctrl_points[8];
@@ -128,4 +128,7 @@ namespace mm_weapons
 
   void createRollingCutter(Player *player);
   void createRollingCutter(Character * character, int x, int y, float vx, float vy, int offset);
+
+  void createFireStorm(Player *player);
+  void createFireStorm(Character * character, int x, int y, float vx, float vy, int offset);
 }
