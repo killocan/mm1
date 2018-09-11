@@ -264,7 +264,7 @@ static void handleFireStormProjectile(mm_weapons::weapon_st * pWeapon)
   pWeapon->x += pWeapon->vx;
 
   pWeapon->x_dist += pWeapon->vx;
-  if (abs((int)pWeapon->x_dist) > 128)
+  if (abs((int)pWeapon->x_dist) > 53)
   {
     pWeapon->x_dist = 0;
 
@@ -278,22 +278,33 @@ static void handleFireStormProjectile(mm_weapons::weapon_st * pWeapon)
 
 static void handleFireStormShield(mm_weapons::weapon_st * pWeapon, Stage * stage)
 {
-  static float x_0[] = {0.0f, 0.0f, 0.0f, 0.0f, 20.0f, 20.0f, 20.0f, 20.0f};
-  static float y_0[] = {30.0f, 20.0f, 10.0f, 0.0f, 0.0f, 10.0f, 20.0f, 30.0f};
+  static float x_0[] = {-20.0f,-30.0,-20.0f,
+                        mm_player_defs::HALFPLAYERWIDTH,
+                        mm_player_defs::PLAYERWIDTH, mm_player_defs::PLAYERWIDTH+20.0f, mm_player_defs::PLAYERWIDTH,
+                        mm_player_defs::HALFPLAYERWIDTH};
+
+  static float y_0[] = {mm_player_defs::PLAYERHEIGHT, mm_player_defs::PLAYERHEIGHT-20, mm_player_defs::PLAYERHEIGHT-60,
+                        -20.0f,
+                        mm_player_defs::PLAYERHEIGHT-60, mm_player_defs::PLAYERHEIGHT-40, mm_player_defs::PLAYERHEIGHT,
+                        mm_player_defs::PLAYERHEIGHT+20};
+
   int num_elements = sizeof(x_0) / sizeof(float);
 
-  if ((Clock::clockTicks - pWeapon->ticks) > 1)
+  if ((Clock::clockTicks - pWeapon->ticks) > 20)
   {
     pWeapon->ticks = Clock::clockTicks;
 
-    pWeapon->x = (stage->m_player->x + (stage->m_player->w/2)) + x_0[pWeapon->current_point];
-    pWeapon->y = (stage->m_player->y + (stage->m_player->h/2)) + y_0[pWeapon->current_point];
+    pWeapon->x = (stage->m_player->x) + x_0[pWeapon->current_point];
+    pWeapon->y = (stage->m_player->y) + y_0[pWeapon->current_point];
+
+    pWeapon->life--;
+    if (pWeapon->life == 0)
+      pWeapon->alive = false;
 
     ++pWeapon->current_point;
     if (pWeapon->current_point == num_elements)
     {
-      pWeapon->alive = false;
-      return;
+      pWeapon->current_point = 0;
     }
 
     ++pWeapon->current_frame;
@@ -357,9 +368,10 @@ static void doWeaponSpecifics(mm_weapons::weapon_st * pWeapon, Stage * stage)
     case mm_weapons::W_FIREMAN_GUN:
     {
       if (pWeapon->subtype)
-        handleFireStormProjectile(pWeapon);
-      else
         handleFireStormShield(pWeapon, stage);
+      else
+        handleFireStormProjectile(pWeapon);
+
     }
     break;
     case mm_weapons::W_ELECMAN_GUN:
@@ -821,7 +833,7 @@ void mm_weapons::createFireStorm(Player *player)
 
     if (player->onground == true)
     {
-      y = (float)(player->y + 12.0f);
+      y = (float)(player->y + 22.0f);
     }
     else
     {
@@ -840,6 +852,7 @@ void mm_weapons::createFireStorm(Player *player)
   }
 
   fire_storm[1].subtype = true;
+  fire_storm[1].life = 31;
 
   fire_storm[0].frames = fire_storm[1].frames = 3;
   fire_storm[0].ticks = fire_storm[1].ticks = Clock::clockTicks;
@@ -850,7 +863,7 @@ void mm_weapons::createFireStorm(Player *player)
   fire_storm[0].y = y;
   fire_storm[2].y = player->y;
 
-  fire_storm[0].vx = 6.5f;
+  fire_storm[0].vx = 4.5f;
   if (player->isFacingRight == false)
   {
     fire_storm[0].vx *= -1.0f;

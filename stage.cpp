@@ -308,7 +308,8 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
     (mm_spritefiles::WEAPONS_ELECMAN, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_ELECMAN])));
   preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *>
     (mm_spritefiles::WEAPONS_CUTMAN, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_CUTMAN])));
-
+  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *>
+    (mm_spritefiles::WEAPONS_FIREMAN, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_FIREMAN])));
 #ifdef DEBUG
   fprintf(stderr,"Preload: [explosion]\n");
 #endif
