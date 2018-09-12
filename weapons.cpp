@@ -278,19 +278,21 @@ static void handleFireStormProjectile(mm_weapons::weapon_st * pWeapon)
 
 static void handleFireStormShield(mm_weapons::weapon_st * pWeapon, Stage * stage)
 {
-  static float x_0[] = {-20.0f,-30.0,-20.0f,
-                        mm_player_defs::HALFPLAYERWIDTH,
-                        mm_player_defs::PLAYERWIDTH, mm_player_defs::PLAYERWIDTH+20.0f, mm_player_defs::PLAYERWIDTH,
-                        mm_player_defs::HALFPLAYERWIDTH};
+  int frameNumber[] = {0, 1, 2, 1};
+  int x_0[] = {-20,-30,-20,
+               mm_player_defs::HALFPLAYERWIDTH,
+               mm_player_defs::PLAYERWIDTH, mm_player_defs::PLAYERWIDTH+10, mm_player_defs::PLAYERWIDTH,
+               mm_player_defs::HALFPLAYERWIDTH};
 
-  static float y_0[] = {mm_player_defs::PLAYERHEIGHT, mm_player_defs::PLAYERHEIGHT-20, mm_player_defs::PLAYERHEIGHT-60,
-                        -20.0f,
-                        mm_player_defs::PLAYERHEIGHT-60, mm_player_defs::PLAYERHEIGHT-40, mm_player_defs::PLAYERHEIGHT,
-                        mm_player_defs::PLAYERHEIGHT+20};
+  int y_0[] = {mm_player_defs::PLAYERHEIGHT, mm_player_defs::PLAYERHEIGHT/2, 0,
+               -20,
+               0, mm_player_defs::PLAYERHEIGHT/2, mm_player_defs::PLAYERHEIGHT,
+               mm_player_defs::PLAYERHEIGHT+10};
 
+  int num_frames = sizeof(frameNumber) / sizeof(int);
   int num_elements = sizeof(x_0) / sizeof(float);
 
-  if ((Clock::clockTicks - pWeapon->ticks) > 20)
+  if ((Clock::clockTicks - pWeapon->ticks) > 1)
   {
     pWeapon->ticks = Clock::clockTicks;
 
@@ -308,10 +310,10 @@ static void handleFireStormShield(mm_weapons::weapon_st * pWeapon, Stage * stage
     }
 
     ++pWeapon->current_frame;
-    if (pWeapon->current_frame >= pWeapon->frames)
+    if (pWeapon->current_frame >= num_frames)
     pWeapon->current_frame = 0;
 
-    pWeapon->frameOffset = pWeapon->current_frame;
+    pWeapon->frameOffset = frameNumber[pWeapon->current_frame];
   }
 }
 
@@ -828,7 +830,7 @@ void mm_weapons::createFireStorm(Player *player)
     x = (float)(player->x + 54);
     if (player->isFacingRight == false)
     {
-      x -= 120.0f;
+      x -= 75.0f;
     }
 
     if (player->onground == true)
@@ -853,12 +855,15 @@ void mm_weapons::createFireStorm(Player *player)
 
   fire_storm[1].subtype = true;
   fire_storm[1].life = 31;
+  fire_storm[1].current_point = 1;
 
   fire_storm[0].frames = fire_storm[1].frames = 3;
   fire_storm[0].ticks = fire_storm[1].ticks = Clock::clockTicks;
 
   fire_storm[0].x = x;
-  fire_storm[1].x = player->x;
+
+  fire_storm[1].x = player->x - 20.0f;
+  fire_storm[1].y = player->y + mm_player_defs::PLAYERHEIGHT;
 
   fire_storm[0].y = y;
   fire_storm[2].y = player->y;
