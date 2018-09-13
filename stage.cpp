@@ -127,14 +127,6 @@ void Stage::setTileNumber(int x, int y, unsigned char tile_number)
 
 int Stage::unload()
 {
-#if 0
-  std::vector<RLE_SPRITE*>::iterator i;
-  for (i = tiles.tile_img_rle.begin(); i != tiles.tile_img_rle.end(); ++i)
-  {
-    destroy_rle_sprite(*i);
-  }
-  tiles.tile_img_rle.clear();
-#endif
   std::vector<BITMAP*>::iterator i;
   for (i = tiles.tile_img.begin(); i != tiles.tile_img.end(); ++i)
   {
@@ -148,7 +140,7 @@ int Stage::unload()
   free(sectors);
   sectors = NULL;
 
-  for(int i = 0; i < max_y; i++)
+  for(int i = 0; i < max_y; ++i)
   {
     free(map[i]);
     map[i] = NULL;
@@ -196,11 +188,8 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
   size_t result = fread(&max_x, sizeof(int), 1, fp);
   result = fread(&max_y, sizeof(int), 1, fp);
   result = fread(&default_tile, sizeof(unsigned char), 1, fp);
-  if (result == 42)
-  {
-    result = 0;
-  }
-  
+  result = 0;
+
   int sectors_num = (max_x/mm_graphs_defs::TILES_X) * (max_y/mm_graphs_defs::TILES_Y);
   sectors = (sector_t*) malloc(sizeof(sector_t) * sectors_num);
   memset(sectors, 0, sizeof(sector_t) * sectors_num);
@@ -294,12 +283,12 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
     (mm_spritefiles::MEGAMAN_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::MEGAMAN_SPRITES], true)));
 
 #ifdef DEBUG
-  fprintf(stderr,"Preload: [bullets]\n");
+  fprintf(stderr,"Preload: [weapons]\n");
 #endif
-  // Weapons
-  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+
+  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *>
     (mm_spritefiles::WEAPONS_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_SPRITES])));
-  // Iceman TODO: load bassed in megaman curr avaliable weapons
+  //TODO: load bassed in megaman curr avaliable weapons
   preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
     (mm_spritefiles::WEAPONS_ICEMAN, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_ICEMAN])));
   preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *>
@@ -310,9 +299,11 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
     (mm_spritefiles::WEAPONS_CUTMAN, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_CUTMAN])));
   preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *>
     (mm_spritefiles::WEAPONS_FIREMAN, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_FIREMAN])));
+
 #ifdef DEBUG
   fprintf(stderr,"Preload: [explosion]\n");
 #endif
+
   preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
     (mm_spritefiles::HITEXPLOSION_SPRITES,     new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::HITEXPLOSION_SPRITES])));
   preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
@@ -747,7 +738,7 @@ void Stage::doCamera(Camera & camera)
   else if (update_scroll == 1)
   {
 #ifdef DEBUG
-    //fprintf(stderr,"Stage::doCamera - atualizando scrool vertical [%d]\n", scroll_count);
+    fprintf(stderr,"Stage::doCamera - atualizando scrool vertical [%d]\n", scroll_count);
 #endif
 
     update_scroll = 0;

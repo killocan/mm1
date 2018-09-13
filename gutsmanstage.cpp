@@ -99,7 +99,7 @@ void GutsManStage::doStageSpecifics()
       if (stage->m_player->x > 2350)
       {
         Sounds::mm_sounds->stopSample(PLATFORM_MOVE);
-        bPlayingPlatformSound = false;        
+        bPlayingPlatformSound = false;
       }
     }
   }
