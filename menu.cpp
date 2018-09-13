@@ -214,7 +214,7 @@ static void boss_show(BITMAP * buffer, FONT * mm_font)
   curFrame      = boss_anim[curSelection].sequence[anim_frame].frame;
   frameDuration = boss_anim[curSelection].sequence[anim_frame].time;
 
-  // Bombman
+  // Bombman bomb
   if (curSelection == 3)
   {
     bomb = boss_show_seq[curSelection]->getFrame(4);
@@ -222,7 +222,7 @@ static void boss_show(BITMAP * buffer, FONT * mm_font)
 
   bossShowMusic.play(0);
 
-  anim_frame++;
+  ++anim_frame;
   while(bMenuEnd == false)
   {
     if (update_mm_menu == 1 && blink)
@@ -339,7 +339,6 @@ static void boss_show(BITMAP * buffer, FONT * mm_font)
     {
       switch (infoStatus)
       {
-        // Errr.... sorry....
         int y, x;
 
         case WAITING:
@@ -523,11 +522,17 @@ void menu()
 
       Sounds::mm_sounds->stopSample(MENU_BG);
 
-      //install_int(update_menu_tick, 120);
-      //boss_show(buffer, mm_font);
-      //remove_int(update_menu_tick);
+#ifndef DEBUG
+      install_int(update_menu_tick, 120);
+      boss_show(buffer, mm_font);
+      remove_int(update_menu_tick);
+#endif
+
       goToStage();
-      //install_int(update_menu_tick, 300);
+
+#ifndef DEBUG
+      install_int(update_menu_tick, 300);
+#endif
       
       Sounds::mm_sounds->play(MENU_BG, true);
     }

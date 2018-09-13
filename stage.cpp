@@ -645,7 +645,8 @@ bool Stage::checkForBoss(int x, int y)
 
 bool Stage::cameraSectorHasFgTiles(Camera & camera, Player & player)
 {
-  int camerax = player.x;
+  // Try to "look ahead" to search for FG tiles.
+  int camerax = player.x + (4 * mm_graphs_defs::TILE_SIZE * (player.isFacingRight ? 1 : -1));
 
   if (camerax < 0)
   {
@@ -656,8 +657,6 @@ bool Stage::cameraSectorHasFgTiles(Camera & camera, Player & player)
     camerax = (this->max_x*mm_graphs_defs::TILE_SIZE)-camera.w;
   }
 
-  // TODO: I think this is overdone, just divide x,y by screensize 
-  //       in each direction should do.
   int y = camera.y/mm_graphs_defs::TILE_SIZE;
   int x = camerax/mm_graphs_defs::TILE_SIZE;
   

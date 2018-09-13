@@ -176,7 +176,7 @@ void StageManager::doDraw()
   std::vector<Character *>::iterator it;
 
   stage->draw(m_buffer, *camera);
-  
+
   for (it = characters_vec.begin(); it != characters_vec.end(); ++it)
   {
     curr_character = *it;
@@ -382,7 +382,7 @@ void StageManager::play()
     stage->doCamera(*camera);
     stage->resetReachMaxX();
 
-#if 0
+#ifndef DEBUG
     textout_centre_ex(screen, mm_font, "READY",
                       SCREEN_W/2, SCREEN_H/2,
                       makecol(255,255,255), -1);
@@ -412,7 +412,7 @@ void StageManager::play()
         while(key[KEY_P]);
       }
 
-      if (key[KEY_ENTER] && game_pause == false)
+      if (key[KEY_ENTER] && (game_pause == false) && (GlobalGameState::playerShots.size() == 0))
       {
         Sounds::mm_sounds->play(PAUSE);
 
@@ -456,7 +456,7 @@ void StageManager::play()
             curr_character->doGravitation();
             curr_character->doLogic();
 
-            //TODO: ver se t� colidindo com o megaman em blinking... e mover isso pra um lugar s� :D
+            //TODO: ver se tah colidindo com o megaman em blinking... e mover isso pra um lugar so :D
             if (curr_character->canCollidePlayer == true)
             {
               if (Collision::pixelCollision(curr_character->x, curr_character->y, curr_character->getFrame(),
@@ -527,6 +527,8 @@ void StageManager::play()
       {
         stage->draw(m_buffer, false);
 
+        mm_weapons::drawWeapons(m_buffer);
+
         for (it = characters_vec.begin(); it != characters_vec.end(); ++it)
         {
           curr_character = *it;
@@ -551,6 +553,9 @@ void StageManager::play()
         clear_bitmap(m_buffer);
 
         stage->draw(m_buffer, true, false, true);
+
+        mm_weapons::drawWeapons(m_buffer);
+
         for (it = characters_vec.begin(); it != characters_vec.end(); ++it)
         {
           curr_character = *it;
@@ -577,6 +582,8 @@ void StageManager::play()
         clear_bitmap(m_buffer);
         stage->draw(m_buffer, true);
 
+        mm_weapons::drawWeapons(m_buffer);
+
         for (it = characters_vec.begin(); it != characters_vec.end(); ++it)
         {
           curr_character = *it;
@@ -597,8 +604,6 @@ void StageManager::play()
         }
       }
 
-      mm_weapons::drawWeapons(m_buffer);
-
       if (weapon_menu == true)
       {
         weapon_menu = weaponMenu->inputAndDraw(m_buffer);
@@ -613,12 +618,11 @@ void StageManager::play()
       {
         EnergyBar::drawEnerybar(m_buffer, 32, 34, player->curWeapon);
       }
-//      if (pBoss != NULL)
-  //    {
-    //    EnergyBar::drawEnerybar(m_buffer, 32, 34, pBoss->curWeapon);
+      //if (pBoss != NULL)
+      //{
+      //  EnergyBar::drawEnerybar(m_buffer, 32, 34, pBoss->curWeapon);
       //}
 
-      //Vsync::Sync();
       //tvmode(m_buffer);
       //bhmode(m_buffer);
 #ifdef DEBUG
@@ -631,6 +635,7 @@ void StageManager::play()
 #ifdef FPS_IN_GAME
       textprintf_ex(m_buffer, font, 1, 1, makecol(255,255,255), 0, "FPS: [%d]", sm_fps);
 #endif
+      Vsync::Sync();
       blit(m_buffer,screen,0,0,0,0,SCREEN_W,SCREEN_H);
 #ifdef FPS_IN_GAME
       ++sm_fps_count;
