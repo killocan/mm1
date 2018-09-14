@@ -637,7 +637,7 @@ bool Stage::checkForBoss(int x, int y)
 bool Stage::cameraSectorHasFgTiles(Camera & camera, Player & player)
 {
   // Try to "look ahead" to search for FG tiles.
-  int camerax = player.x + (4 * mm_graphs_defs::TILE_SIZE * (player.isFacingRight ? 1 : -1));
+  int camerax = player.x + player.utilX;
 
   if (camerax < 0)
   {
