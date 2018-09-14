@@ -31,8 +31,6 @@ TackleFire::TackleFireFragment::TackleFireFragment(const Stage & stage, int x, i
   this->old_x = this->x;
   this->old_y = this->y;
 
-  //
-
   overstair     = false;
   isFacingRight = false;
   colorOffset   = 0;
@@ -304,7 +302,8 @@ void TackleFire::respawn()
   for (int i = 0; i < 3; ++i)
   {
     cur = dynamic_cast <TackleFire::TackleFireFragment*> (fragments[i]);
-    cur->setWait();
+    if (cur->curState == TackleFire::TackleFireFragment::WAITING)
+      cur->setWait();
   }
   
   return;
