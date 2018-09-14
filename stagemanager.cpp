@@ -219,8 +219,7 @@ void StageManager::checkColissionAgainstEnemy()
           }
         }
 
-        //TODO: TIRAR PARA PODER ATINGIR O MEGAMAN
-        if (false && player->isInvincible == false)
+        if (player->isInvincible == false)
         {
           if (Collision::pixelCollision((int)player->x,    (int)player->y,   player->getFrame(),
                                          curr_character->x, curr_character->y, curr_character->getFrame(),
@@ -453,6 +452,7 @@ void StageManager::play()
                ++i)
           {
             curr_character = *i;
+            curr_character->checkOnCamera();
             curr_character->doGravitation();
             curr_character->doLogic();
 
