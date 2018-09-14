@@ -24,10 +24,10 @@ bool Collision::pixelCollision(int object1X, int object1Y, BITMAP *sprite1, int 
     return false;
   }
 
-  static int mask = makecol32(255,0,255);
+  unsigned int mask = MASK_COLOR_32;
 
   int x1,x2,y1,y2;
-  int color1, color2;
+  unsigned int color1, color2;
   for (int y = ymin; y < ymax; ++y) 
   {
     // normalize the coordinates.
@@ -43,7 +43,8 @@ bool Collision::pixelCollision(int object1X, int object1Y, BITMAP *sprite1, int 
       color1 = _getpixel32(sprite1, x1, y1);
       color2 = _getpixel32(sprite2, x2, y2);
 
-      if (!((color1 & color2) ^ mask))
+      //if (!((color1 & color2) ^ mask))
+      if (color1 != mask && color2 != mask)
       {
         if (colX != NULL)
         {
