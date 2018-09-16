@@ -890,6 +890,48 @@ void mm_weapons::createFireStorm(Player *player)
   }
 }
 
-void createFireStorm(Character * character, int x, int y, float vx, float vy, int offset)
+void mm_weapons::createFireStorm(Character * character, int x, int y, float vx, float vy, int offset)
+{
+}
+
+void mm_weapons::createMagnetBeam(Player *player)
+{
+  float x, y;
+
+  if (player->grabstair == false)
+  {
+    x = (float)(player->x + 54);
+    if (player->isFacingRight == false)
+    {
+      x -= 75.0f;
+    }
+
+    if (player->onground == true)
+    {
+      y = (float)(player->y + 22.0f);
+    }
+    else
+    {
+      y = (float)(player->y + 12.0f);
+    }
+  }
+  else
+  {
+    x = (float)(player->x + 52.0f);
+    if (player->isFacingRight == false)
+    {
+      x -= 58.0f;
+    }
+
+    y = (float)(player->y + 12.0f);
+  }
+
+  Character * magnet_beam = cur_stage->createCharacter(mm_tile_actions::MAGNET_BEAM,
+                                                       x, y, 0, 0, NULL);
+
+  TemporaryCharacterList::mm_tempCharacterLst.push_back(magnet_beam);
+}
+
+void createMagnetBeam(Character * character, int x, int y, float vx, float vy, int offset)
 {
 }

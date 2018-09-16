@@ -801,6 +801,19 @@ void Player::fire()
       }
     }
     break;
+    case mm_weapons::W_PLATFORM_CREATOR:
+    {
+      if ((GlobalGameState::playerShots.size() == 0) && (weapons[mm_weapons::W_PLATFORM_CREATOR] > 0))
+      {
+        weapons[mm_weapons::W_PLATFORM_CREATOR]--;
+
+        mm_weapons::createMagnetBeam(this);
+
+        firing = true;
+        lastShot = Clock::clockTicks;
+      }
+    }
+    break;
     default:
       if (GlobalGameState::playerShots.size() == 0)
       {

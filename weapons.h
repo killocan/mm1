@@ -131,4 +131,7 @@ namespace mm_weapons
 
   void createFireStorm(Player *player);
   void createFireStorm(Character * character, int x, int y, float vx, float vy, int offset);
+
+  void createMagnetBeam(Player *player);
+  void createMagnetBeam(Character * character, int x, int y, float vx, float vy, int offset);
 }
