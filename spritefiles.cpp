@@ -24,7 +24,7 @@ namespace mm_spritefiles
     "./game_data/watcher_seq.dat",
     "./game_data/tacklefire_seq.dat",
     "./game_data/peng_seq.dat",
-    "./game_data/footholder.dat",
+    "./game_data/footholder_seq.dat",
     "./game_data/crazyrazy_seq.dat",
     "./game_data/bigeye_seq.dat",
     "./game_data/flea_seq.dat",
@@ -54,6 +54,7 @@ namespace mm_spritefiles
     "./game_data/fire_storm_seq.dat",
     "./game_data/thunder_beam_seq.dat",
     "./game_data/bossdoor_seq.dat",
+
     "./game_data/hit_explosion_seq.dat",
     "./game_data/explosion_little_seq.dat",
     "./game_data/megaman_explode_seq.dat",
@@ -62,6 +63,18 @@ namespace mm_spritefiles
     "./game_data/crazyrazy_upper_seq.dat",
     "./game_data/sparkle_enm_seq.dat",
     "./game_data/bonus_point_seq.dat",
+
     "./game_data/gutsman_seq.dat",
+    "./game_data/cutman_seq.dat",
+    "./game_data/iceman_seq.dat",
+    "./game_data/bombman_seq.dat",
+    "./game_data/fireman_seq.dat",
+    "./game_data/elecman_seq.dat",
+    "./game_data/yellow_devil_seq.dat",
+    "./game_data/copy_robot_seq.dat",
+    "./game_data/cwu-01p_seq.dat",
+    "./game_data/willy_seq.dat",
+
+    "./game_data/magnet_beam_seq.dat",
   };
 }

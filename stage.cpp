@@ -29,6 +29,7 @@
 #include "screwbomber.h"
 #include "bombomb.h"
 #include "crazyrazy.h"
+#include "footholder.h"
 #include "tacklefire.h"
 #include "moveplatform.h"
 #include "lightningwall.h"
@@ -188,7 +189,7 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
   size_t result = fread(&max_x, sizeof(int), 1, fp);
   result = fread(&max_y, sizeof(int), 1, fp);
   result = fread(&default_tile, sizeof(unsigned char), 1, fp);
-  result = 0;
+  if (result) result = 0;
 
   int sectors_num = (max_x/mm_graphs_defs::TILES_X) * (max_y/mm_graphs_defs::TILES_Y);
   sectors = (sector_t*) malloc(sizeof(sector_t) * sectors_num);
@@ -521,13 +522,6 @@ int Stage::getOffset(int type)
   return (offsetMap[type]);
 }
 
-//inline void Stage::tileDraw(BITMAP * bmp, int tile_number, int x, int y)
-//{
-  //draw_sprite(bmp, tiles.tile_img[tile_number], x, y);
-  //blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, 32,32);
-  //draw_rle_sprite(bmp, tiles.tile_img_rle[tile_number], x, y);
-//}
-
 void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
 {
   int i, j;
@@ -554,6 +548,10 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
 
   int tile_number = 0;
 
+#ifdef DEBUG
+  int tile_action = 0;
+#endif
+
   if (hasFg == false)
   {
     y = map_yoff;
@@ -565,15 +563,61 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
 
       for(j = 0; j < (xdisp>>2); ++j)
       {
-        tile_number = (*(map_line++)).tile_number;blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);x += mm_graphs_defs::TILE_SIZE;
-        tile_number = (*(map_line++)).tile_number;blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);x += mm_graphs_defs::TILE_SIZE;
-        tile_number = (*(map_line++)).tile_number;blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);x += mm_graphs_defs::TILE_SIZE;
-        tile_number = (*(map_line++)).tile_number;blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);x += mm_graphs_defs::TILE_SIZE;
+#ifdef DEBUG
+        tile_action = (*(map_line)).action;
+#endif
+        tile_number = (*(map_line++)).tile_number;
+        blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
+#ifdef DEBUG
+        if (tile_action == mm_tile_actions::TILE_SOLID)
+          hline(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, makecol(255,0,0));
+#endif
+        x += mm_graphs_defs::TILE_SIZE;
+
+#ifdef DEBUG
+        tile_action = (*(map_line)).action;
+#endif
+        tile_number = (*(map_line++)).tile_number;
+        blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
+#ifdef DEBUG
+        if (tile_action == mm_tile_actions::TILE_SOLID)
+          hline(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, makecol(255,0,0));
+#endif
+        x += mm_graphs_defs::TILE_SIZE;
+
+#ifdef DEBUG
+        tile_action = (*(map_line)).action;
+#endif
+        tile_number = (*(map_line++)).tile_number;
+        blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
+#ifdef DEBUG
+        if (tile_action == mm_tile_actions::TILE_SOLID)
+          hline(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, makecol(255,0,0));
+#endif
+        x += mm_graphs_defs::TILE_SIZE;
+
+#ifdef DEBUG
+        tile_action = (*(map_line)).action;
+#endif
+        tile_number = (*(map_line++)).tile_number;
+        blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
+#ifdef DEBUG
+        if (tile_action == mm_tile_actions::TILE_SOLID)
+          hline(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, makecol(255,0,0));
+#endif
+        x += mm_graphs_defs::TILE_SIZE;
       }
       if (xdisp&1)
       {
+#ifdef DEBUG
+        tile_action = (*(map_line)).action;
+#endif
         tile_number = (*(map_line++)).tile_number;
         blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
+#ifdef DEBUG
+        if (tile_action == mm_tile_actions::TILE_SOLID)
+          hline(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, makecol(255,0,0));
+#endif
       }
 
       y += mm_graphs_defs::TILE_SIZE;
@@ -590,8 +634,15 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
         map_line = &map[mapy+i][mapx];
         for(j = 0; j < xdisp; ++j)
         {
+#ifdef DEBUG
+          tile_action = (*(map_line)).action;
+#endif
           tile_number = (*(map_line++)).tile_number;
           masked_blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
+#ifdef DEBUG
+          if (tile_action == mm_tile_actions::TILE_SOLID)
+            hline(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, makecol(255,0,0));
+#endif
           x += mm_graphs_defs::TILE_SIZE;
         }
         y += mm_graphs_defs::TILE_SIZE;
@@ -614,8 +665,15 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
             continue;
           }
 
+#ifdef DEBUG
+          tile_action = (*(map_line)).action;
+#endif
           tile_number = (*(map_line++)).tile_number;
           masked_blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
+#ifdef DEBUG
+          if (tile_action == mm_tile_actions::TILE_SOLID)
+            hline(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, makecol(255,0,0));
+#endif
           x += mm_graphs_defs::TILE_SIZE;
         }
         y += mm_graphs_defs::TILE_SIZE;
@@ -940,6 +998,11 @@ Character * Stage::createCharacter(unsigned int TYPE, int x, int y, int vx, int 
       cur_character = new WeaponChargerLittle(*this, x, y, param);
     }
     break;
+    case mm_tile_actions::TILE_ENEMY_FOOTHOLDER:
+    {
+      cur_character = new FootHolder(*this, x, y);
+    }
+      break;
     case mm_tile_actions::TILE_GUTSMAN_ROCK:
     {
       cur_character = new GutsmanRock(*this, x, y);

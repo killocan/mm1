@@ -208,7 +208,9 @@ void Watcher::WatcherFragment::hit(mm_weapons::weapon_st * pWeapon)
 
 void Watcher::WatcherFragment::checkOnCamera()
 {
-  if ((this->x >= GlobalCamera::mm_camera->x) && (this->x <= GlobalCamera::mm_camera->x+GlobalCamera::mm_camera->w) && (cur_stage->horz_scroll == false))
+  if ((this->x >= GlobalCamera::mm_camera->x) &&
+      (this->x <= GlobalCamera::mm_camera->x+GlobalCamera::mm_camera->w) &&
+      (cur_stage->horz_scroll == false))
   {
     alive = true;
   }
@@ -216,7 +218,7 @@ void Watcher::WatcherFragment::checkOnCamera()
   {
     x = old_x;
     y = old_y;
-    curState = Watcher::WatcherFragment::WAITING;
+    //curState = Watcher::WatcherFragment::WAITING;
   }
 }
 

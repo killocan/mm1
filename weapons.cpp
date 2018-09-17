@@ -6,6 +6,7 @@
 #include <math.h>
 
 #include "weapons.h"
+#include "tileactions.h"
 #include "globalgamestate.h"
 #include "globals.h"
 #include "defines.h"
@@ -926,8 +927,7 @@ void mm_weapons::createMagnetBeam(Player *player)
     y = (float)(player->y + 12.0f);
   }
 
-  Character * magnet_beam = cur_stage->createCharacter(mm_tile_actions::MAGNET_BEAM,
-                                                       x, y, 0, 0, NULL);
+  Character * magnet_beam = player->cur_stage->createCharacter(mm_tile_actions::MAGNET_BEAM, x, y, 0, 0, NULL);
 
   TemporaryCharacterList::mm_tempCharacterLst.push_back(magnet_beam);
 }

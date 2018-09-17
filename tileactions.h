@@ -69,5 +69,16 @@ namespace mm_tile_actions
     BONUS_POINT_CHAR,
 
     GUTSMAN,
+    CUTMAN,
+    ICEMAN,
+    BOMBMAN,
+    FIREMAN,
+    ELECMAN,
+    YELLOWDEVIL,
+    COPYROBOT,
+    CWUO1P,
+    WILLY,
+
+    MAGNET_BEAM
   };
 }

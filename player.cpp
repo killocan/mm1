@@ -863,11 +863,14 @@ void Player::drawCharacter(BITMAP * bmp)
   }
 
 #ifdef DEBUG
-  // Draw megaman real(x,y) and stairX point.
-  int xrect = (sx+utilX)+(utilXLen>>1);
-  int yrect = sy+8;
-  rectfill(bmp, sx,sy,sx+4,sy+4, makecol(255,0,0));
-  rectfill(bmp, xrect,yrect,xrect+4,yrect+4, makecol(0,255,0));
+  int xrect = (xpos + this->utilX);
+
+  drawing_mode(DRAW_MODE_TRANS, NULL, 0, 0);
+
+  rect(bmp, xpos, this->sy, xpos + getFrameW(), this->sy + mm_player_defs::PLAYERHEIGHT, makecol(255,0,0));
+  rectfill(bmp, xrect, this->sy, xrect + this->utilXLen, this->sy + mm_player_defs::PLAYERHEIGHT, makecol(0,255,0));
+
+  drawing_mode(DRAW_MODE_SOLID, NULL, 0, 0);
 #endif
 }
 
