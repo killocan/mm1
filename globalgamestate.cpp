@@ -5,21 +5,10 @@
 
 #include "globalgamestate.h"
 
-#if 0
-AnimSequence * GlobalGameState::weaponsFrames[mm_weapons::WEAPONS_NUMBER] = {};
-void GlobalGameState::loadWeaponsFrames()
-{
-  for (int i = 0; i < mm_weapons::WEAPONS_NUMBER; i++)
-  {
-    weaponsFrames[i] = new AnimSequence("");
-  }
-}
-#endif
-
 std::list<mm_weapons::weapon_st> GlobalGameState::playerShots;
 std::list<mm_weapons::weapon_st> GlobalGameState::enemyShots;
 
-bool GlobalGameState::hasPlatformGun          = false;
+bool GlobalGameState::hasPlatformGun          = true;
 
 bool GlobalGameState::allEnemysDefeated       = false;
 bool GlobalGameState::enemyDefeated[6]        = {true, true, true, true, true, true};

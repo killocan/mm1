@@ -28,6 +28,7 @@ void GutsManStage::setupStage()
 
   stage->setOffset(mm_spritefiles::BIGEYE_SPRITES, 0); // set which sprite color to use.
   stage->setOffset(mm_spritefiles::FLEA_SPRITES,   0); // set which sprite color to use.
+  stage->setOffset(mm_spritefiles::FOOTHOLDER_SPRITES, 0);
 
   bgTileWarning0 = 8;
   bgTileWarning1 = 35;
