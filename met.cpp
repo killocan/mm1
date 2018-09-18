@@ -29,8 +29,6 @@ Met::Met(const Stage & stage, int x, int y) : Character(stage, mm_spritefiles::M
   //this->x -= 16;
   this->old_x = this->x;
 
-
-
   vely          = 1;
   overstair     = false;
   isFacingRight = false;
