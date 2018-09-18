@@ -23,4 +23,6 @@ public:
   virtual void doGravitation();
 
   enum {MOVING, FIRING};
+private:
+  unsigned long fire_pause;
 };
