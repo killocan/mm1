@@ -15,6 +15,8 @@ class FootHolder : public Character
 public:
   FootHolder(const Stage & stage, int x, int y);
 
+  virtual void fire();
+
   virtual void doLogic();
 
   // Do nothing

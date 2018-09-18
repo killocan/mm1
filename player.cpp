@@ -156,14 +156,16 @@ void Player::hit(Character * pCharacter)
   }
 
   // Do not cause harm to megaman.
-  if (pCharacter->type == mm_spritefiles::MOVING_PLATFORM_SPRITES)
+  if (pCharacter->type == mm_spritefiles::MOVING_PLATFORM_SPRITES ||
+      pCharacter->type == mm_spritefiles::FOOTHOLDER_SPRITES)
   {
     bool bOverPlatform = abs((this->y+mm_player_defs::PLAYERHEIGHT) - pCharacter->y) < 15;
     if ((this->vely >= 0) && (pCharacter->isPlatform == true))
     {
+      int offset = pCharacter->type == mm_spritefiles::MOVING_PLATFORM_SPRITES ? 4 : 3;
       if (bOverPlatform == true)// && pCharacter->isPlatform == true)
       {
-        this->y = pCharacter->y-mm_player_defs::PLAYERHEIGHT+4;
+        this->y = pCharacter->y-mm_player_defs::PLAYERHEIGHT + offset;
         onPlatform = true;
         this->conPlayer = pCharacter;
       }
