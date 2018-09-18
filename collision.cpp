@@ -44,6 +44,7 @@ bool Collision::pixelCollision(int object1X, int object1Y, BITMAP *sprite1, int 
       color2 = _getpixel32(sprite2, x2, y2);
 
       //if (!((color1 & color2) ^ mask))
+      //TODO: testar (color1&color2)-mask != 0
       if (color1 != mask && color2 != mask)
       {
         if (colX != NULL)
