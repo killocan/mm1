@@ -13,7 +13,7 @@ class Camera;
 class AnimSequence;
 class Stage;
 
-#define CUTTER_CURVE_PNTS 50
+#define CUTTER_CURVE_PNTS 35
 
 // 0 CUTMAN
 // 1 GUTSMAN

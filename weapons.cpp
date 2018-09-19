@@ -174,10 +174,10 @@ static void handleRollingCutter(mm_weapons::weapon_st * pWeapon, Stage * stage)
     {
       pWeapon->cutter_recalc = false;
 
-      pWeapon->cutter_target_x = pWeapon->vx > 0.0f ? pWeapon->x + 140 : pWeapon->x - 140; // 140 - Distance to target
+      pWeapon->cutter_target_x = pWeapon->vx > 0.0f ? pWeapon->x + 160 : pWeapon->x - 160; // 160 - Distance to target
       pWeapon->cutter_target_y = pWeapon->y;
 
-      int mid_x1 = pWeapon->vx > 0.0f ? pWeapon->x + (140 / 2) : pWeapon->x - (140 / 2);
+      int mid_x1 = pWeapon->vx > 0.0f ? pWeapon->x + (160 / 2) : pWeapon->x - (160 / 2);
       int mid_y1 = pWeapon->y - 100; // Radius
 
       pWeapon->cutter_ctrl_points[0] = pWeapon->x;
@@ -193,16 +193,18 @@ static void handleRollingCutter(mm_weapons::weapon_st * pWeapon, Stage * stage)
     }
     else
     {
-      int mid_x1 = pWeapon->vx > 0.0f ? pWeapon->cutter_origin_x + (140 / 2) : pWeapon->cutter_origin_x - (140 / 2);
+      //int mid_x1 = pWeapon->vx > 0.0f ? pWeapon->cutter_origin_x + (160 / 2) : pWeapon->cutter_origin_x - (160 / 2);
+      //int mid_x1 = pWeapon->vx > 0.0f ? stage->m_player->x + (160 / 2) : stage->m_player->x - (160 / 2);
+      int mid_x1 = (stage->m_player->x + stage->m_player->utilX) + ((pWeapon->cutter_target_x - stage->m_player->x) / 2);
       int mid_y1 = pWeapon->cutter_origin_y + 100;
 
       pWeapon->cutter_ctrl_points[0] = pWeapon->cutter_target_x;
       pWeapon->cutter_ctrl_points[1] = pWeapon->cutter_target_y;
       pWeapon->cutter_ctrl_points[2] = mid_x1;
       pWeapon->cutter_ctrl_points[3] = mid_y1;
-      pWeapon->cutter_ctrl_points[4] = stage->m_player->x + (pWeapon->vx<0.0f?20:0);
+      pWeapon->cutter_ctrl_points[4] = stage->m_player->x + (pWeapon->vx<0.0f?20:10);
       pWeapon->cutter_ctrl_points[5] = stage->m_player->y + 20;
-      pWeapon->cutter_ctrl_points[6] = stage->m_player->x + (pWeapon->vx<0.0f?20:0);
+      pWeapon->cutter_ctrl_points[6] = stage->m_player->x + (pWeapon->vx<0.0f?20:10);
       pWeapon->cutter_ctrl_points[7] = stage->m_player->y + 20;
 
       calc_spline(pWeapon->cutter_ctrl_points, CUTTER_CURVE_PNTS, pWeapon->cutter_curve_X, pWeapon->cutter_curve_Y);
@@ -211,14 +213,15 @@ static void handleRollingCutter(mm_weapons::weapon_st * pWeapon, Stage * stage)
 
   if (pWeapon->cutter_foward == false)
   {
+    /*
     float x1 = pWeapon->x + (pWeapon->w/2);
     float y1 = pWeapon->y + (pWeapon->h/2);
     float x2 = stage->m_player->x + (stage->m_player->w/2);
     float y2 = stage->m_player->y + (stage->m_player->h/2);
+     */
+    //int distance = sqrt( pow(x2 - x1, 2) + pow(y2 - y1, 2) );
 
-    int distance = sqrt( pow(x2 - x1, 2) + pow(y2 - y1, 2) );
-
-    if ((distance > 15 && distance < 30) &&
+    if (//(distance > 5 && distance < 15) &&
         Collision::pixelCollision((int) pWeapon->x, (int) pWeapon->y,
                                   pWeapon->bulletSpriteShet->getFrame(pWeapon->frameOffset),
                                   stage->m_player->x, stage->m_player->y, stage->m_player->getFrame()))
@@ -246,7 +249,7 @@ static void handleRollingCutter(mm_weapons::weapon_st * pWeapon, Stage * stage)
     return;
   }
 
-  static int rolling_cutter_frames[4] = {0,1,2,3};
+  static int rolling_cutter_frames[4] = {3,2,1,0};
 
   if ((Clock::clockTicks - pWeapon->ticks) > 4)
   {
@@ -778,7 +781,7 @@ void mm_weapons::createRollingCutter(Player * player)
   cutter.life = 2;
   cutter.alive  = true;
 
-  cutter.frameOffset = 0;
+  cutter.frameOffset = 3;
   cutter.bulletSpriteShet = player->cur_stage->getAnimSeq(mm_spritefiles::WEAPONS_CUTMAN);
   cutter.weapon = mm_weapons::W_CUTMAN_GUN;
 
@@ -791,10 +794,10 @@ void mm_weapons::createRollingCutter(Player * player)
   cutter.ticks = Clock::clockTicks;
   cutter.frames = 4;
 
-  cutter.cutter_target_x = cutter.vx > 0.0f ? cutter.x + 140 : cutter.x - 140; // 140 - Distance to target
+  cutter.cutter_target_x = cutter.vx > 0.0f ? cutter.x + 160 : cutter.x - 160; // 160 - Distance to target
   cutter.cutter_target_y = cutter.y;
 
-  int mid_x1 = cutter.vx > 0.0f ? cutter.x + (140 / 2) : cutter.x - (140 / 2);
+  int mid_x1 = cutter.vx > 0.0f ? cutter.x + (160 / 2) : cutter.x - (160 / 2);
   int mid_y1 = cutter.y - 100; // Radius
 
   cutter.cutter_ctrl_points[0] = cutter.x;
