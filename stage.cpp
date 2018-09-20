@@ -550,6 +550,8 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
 
 #ifdef DEBUG
   int tile_action = 0;
+
+  drawing_mode(DRAW_MODE_TRANS, NULL, 0, 0);
 #endif
 
   if (hasFg == false)
@@ -570,7 +572,7 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
         blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
 #ifdef DEBUG
         if (tile_action == mm_tile_actions::TILE_SOLID)
-          hline(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, makecol(255,0,0));
+          rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(255,0,0));
 #endif
         x += mm_graphs_defs::TILE_SIZE;
 
@@ -581,7 +583,7 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
         blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
 #ifdef DEBUG
         if (tile_action == mm_tile_actions::TILE_SOLID)
-          hline(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, makecol(255,0,0));
+          rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(255,0,0));
 #endif
         x += mm_graphs_defs::TILE_SIZE;
 
@@ -592,7 +594,7 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
         blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
 #ifdef DEBUG
         if (tile_action == mm_tile_actions::TILE_SOLID)
-          hline(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, makecol(255,0,0));
+          rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(255,0,0));
 #endif
         x += mm_graphs_defs::TILE_SIZE;
 
@@ -603,7 +605,7 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
         blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
 #ifdef DEBUG
         if (tile_action == mm_tile_actions::TILE_SOLID)
-          hline(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, makecol(255,0,0));
+          rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(255,0,0));
 #endif
         x += mm_graphs_defs::TILE_SIZE;
       }
@@ -616,7 +618,7 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
         blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
 #ifdef DEBUG
         if (tile_action == mm_tile_actions::TILE_SOLID)
-          hline(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, makecol(255,0,0));
+          rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(255,0,0));
 #endif
       }
 
@@ -641,7 +643,7 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
           masked_blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
 #ifdef DEBUG
           if (tile_action == mm_tile_actions::TILE_SOLID)
-            hline(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, makecol(255,0,0));
+            rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(255,0,0));
 #endif
           x += mm_graphs_defs::TILE_SIZE;
         }
@@ -672,7 +674,7 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
           masked_blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
 #ifdef DEBUG
           if (tile_action == mm_tile_actions::TILE_SOLID)
-            hline(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, makecol(255,0,0));
+            rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(255,0,0));
 #endif
           x += mm_graphs_defs::TILE_SIZE;
         }
@@ -680,6 +682,10 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
       }
     }
   }
+
+#ifdef DEBUG
+  drawing_mode(DRAW_MODE_SOLID, NULL, 0, 0);
+#endif
 }
 
 bool Stage::checkForBoss(int x, int y)

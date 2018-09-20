@@ -115,7 +115,7 @@ int main()
   set_gfx_mode(GFX_AUTODETECT_WINDOWED, mm_graphs_defs::UTIL_W, mm_graphs_defs::UTIL_H, 0, 0);
 
 #ifdef DEBUG
-  set_trans_blender(100, 100, 100, 100);
+  set_trans_blender(100, 100, 100, 200);
 #endif
 
   END_OF_FUNCTION(GlobalGameState::update_game_logic_tick);
