@@ -39,8 +39,6 @@ FootHolder::FootHolder(const Stage & stage, int x, int y) : Character(stage, mm_
   this->isPlatform = true;
 
   fire_pause = Clock::clockTicks;
-
-  fire();
 }
 
 void FootHolder::doLogic()
@@ -58,12 +56,14 @@ void FootHolder::doLogic()
   if (abs(this->y - this->old_y) > 40)
     this->vely *=-1;
 
-  if ((Clock::clockTicks - fire_pause) > 60)
+  if ((Clock::clockTicks - fire_pause) > 70)
   {
     fire_pause = Clock::clockTicks;
 
-    if (rand()%100 == 50)
+    if (rand()%100 < 50)
+    {
       fire();
+    }
   }
 }
 
