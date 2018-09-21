@@ -25,4 +25,9 @@ public:
   enum {MOVING, FIRING};
 private:
   unsigned long fire_pause;
+  float xmin;
+  float xmax;
+  float ymin;
+  float ymax;
+  float midx, midy;
 };
