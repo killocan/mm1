@@ -30,4 +30,5 @@ private:
   float ymin;
   float ymax;
   float midx, midy;
+  bool crossed_min,crossed_max;
 };
