@@ -658,6 +658,14 @@ void mm_weapons::createHyperBomb(Player * player)
   bomb.w = bomb.bulletSpriteShet->getFrame(bomb.frameOffset)->w;
   bomb.h = bomb.bulletSpriteShet->getFrame(bomb.frameOffset)->h;
 
+  int tilecoordx, tilecoordy;
+  if (player->cur_stage->genericColVer(bomb.x + bomb.vx + (bomb.vx > 0 ? bomb.w : 0), bomb.y, bomb.h, tilecoordx, tilecoordy))
+  {
+    bomb.vx = 0.0f;
+    bomb.vy = 0.0f;
+    bomb.x = (float)(player->x + player->utilX);
+  }
+
   GlobalGameState::playerShots.push_back(bomb);
 }
 
