@@ -15,48 +15,48 @@
 #include "globals.h"
 #include "globalgamestate.h"
 #include "sfx.h"
-
 #include "spritefiles.h"
-
-//FootHolder
-
-// 3 * MM_W while standing.
-static const float MAX_X = 136.0f;
-// 4 * MM_H while standing.
-static const float MAX_Y = 192.0f;
-// 2.5 * MM_W while standing.
-static const float X_OFFSET = 100.0f;
 
 FootHolder::FootHolder(const Stage & stage, int x, int y) : Character(stage, mm_spritefiles::FOOTHOLDER_SPRITES)
 {
-  this->x = x;
+  this->x = x + 2;
   this->y = y + (mm_graphs_defs::TILE_SIZE / 2);
   this->old_x = this->x;
   this->old_y = this->y;
-
-  this->ymin = this->y;
-  this->ymax = this->y + MAX_Y;
-
-  this->xmin = this->x - X_OFFSET;
-  this->xmax = this->xmin + MAX_X;
-
-  this->midx = this->xmin + ((this->xmax - this->xmin) / 2);
-
-  this->velx = -1.0f;
-  this->vely = 1.0f;
 
   colorOffset = cur_stage->getOffset(mm_spritefiles::FOOTHOLDER_SPRITES);
   curState = FootHolder::MOVING;
   setAnimSeq(colorOffset + FootHolder::MOVING);
 
-  h = getFrameH();
-  w = getFrameW();
+  this->h = getFrameH();
+  this->w = getFrameW();
+
+  this->ymin = this->y;
+  this->ymax = this->ymin + (6 * this->h);
+
+  this->xmin = this->x - 100;
+  this->xmax = this->xmin + ((5 * this->w)/2);
+
+  this->midx = this->xmin + ((this->xmax - this->xmin) / 2) + (this->w / 2);
+
+  this->velx = -1.0f;
+  this->vely = 0.0f;
 
   this->isPlatform = true;
 
   crossed_min = crossed_max = false;
 
   fire_pause = Clock::clockTicks;
+}
+
+void FootHolder::respawn()
+{
+  this->x = this->old_x;
+  this->y = this->old_y;
+
+  this->velx = -1.0f;
+  this->vely = 0.0f;
+  this->crossed_min = this->crossed_max = false;
 }
 
 void FootHolder::doLogic()
@@ -71,7 +71,7 @@ void FootHolder::doLogic()
 
   if (this->velx < 0.0f && crossed_min == false)
   {
-    if (this->x+(this->w/2) < this->midx)
+    if (this->x+(this->w/2) == this->midx)
     {
       crossed_max = false;
       crossed_min = true;
@@ -80,7 +80,7 @@ void FootHolder::doLogic()
   }
   else if (this->velx > 0.0f && crossed_max == false)
   {
-    if (this->x+(this->w/2) > this->midx)
+    if (this->x+(this->w/2) == this->midx)
     {
       crossed_min = false;
       crossed_max = true;
@@ -94,7 +94,6 @@ void FootHolder::doLogic()
       this->x += this->velx;
     else
     {
-      this->x = this->xmin+1;
       this->velx *= -1;
       decide = true;
     }
@@ -105,25 +104,42 @@ void FootHolder::doLogic()
       this->x += this->velx;
     else
     {
-      this->x = this->xmax-1;
       this->velx *= -1;
       decide = true;
     }
   }
 
-  if (this->y > this->ymin && this->y < this->ymax)
-    this->y += this->vely;
-  else
+  if (vely < 0)
+  {
+    if (this->y > this->ymin)
+      this->y += this->vely;
+    else
+    {
+      this->vely *= -1;
+      decide = false;
+    }
+  }
+  else if (vely > 0)
+  {
+    if (this->y < this->ymax)
+      this->y += this->vely;
+    else
+    {
+      this->vely *= -1;
+      decide = false;
+    }
+  }
+
   {
 
-    if (this->y <= this->ymin)
+    /*if (this->y <= this->ymin)
       this->y = this->ymin + 1;
     else if (this->y >= this->ymax)
-      this->y = this->ymax - 1;
+      this->y = this->ymax - 1;*/
 
+    //this->vely *= -1.0f;
 
-    this->vely *= -1.0f;
-    decide = false;
+    //decide = false;
   }
 
   if (decide)
@@ -147,6 +163,36 @@ void FootHolder::doLogic()
     }
   }
 }
+
+#ifdef DEBUG
+void FootHolder::drawCharacter(BITMAP * bmp)
+{
+  int curSpriteFrame = anim_seqs[curAnimSeq][curAnimFrame].frameNumber;
+
+  drawing_mode(DRAW_MODE_TRANS, NULL, 0, 0);
+
+  rectfill(bmp, (this->xmin - GlobalCamera::mm_camera->x),
+                (this->ymin - GlobalCamera::mm_camera->y),
+                ((this->xmax+this->w) - GlobalCamera::mm_camera->x),
+                ((this->ymax+this->h) - GlobalCamera::mm_camera->y),
+                makecol(0,0,255));
+  vline(bmp, (this->midx - GlobalCamera::mm_camera->x),
+             (this->ymin - GlobalCamera::mm_camera->y),
+             ((this->ymax+this->h) - GlobalCamera::mm_camera->y),
+             makecol(0,0,0));
+
+  drawing_mode(DRAW_MODE_SOLID, NULL, 0, 0);
+
+  if (isFacingRight == true)
+  {
+    draw_sprite(bmp, this->spriteSheet->getFrame(curSpriteFrame), this->sx, this->sy);
+  }
+  else
+  {
+    draw_sprite_h_flip(bmp, this->spriteSheet->getFrame(curSpriteFrame), this->sx, this->sy);
+  }
+}
+#endif
 
 void FootHolder::fire()
 {
