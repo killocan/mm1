@@ -7,12 +7,4 @@ BUGS:
 - ao saltar sobre uma escada muito proxima de um teto megaman passa direto, altura do sprite
   faz detectar sprite abaixo do inicio da escada, arrumar um jeito de colidir com altura modificada
   somente neste caso ou arrumar um altura real em hor e em ver... algo assim.
-- hyperbomb na escada nao deve deslocar na lateral se houver colisao no lado destino, manter no x,y do megaman.
 - mudar sprite para atirar na escada quando for hyperbomb e rolling cutter
-
-X Velocidade de salto tanto pra cima quanto a queda e maior que no jogo (influencia colisao com o mapa).
---- Parece estar ok, mudei altura do personagem no salto.
-
-- Camera fodida quando sala e protegida de visao dos dois lados (gutsman stage principalmente)
---- Colocar ela em "trilhos" e corrigir sempre q for sair fora.
------ ACHO Q CORRIGI :D
