@@ -29,13 +29,12 @@ public:
 
 private:
   unsigned long fire_pause;
-  unsigned long logic_timer;
 
   FootHolder::direction current_direction;
   int displacement_x;
   int x_quadrant;
   int y_line;
-  int current_decision;
-  int xstep;
-  static int decisions[6][3];
+  float current_decision;
+  float xstep;
+  static float decisions[6][3];
 };

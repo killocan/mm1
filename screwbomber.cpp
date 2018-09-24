@@ -238,7 +238,7 @@ void ScrewBomber::adjustToFloorOrCeiling(int x_map, int y_map)
       }
 
 #ifdef DEBUG
-      fprintf(stderr,"FINAL ScrewBomber: x=[%d] utilX=[%d] y=[%d] vely=[%d] h=[%d]\n",
+      fprintf(stderr,"FINAL ScrewBomber: x=[%f] utilX=[%f] y=[%f] vely=[%f] h=[%d]\n",
                                     x,     utilX,     y,     vely,     h);
 #endif
       break;

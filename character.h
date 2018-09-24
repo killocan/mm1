@@ -73,12 +73,12 @@ class Character
     virtual void checkOnCamera();
     virtual bool canJumpAgain();
 
-    int x, y;
-    int old_x, old_y;
+    float x, y;
+    float old_x, old_y;
     int sx, sy;
-    int h, w;
-    int velx, vely;
-    int utilX, utilXLen;
+    float h, w;
+    float velx, vely;
+    float utilX, utilXLen;
 
     int life;
     int weaponDamage[mm_weapons::WEAPONS_NUMBER]; // Everyone has different damage by different weapons.

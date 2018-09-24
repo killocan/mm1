@@ -447,11 +447,11 @@ void Player::normalLogic()
           {
             setAnimSeq(Player::ONSTAIR);
             isGettingOut = true;
-            if (((y % mm_graphs_defs::TILE_SIZE) < 4) || 
+            if ((( ((int)y) % mm_graphs_defs::TILE_SIZE) < 4) ||
                 (cur_stage->tileActionUnnormalized(x+utilX, y+mm_graphs_defs::TILE_SIZE) != mm_tile_actions::TILE_STAIR_BEGIN))
             {
               y-= 6;
-              y-= y%mm_graphs_defs::TILE_SIZE;
+              y-= ((int)y)%mm_graphs_defs::TILE_SIZE;
               y = (y / mm_graphs_defs::TILE_SIZE) * mm_graphs_defs::TILE_SIZE;
               isGettingOut = false;
               onground  = true;
@@ -477,7 +477,7 @@ void Player::normalLogic()
       // is on the last stair step tile(with nothing bellow) then keep holding on it.
       if((collisionHor(*cur_stage, x+utilX, y+vely+h, tilecoordx, tilecoordy, true, tiletype) && 
         (tiletype == mm_tile_actions::TILE_STAIR || tiletype == mm_tile_actions::TILE_STAIR_BEGIN) && 
-        (((x+utilX) % mm_graphs_defs::TILE_SIZE) < (mm_graphs_defs::TILE_SIZE/2))) ||
+        (( (int)(x+utilX) % mm_graphs_defs::TILE_SIZE) < (mm_graphs_defs::TILE_SIZE/2))) ||
         (overstair == true && tiletype == 0))
       {
         vely = 0;
@@ -674,7 +674,7 @@ bool Player::collisionStair(const Stage & stage, int x, int y, int &tilecoordx, 
   int tileypixels = y-(y%mm_graphs_defs::TILE_SIZE);
   int testend     = y + realFrameHeight;//y + getFrameH();
 
-  tilecoordx = x + (utilXLen>>1);
+  tilecoordx = x + (utilXLen / 2.0f);
   tilecoordx /= mm_graphs_defs::TILE_SIZE;
 
   tilecoordy = tileypixels/mm_graphs_defs::TILE_SIZE;

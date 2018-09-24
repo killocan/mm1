@@ -278,7 +278,7 @@ void CrazyRazy::hit(mm_weapons::weapon_st * pWeapon)
     {
       pWeapon->alive = false;
 
-      if (yhit >= (h>>1))
+      if (yhit >= (h/2.0f))
       {
         life--;
       }

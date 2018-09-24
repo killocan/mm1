@@ -626,7 +626,7 @@ void StageManager::play()
       //tvmode(m_buffer);
       //bhmode(m_buffer);
 #ifdef DEBUG
-      textprintf_ex(m_buffer, font, 1, 10, makecol(255,255,255), 0, "X: [%d]  Y: [%d]  VELX: [%d]  VELY: [%d]",
+      textprintf_ex(m_buffer, font, 1, 10, makecol(255,255,255), 0, "X: [%f]  Y: [%f]  VELX: [%f]  VELY: [%f]",
                     player->x, player->y, player->velx, player->vely);
       textprintf_ex(m_buffer, font, 1, 20, makecol(255,255,255), 0, "camera.x: [%d]  camera.y: [%d]",
                     camera->x, camera->y);

@@ -17,14 +17,15 @@
 #include "sfx.h"
 #include "spritefiles.h"
 
-int FootHolder::decisions[6][3] = {
-  {1,1,0},   // 1
-  {-1,1,0},  // 2
-  {-1,1,0},  // 3
-  {-1,1,0},  // 4
-  {-1,1,0},  // 5
-  {-1,-1,0}, // 6
-                            };
+float FootHolder::decisions[6][3] =
+{
+  {1.0f,  1.0f, 0.0f},   // 1
+  {-1.0f, 1.0f, 0.0f},  // 2
+  {-1.0f, 1.0f, 0.0f},  // 3
+  {-1.0f, 1.0f, 0.0f},  // 4
+  {-1.0f, 1.0f, 0.0f},  // 5
+  {-1.0f,-1.0f, 0.0f}, // 6
+};
 
 FootHolder::FootHolder(const Stage & stage, int x, int y) : Character(stage, mm_spritefiles::FOOTHOLDER_SPRITES)
 {
@@ -44,90 +45,82 @@ FootHolder::FootHolder(const Stage & stage, int x, int y) : Character(stage, mm_
   displacement_x = this->w - 4;
   x_quadrant = 2;
   y_line = 0;
-  current_decision = 0;
-  xstep = -1;
+  current_decision = 0.0f;
+  xstep = -1.0f;
 
   this->isPlatform = true;
 
   fire_pause  = Clock::clockTicks;
-  logic_timer = Clock::clockTicks;
 }
 
 void FootHolder::respawn()
 {
   this->x = this->old_x;
   this->y = this->old_y;
+
+  current_direction = FootHolder::LEFT;
+  displacement_x = this->w - 4;
+  x_quadrant = 2;
+  y_line = 0;
+  current_decision = 0.0f;
+  xstep = -1.0f;
 }
 
 void FootHolder::doLogic()
 {
-  if (true)
+  if (this->cur_stage->m_player->onPlatform == true && this->cur_stage->m_player->conPlayer == this)
   {
-    logic_timer = Clock::clockTicks;
+    this->cur_stage->m_player->x += this->xstep;
+    this->cur_stage->m_player->y += this->current_decision;
+  }
 
-    if (this->cur_stage->m_player->onPlatform == true && this->cur_stage->m_player->conPlayer == this)
+  if (displacement_x < this->w)
+  {
+    ++displacement_x;
+
+    this->x += this->xstep;
+    this->y += this->current_decision;
+  }
+  else
+  {
+    displacement_x = 0;
+
+    if (this->current_decision > 0)
     {
-      this->cur_stage->m_player->x += this->xstep;
-      this->cur_stage->m_player->y += this->current_decision;
+      if (y_line < 5) y_line++;
+    }
+    else if(this->current_decision < 0)
+    {
+      if (y_line > 0) y_line--;
     }
 
-    if (displacement_x < this->w)
+    if (current_direction == FootHolder::LEFT)
     {
-      ++displacement_x;
-
-      this->x += this->xstep;
-      this->y += this->current_decision;
+      if (x_quadrant > 0)
+      {
+        --x_quadrant;
+      }
+      else
+      {
+        xstep = 1.0f;
+        current_direction = FootHolder::RIGHT;
+      }
     }
-    else
+    else if (current_direction == FootHolder::RIGHT)
     {
-      displacement_x = 0;
-
-      fprintf(stderr,"QUADRANTE X[%d]\n",x_quadrant);
-
-      if (this->current_decision > 0)
+      if (x_quadrant < 1)
       {
-        fprintf(stderr,"INDO PARA PROXIMO Y ABAIXO\n");
-        if (y_line < 5) y_line++;
+        ++x_quadrant;
       }
-      else if(this->current_decision < 0)
+      else
       {
-        fprintf(stderr,"INDO PARA PROXIMO Y ACIMA\n");
-        if (y_line > 0) y_line--;
+        xstep = -1.0f;
+        current_direction = FootHolder::LEFT;
       }
-
-      if (current_direction == FootHolder::LEFT)
-      {
-        if (x_quadrant > 0)
-        {
-          fprintf(stderr,"INDO PARA QUADRANTE X ESQUERDA\n");
-          --x_quadrant;
-        }
-        else
-        {
-          fprintf(stderr,"MUDANDO DIRECAO PARA DIREITA x[%d]\n", this->x);
-          xstep = 1;
-          current_direction = FootHolder::RIGHT;
-        }
-      }
-      else if (current_direction == FootHolder::RIGHT)
-      {
-        if (x_quadrant < 1)
-        {
-          fprintf(stderr,"INDO PARA QUADRANTE X DIREITA\n");
-          ++x_quadrant;
-        }
-        else
-        {
-          fprintf(stderr,"MUDANDO DIRECAO PARA ESQUERDA x[%d]\n", this->x);
-          xstep = -1;
-          current_direction = FootHolder::LEFT;
-        }
-      }
-
-      int rnd = rand()%3;
-      current_decision = decisions[y_line][rnd];
-      fprintf(stderr, "NOVA DECISAO: rnd[%d] y_line[%d] current_decision[%d]\n", rnd, y_line, current_decision);
     }
+
+    int rnd = rand()%3;
+    current_decision = decisions[y_line][rnd];
   }
 
   if ((Clock::clockTicks - fire_pause) > 40)
@@ -146,7 +139,7 @@ void FootHolder::drawCharacter(BITMAP * bmp)
 {
   drawing_mode(DRAW_MODE_TRANS, NULL, 0, 0);
 
-  int xmin = this->old_x - 100;
+  int xmin = this->old_x - 100.0f;
   int xmax = xmin + 2*this->w;
   int ymin = this->old_y;
   int ymax = ymin + 5*this->h;

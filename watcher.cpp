@@ -291,21 +291,21 @@ void Watcher::doLogic()
   // right left center -> up - down
   if (childAlive == false)
   {
-    int yini = this->y;
+    float yini = this->y;
 
-    int xpos[] = 
+    float xpos[] =
     {
       x, x+(2*mm_graphs_defs::TILE_SIZE), x-(2*mm_graphs_defs::TILE_SIZE), // DOWN
       x+(mm_graphs_defs::TILE_SIZE), x-(2*mm_graphs_defs::TILE_SIZE), x    // UP
     };
-    int ypos[] = 
+    float ypos[] =
     {
       yini+(2*mm_graphs_defs::TILE_SIZE), y+(6*mm_graphs_defs::TILE_SIZE), y+(12*mm_graphs_defs::TILE_SIZE), // DOWN 
       yini-(2*mm_graphs_defs::TILE_SIZE), y-(6*mm_graphs_defs::TILE_SIZE), y-(12*mm_graphs_defs::TILE_SIZE)  // UP
     };
-    int px = cur_stage->m_player->x;
-    int *ptsx = px < x ? xpos : &xpos[3];
-    int *ptsy = px < x ? ypos : &ypos[3];
+    float px = cur_stage->m_player->x;
+    float *ptsx = px < x ? xpos : &xpos[3];
+    float *ptsy = px < x ? ypos : &ypos[3];
 
     childAlive = true;
 
@@ -314,7 +314,7 @@ void Watcher::doLogic()
     {
       cur = dynamic_cast <Watcher::WatcherFragment*> (fragments[i]);
 #ifdef DEBUG
-      fprintf(stderr,"Watcher [%p] - criando fragmento em x[%d] y[%d]\n", this, ptsx[i], ptsy[i]);
+      fprintf(stderr,"Watcher [%p] - criando fragmento em x[%f] y[%f]\n", this, ptsx[i], ptsy[i]);
 #endif
       cur->resetState(ptsx[i], ptsy[i]);
     }

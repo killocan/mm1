@@ -122,8 +122,8 @@ void Character::loadAnimSeqs(unsigned int TYPE)
 
 void Character::calcScreenCoords() //const Camera & camera)
 {
-  this->sx = this->x - GlobalCamera::mm_camera->x;
-  this->sy = this->y - GlobalCamera::mm_camera->y;
+  this->sx = (int) (this->x - GlobalCamera::mm_camera->x);
+  this->sy = (int) (this->y - GlobalCamera::mm_camera->y);
 }
 
 bool Character::canJumpAgain()
