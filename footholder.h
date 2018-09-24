@@ -9,7 +9,6 @@
 
 class Stage;
 
-//FootHolder
 class FootHolder : public Character
 {
 public:
@@ -25,13 +24,18 @@ public:
 
   virtual void doGravitation();
 
-  enum {MOVING, FIRING};
+  enum {MOVING};
+  enum direction {RIGHT, LEFT};
+
 private:
   unsigned long fire_pause;
-  int xmin;
-  float xmax;
-  float ymin;
-  float ymax;
-  float midx;
-  bool crossed_min,crossed_max;
+  unsigned long logic_timer;
+
+  FootHolder::direction current_direction;
+  int displacement_x;
+  int x_quadrant;
+  int y_line;
+  int current_decision;
+  int xstep;
+  static int decisions[6][3];
 };
