@@ -176,6 +176,7 @@ void Stage::defineCameraSector(int x, int y, bool state)
 }
 
 //#define ignore_result(x) ({ __typeof__(x) z = x; (void)sizeof z; })
+#define TEST(r, c) if (r != (size_t)c){fprintf(stderr,"READ ERROR! Stage file corrupted. Line[%d]\n", __LINE__);}
 int Stage::load(const std::string & stage_path, Camera & camera, Player ** player)
 {
   FILE *fp;
@@ -187,9 +188,11 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
   }
 
   size_t result = fread(&max_x, sizeof(int), 1, fp);
+  TEST(result, 1);
   result = fread(&max_y, sizeof(int), 1, fp);
+  TEST(result, 1);
   result = fread(&default_tile, sizeof(unsigned char), 1, fp);
-  if (result) result = 0;
+  TEST(result, 1);
 
   int sectors_num = (max_x/mm_graphs_defs::TILES_X) * (max_y/mm_graphs_defs::TILES_Y);
   sectors = (sector_t*) malloc(sizeof(sector_t) * sectors_num);
@@ -200,6 +203,7 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
   {
     map[i] = (MAP_INFO*) malloc(sizeof(MAP_INFO) * max_x);
     result = fread(&(map[i][0]), sizeof(MAP_INFO), max_x, fp);
+    TEST(result, max_x);
   }
 
   result = 0;

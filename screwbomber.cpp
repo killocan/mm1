@@ -206,7 +206,7 @@ void ScrewBomber::adjustToFloorOrCeiling(int x_map, int y_map)
       break;
     }
   }
-  int yMax;
+  unsigned int yMax;
   for (yMax = y_map; yMax < cur_stage->max_y; yMax++)
   {
     if (cur_stage->tileAction(x_map, yMax) == mm_tile_actions::TILE_SOLID)

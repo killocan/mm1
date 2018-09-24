@@ -54,7 +54,7 @@ class Stage
     bool checkForBoss(int x, int y);
 
     bool has_fg_tiles;
-    int max_x, max_y;
+    unsigned int max_x, max_y;
     int scroll_count;
 
     bool horz_scroll;

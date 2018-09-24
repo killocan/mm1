@@ -72,7 +72,7 @@ void OctopusBattery::findBorders(const Stage & stage, int x_map, int y_map)
     }
     minX = (xMin+1)*mm_graphs_defs::TILE_SIZE;
 
-    int xMax;
+    unsigned int xMax;
     for (xMax = x_map; xMax < stage.max_x; xMax++)
     {
       if (stage.tileAction(xMax, y_map) == mm_tile_actions::TILE_SOLID)
@@ -88,7 +88,7 @@ void OctopusBattery::findBorders(const Stage & stage, int x_map, int y_map)
   }
   else
   {
-    int yMin;
+    unsigned int yMin;
     for (yMin = y_map; yMin >= 0; yMin--)
     {
       if (stage.tileAction(x_map, yMin) == mm_tile_actions::TILE_SOLID)
@@ -98,7 +98,7 @@ void OctopusBattery::findBorders(const Stage & stage, int x_map, int y_map)
     }
     minY = (yMin+1)*mm_graphs_defs::TILE_SIZE;
 
-    int yMax;
+    unsigned int yMax;
     for (yMax = y_map; yMax < stage.max_y; yMax++)
     {
       if (stage.tileAction(x_map, yMax) == mm_tile_actions::TILE_SOLID)
