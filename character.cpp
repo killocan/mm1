@@ -391,7 +391,7 @@ bool Character::handleAnimation(bool * bAnimationEnded)
 
 bool Character::nextAnimFrame()
 {
-  if ((curAnimFrame+1) < anim_seqs[curAnimSeq].size())
+  if ((unsigned int)(curAnimFrame+1) < anim_seqs[curAnimSeq].size())
   {
     curAnimFrame++;
     curAnimFrameDuration = getCurrFrameDuration();
@@ -442,7 +442,7 @@ int Character::getCurrFrameDuration()
 
 void Character::setAnimSeq(int newAnimSeq, bool reset)
 {
-  if (newAnimSeq < anim_seqs.size() && newAnimSeq != curAnimSeq)
+  if ((unsigned int)newAnimSeq < anim_seqs.size() && newAnimSeq != curAnimSeq)
   {
     curAnimSeq = newAnimSeq;
     if (reset == true) curAnimFrame = 0;
@@ -452,7 +452,7 @@ void Character::setAnimSeq(int newAnimSeq, bool reset)
 
 void Character::resetAnimSeq(int animSeq)
 {
-  if (animSeq < anim_seqs.size())
+  if ((unsigned int) animSeq < anim_seqs.size())
   {
     curAnimSeq = animSeq;
     curAnimFrame = 0;

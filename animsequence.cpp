@@ -161,7 +161,7 @@ void AnimSequence::loadSprites(const char * seqFile)
   //fprintf(stderr,"anim sequence[%s]\nInitX[%d] LenX[%d]\n", seqFile, utilXSize[0], utilXSize[1]);
 
   //int x = 0;
-  for (int i = 0, x = 0; i < framesLen.size(); i++)
+  for (unsigned int i = 0, x = 0; i < framesLen.size(); i++)
   {
     seqFrames.push_back(create_sub_bitmap(seqBmp, x, 1, framesLen[i], seqBmp->h));
     x += framesLen[i] + 1;
@@ -185,7 +185,7 @@ int * AnimSequence::getUtilXInfo()
 
 void AnimSequence::unload()
 {
-  for (int i = 0; i < seqFrames.size(); i++)
+  for (unsigned int i = 0; i < seqFrames.size(); i++)
   {
     destroy_bitmap(seqFrames[i]);
   }
@@ -201,7 +201,7 @@ void AnimSequence::unload()
 
 BITMAP * AnimSequence::getFrame(int frame_idx)
 {
-  if (frame_idx >= seqFrames.size())
+  if ((unsigned int) frame_idx >= seqFrames.size())
     return NULL;
 
   return seqFrames[frame_idx];

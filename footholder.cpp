@@ -19,17 +19,17 @@
 
 float FootHolder::decisions[6][3] =
 {
-  {1.0f,  1.0f, 0.0f},   // 1
-  {-1.0f, 1.0f, 0.0f},  // 2
-  {-1.0f, 1.0f, 0.0f},  // 3
-  {-1.0f, 1.0f, 0.0f},  // 4
-  {-1.0f, 1.0f, 0.0f},  // 5
-  {-1.0f,-1.0f, 0.0f}, // 6
+  {1.0f,  1.0f, 0.0f},
+  {-1.0f, 1.0f, 0.0f},
+  {-1.0f, 1.0f, 0.0f},
+  {-1.0f, 1.0f, 0.0f},
+  {-1.0f, 1.0f, 0.0f},
+  {-1.0f,-1.0f, 0.0f},
 };
 
 FootHolder::FootHolder(const Stage & stage, int x, int y) : Character(stage, mm_spritefiles::FOOTHOLDER_SPRITES)
 {
-  this->x = x+2;
+  this->x = x+60;
   this->y = y + (mm_graphs_defs::TILE_SIZE / 2);
   this->old_x = this->x;
   this->old_y = this->y;
@@ -46,7 +46,7 @@ FootHolder::FootHolder(const Stage & stage, int x, int y) : Character(stage, mm_
   x_quadrant = 2;
   y_line = 0;
   current_decision = 0.0f;
-  xstep = -1.0f;
+  xstep = -1.25f;
 
   this->isPlatform = true;
 
@@ -63,7 +63,7 @@ void FootHolder::respawn()
   x_quadrant = 2;
   y_line = 0;
   current_decision = 0.0f;
-  xstep = -1.0f;
+  xstep = -1.25f;
 }
 
 void FootHolder::doLogic()
@@ -74,7 +74,7 @@ void FootHolder::doLogic()
     this->cur_stage->m_player->y += this->current_decision;
   }
 
-  if (displacement_x < this->w)
+  if (displacement_x < 60) //this->w)
   {
     ++displacement_x;
 
@@ -102,7 +102,7 @@ void FootHolder::doLogic()
       }
       else
       {
-        xstep = 1.0f;
+        xstep = 1.25f;
         current_direction = FootHolder::RIGHT;
       }
     }
@@ -114,7 +114,7 @@ void FootHolder::doLogic()
       }
       else
       {
-        xstep = -1.0f;
+        xstep = -1.25f;
         current_direction = FootHolder::LEFT;
       }
     }
@@ -139,26 +139,28 @@ void FootHolder::drawCharacter(BITMAP * bmp)
 {
   drawing_mode(DRAW_MODE_TRANS, NULL, 0, 0);
 
-  int xmin = this->old_x - 100.0f;
-  int xmax = xmin + 2*this->w;
+  int xmin = this->old_x - 160.0f;
+  int xmax = xmin + (2.5*this->w);
   int ymin = this->old_y;
   int ymax = ymin + 5*this->h;
   int midx = xmin + ((xmax-xmin)/2) + (this->w/2);
 
   rectfill(bmp, (xmin - GlobalCamera::mm_camera->x),
                 (ymin - GlobalCamera::mm_camera->y),
-                ((xmax+this->w) - GlobalCamera::mm_camera->x),
+                //((xmax+this->w) - GlobalCamera::mm_camera->x),
+                ((xmax+60) - GlobalCamera::mm_camera->x),
                 ((ymax+this->h) - GlobalCamera::mm_camera->y),
                 makecol(0,0,255));
 
   int yp;
   yp = ymin;
   for (int j = 0; j < 6; j++,yp+=this->h)
-    for (int i = 0, xp = xmin; i < 3; i++, xp+= this->w)
+    for (int i = 0, xp = xmin; i < 3; i++, xp+= 60)//((float)this->w*1.25))
       rect(bmp, xp- GlobalCamera::mm_camera->x,
                 yp- GlobalCamera::mm_camera->y,
-                xp+this->w- GlobalCamera::mm_camera->x,
-                yp+this->h- GlobalCamera::mm_camera->y, makecol(255,0,0));
+                //(xp + ((float)this->w*1.25) ) - GlobalCamera::mm_camera->x,
+                (xp + 60) - GlobalCamera::mm_camera->x,
+                (yp + this->h) - GlobalCamera::mm_camera->y, makecol(255,0,0));
 
   vline(bmp, (midx - GlobalCamera::mm_camera->x),
              (ymin - GlobalCamera::mm_camera->y),

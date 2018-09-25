@@ -174,6 +174,7 @@ static void draw_frames(BITMAP * buffer)
   }
 }
 
+#ifndef DEBUG
 static void boss_show(BITMAP * buffer, FONT * mm_font)
 {
   SceneSoundManager bossShowMusic(mm_soundpack::sounds[mm_soundpack::STAGE_SELECTED_MUSIC]);
@@ -355,7 +356,7 @@ static void boss_show(BITMAP * buffer, FONT * mm_font)
         {
           for (int count = 0; count < 2; count++)
           {
-            for (int j = 0; j < strlen(infoStr[count])+1; ++j)
+            for (unsigned int j = 0; j < strlen(infoStr[count])+1; ++j)
             {
               draw_text(screen, mm_font, x, y, white, dblue, infoStr[count], j);
               rest(100);
@@ -373,8 +374,8 @@ static void boss_show(BITMAP * buffer, FONT * mm_font)
           int clearPoints = GlobalGameState::enemyClearPoints[curSelection];
           int rndNumber = (rand() % 10) * ((clearPoints >= oht) ? oht : tt);
 
-          textprintf_ex(buffer, mm_font, x, 178, white, -1, infoStr[0]);
-          textprintf_ex(buffer, mm_font, x, 178 + text_height(mm_font) + 10, white, -1, infoStr[1]);
+          textprintf_ex(buffer, mm_font, x, 178, white, -1, "%s", infoStr[0]);
+          textprintf_ex(buffer, mm_font, x, 178 + text_height(mm_font) + 10, white, -1, "%s", infoStr[1]);
 
           static int timer = 0;
           if (timer <= 50)
@@ -408,6 +409,7 @@ static void boss_show(BITMAP * buffer, FONT * mm_font)
 
   rest(1000);
 }
+#endif
 
 static void goToStage()
 {
@@ -456,7 +458,7 @@ void menu()
 
   char buf[80];
   char lower_case_name[15];
-  for (int i = 0, j = 0; i < 6; i++)
+  for (unsigned int i = 0, j = 0; i < 6; i++)
   {
     for (j = 0; j < strlen(BOSS_NAMES[i]); j++)
     {

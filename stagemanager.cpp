@@ -105,7 +105,6 @@ void StageManager::doMegamanSpawning(BITMAP * buffer, FONT * mm_font)
 
   int y_goal = player->y;
   player->y = ((y_goal / mm_graphs_defs::UTIL_H) * mm_graphs_defs::UTIL_H)- (int)player->h;
-  fprintf(stderr,"player.y = %f ygoal = %f\n", player->y, y_goal);
 
   int animCount = 0;
 
@@ -325,6 +324,8 @@ static bool tempCharacterKill(const Character* value)
   delete value;
   return true;
 }
+
+#if 0
 static bool tempCharacterClean(const Character* value)
 {
   if (value->type != mm_tile_actions::TILE_DOOR)
@@ -335,6 +336,8 @@ static bool tempCharacterClean(const Character* value)
 
   return false;
 }
+#endif
+
 void StageManager::play()
 {
   stage  = new Stage(getStageFilePath(), *camera, &player);//, characters_vec);
@@ -628,14 +631,14 @@ void StageManager::play()
       //tvmode(m_buffer);
       //bhmode(m_buffer);
 #ifdef DEBUG
-      textprintf_ex(m_buffer, font, 1, 10, makecol(255,255,255), 0, "X: [%f]  Y: [%f]  VELX: [%f]  VELY: [%f]",
+      textprintf_ex(m_buffer, font, 1, 10, makecol(255,255,255), 0, "X:[%f] Y:[%f] VX:[%f] VY:[%f]",
                     player->x, player->y, player->velx, player->vely);
-      textprintf_ex(m_buffer, font, 1, 20, makecol(255,255,255), 0, "camera.x: [%d]  camera.y: [%d]",
+      textprintf_ex(m_buffer, font, 1, 20, makecol(255,255,255), 0, "camera.x:[%d] camera.y:[%d]",
                     camera->x, camera->y);
 #endif
 
 #ifdef FPS_IN_GAME
-      textprintf_ex(m_buffer, font, 1, 1, makecol(255,255,255), 0, "FPS: [%d]", sm_fps);
+      textprintf_ex(m_buffer, font, 1, 1, makecol(255,255,255), 0, "FPS:[%d]", sm_fps);
 #endif
       Vsync::Sync();
       blit(m_buffer,screen,0,0,0,0,SCREEN_W,SCREEN_H);
