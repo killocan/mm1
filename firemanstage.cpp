@@ -32,7 +32,7 @@ void FireManStage::doStageSpecifics()
     lastCycleTime = Clock::clockTicks;
 
     BITMAP * tileset = stage->getTileSet();
-    unsigned int color;
+    int color;
     for (int i = 0; i < 5; ++i)
     {
       Point2D * pt = &pts[i];

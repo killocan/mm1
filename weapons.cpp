@@ -677,7 +677,7 @@ void mm_weapons::createHyperBomb(Character * character, int x, int y, float vx, 
 void mm_weapons::createThunderBeam(Player * player)
 {
   mm_weapons::weapon_st thunder_beam[3];
-  thunder_beam[1].can_hurt = thunder_beam[2].can_hurt = thunder_beam[3].can_hurt = true;
+  thunder_beam[0].can_hurt = thunder_beam[1].can_hurt = thunder_beam[2].can_hurt = true;
 
   float x, y;
 
@@ -833,7 +833,7 @@ void mm_weapons::createRollingCutter(Character * character, int x, int y, float 
 void mm_weapons::createFireStorm(Player *player)
 {
   mm_weapons::weapon_st fire_storm[2];
-  fire_storm[1].can_hurt = fire_storm[2].can_hurt = true;
+  fire_storm[0].can_hurt = fire_storm[1].can_hurt = true;
 
   float x, y;
 
@@ -878,7 +878,7 @@ void mm_weapons::createFireStorm(Player *player)
   fire_storm[1].y = player->y + mm_player_defs::PLAYERHEIGHT;
 
   fire_storm[0].y = y;
-  fire_storm[2].y = player->y;
+  fire_storm[1].y = player->y;
 
   fire_storm[0].vx = 4.5f;
   if (player->isFacingRight == false)

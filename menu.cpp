@@ -456,7 +456,7 @@ void menu()
 
   char buf[80];
   char lower_case_name[15];
-  for (unsigned int i = 0, j = 0; i < 6; i++)
+  for (int i = 0, j = 0; i < 6; i++)
   {
     for (j = 0; j < strlen(BOSS_NAMES[i]); j++)
     {

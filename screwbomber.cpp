@@ -206,7 +206,7 @@ void ScrewBomber::adjustToFloorOrCeiling(int x_map, int y_map)
       break;
     }
   }
-  unsigned int yMax;
+  int yMax;
   for (yMax = y_map; yMax < cur_stage->max_y; yMax++)
   {
     if (cur_stage->tileAction(x_map, yMax) == mm_tile_actions::TILE_SOLID)
@@ -216,7 +216,7 @@ void ScrewBomber::adjustToFloorOrCeiling(int x_map, int y_map)
   }
 
   // which wall is closer, up or down?
-  closer = (abs(yMin-y_map) < abs(yMax-y_map)) ? 0 : 1;
+  closer = (abs((int)(yMin-y_map)) < abs((int)(yMax-y_map))) ? 0 : 1;
 
   int tilecoordx, tilecoordy, tiletype;
   int dir = (closer == 0) ? -1 : 1;

@@ -22,7 +22,7 @@ class Character
   public:
     const static int FREEZE = -1;
 
-    Character(const Stage & stage, unsigned int TYPE);
+    Character(const Stage & stage, int TYPE);
     Character();
     virtual ~Character();
 
@@ -55,8 +55,8 @@ class Character
     virtual bool handleAnimation(bool * bAnimationEnded = NULL);
     bool nextAnimFrame();
     int getCurrFrameDuration();
-    virtual void setAnimSeq(unsigned int newAnimSeq, bool reset = true);
-    void resetAnimSeq(unsigned int animSeq);
+    virtual void setAnimSeq(int newAnimSeq, bool reset = true);
+    void resetAnimSeq(int animSeq);
 
     virtual void loadWeapon();
     virtual void fire();
@@ -90,9 +90,9 @@ class Character
 
     unsigned long lastShot;
 
-    unsigned int curAnimFrame;
-    unsigned int curAnimFrameDuration;
-    unsigned int curAnimSeq;
+    int curAnimFrame;
+    int curAnimFrameDuration;
+    int curAnimSeq;
 
     bool isFacingRight,isFacingDown;
     bool grabstair;
@@ -121,5 +121,5 @@ class Character
     int xcol, ycol;
 
   private:
-    void loadAnimSeqs(unsigned int TYPE);
+    void loadAnimSeqs(int TYPE);
 };

@@ -150,7 +150,7 @@ int Stage::unload()
   free(map);
   map = NULL;
 
-  std::map<unsigned int, AnimSequence *>::iterator it;
+  std::map<int, AnimSequence *>::iterator it;
   for (it = preLoadedSprites.begin(); it != preLoadedSprites.end(); ++it)
   {
     delete it->second;
@@ -228,6 +228,9 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
       {
         camera.x = x*mm_graphs_defs::TILE_SIZE;
         camera.y = y*mm_graphs_defs::TILE_SIZE;
+#ifdef DEBUG
+        fprintf(stderr,"INITIAL CAMERA Y = [%d] X [%d]\n", camera.y, camera.x);
+#endif
       }
       else if (map[y][x].action == mm_tile_actions::TILE_SCROLL_LIMIT)
       {
@@ -272,7 +275,7 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
 #ifdef DEBUG
             fprintf(stderr,"Preload: [%s]\n", mm_spritefiles::sprite_files[tile_action]);
 #endif
-            preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+            preLoadedSprites.insert(std::pair<int, AnimSequence *>
               (tile_action, new AnimSequence(mm_spritefiles::sprite_files[tile_action])));
           }
         }
@@ -284,38 +287,38 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
   fprintf(stderr,"Preload: [megaman]\n");
 #endif
   // Megaman, keep a copy for weapon color change.
-  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+  preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (mm_spritefiles::MEGAMAN_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::MEGAMAN_SPRITES], true)));
 
 #ifdef DEBUG
   fprintf(stderr,"Preload: [weapons]\n");
 #endif
 
-  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *>
+  preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (mm_spritefiles::WEAPONS_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_SPRITES])));
   //TODO: load bassed in megaman curr avaliable weapons
-  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+  preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (mm_spritefiles::WEAPONS_ICEMAN, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_ICEMAN])));
-  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *>
+  preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (mm_spritefiles::WEAPONS_BOMBMAN, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_BOMBMAN])));
-  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *>
+  preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (mm_spritefiles::WEAPONS_ELECMAN, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_ELECMAN])));
-  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *>
+  preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (mm_spritefiles::WEAPONS_CUTMAN, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_CUTMAN])));
-  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *>
+  preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (mm_spritefiles::WEAPONS_FIREMAN, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_FIREMAN])));
-  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *>
+  preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (mm_spritefiles::WEAPONS_MAGNETIC, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_MAGNETIC])));
 
 #ifdef DEBUG
   fprintf(stderr,"Preload: [explosion]\n");
 #endif
 
-  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+  preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (mm_spritefiles::HITEXPLOSION_SPRITES,     new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::HITEXPLOSION_SPRITES])));
-  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+  preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (mm_spritefiles::EXPLOSIONLITTLE_SPRITES,  new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::EXPLOSIONLITTLE_SPRITES])));
-  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+  preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (mm_spritefiles::MEGAMANEXPLOSION_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::MEGAMANEXPLOSION_SPRITES])));
 
   if (hasPicketMan == true)
@@ -323,7 +326,7 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
 #ifdef DEBUG
     fprintf(stderr,"Preload: [PicketMan Hammer]\n");
 #endif
-    preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+    preLoadedSprites.insert(std::pair<int, AnimSequence *>
       (mm_spritefiles::PICKETMANHAMMER_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::PICKETMANHAMMER_SPRITES])));
   }
 
@@ -332,9 +335,9 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
 #ifdef DEBUG
     fprintf(stderr,"Preload: [CrazyRazy Upper and Lower parts]\n");
 #endif
-    preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+    preLoadedSprites.insert(std::pair<int, AnimSequence *>
       (mm_spritefiles::CRAZYRAZY_LOWER_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::CRAZYRAZY_LOWER_SPRITES])));
-    preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+    preLoadedSprites.insert(std::pair<int, AnimSequence *>
       (mm_spritefiles::CRAZYRAZY_UPPER_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::CRAZYRAZY_UPPER_SPRITES])));
   }
 
@@ -343,20 +346,20 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
 #ifdef DEBUG
     fprintf(stderr,"Preload: [Watcher gun]\n");
 #endif
-    preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+    preLoadedSprites.insert(std::pair<int, AnimSequence *>
       (mm_spritefiles::SPARKLE_ENM_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::SPARKLE_ENM_SPRITES])));
   }
 
 #ifdef DEBUG
     fprintf(stderr,"Preload: [Bonus Point]\n");
 #endif
-  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *>
+  preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (mm_spritefiles::BONUS_POINT_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::BONUS_POINT_SPRITES])));
 
 #ifdef DEBUG
   fprintf(stderr,"Preload: [BossDoor]\n");
 #endif
-  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *> 
+  preLoadedSprites.insert(std::pair<int, AnimSequence *>
       (mm_spritefiles::BOSSDOOR_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::BOSSDOOR_SPRITES])));
 
 #ifdef DEBUG
@@ -415,7 +418,7 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
 
 void Stage::runtimeLoadCharacter(mm_spritefiles::SPRT_TYPE characterSprite)
 {
-  preLoadedSprites.insert(std::pair<unsigned int, AnimSequence *>
+  preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (characterSprite, new AnimSequence(mm_spritefiles::sprite_files[characterSprite])));
 }
 
@@ -446,7 +449,7 @@ void Stage::createEnemies(std::vector<Character *> & characters_vec)
   }
 }
 
-AnimSequence * Stage::getAnimSeq(unsigned int TYPE)
+AnimSequence * Stage::getAnimSeq(int TYPE)
 {
   return preLoadedSprites[TYPE];
 }
@@ -867,7 +870,7 @@ void Stage::loadTiles(const std::string & stage_file)
   }
 }
 
-Character * Stage::createCharacter(unsigned int TYPE, int x, int y, int vx, int vy, void * param)
+Character * Stage::createCharacter(int TYPE, int x, int y, int vx, int vy, void * param)
 {
   Character * cur_character = NULL;
 

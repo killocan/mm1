@@ -183,7 +183,7 @@ void Beak::adjustToWall(int x_map, int y_map)
   }
 
   // which wall is closer, left or right?
-  closer = (abs(xMin-x_map) < abs(xMax-x_map)) ? 0 : 1;
+  closer = (abs((int)(xMin-x_map)) < abs((int)(xMax-x_map))) ? 0 : 1;
   isFacingRight = (closer == 0);
 
   int tilecoordx, tilecoordy, tiletype;
@@ -205,7 +205,7 @@ void Beak::adjustToWall(int x_map, int y_map)
       }
 
 #ifdef DEBUG
-      fprintf(stderr,"FINAL Beak: x=[%d] utilX=[%d] y=[%d] vely=[%d] h=[%d]\n",
+      fprintf(stderr,"FINAL Beak: x=[%f] utilX=[%f] y=[%f] vely=[%f] h=[%f]\n",
                                     x,     utilX,     y,     vely,     h);
 #endif
       break;

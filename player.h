@@ -33,7 +33,7 @@ class Player : public Character
     virtual void touchCelling();
     virtual void firingOnJump();
     virtual void changeWeapon();
-    virtual void setAnimSeq(unsigned int newAnimSeq, bool reset = true);
+    virtual void setAnimSeq(int newAnimSeq, bool reset = true);
     
     void reset();
     void forceAnimation();

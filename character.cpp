@@ -15,7 +15,7 @@
 #include "sfx.h"
 #include "dropitem.h"
 
-Character::Character(const Stage & stage, unsigned int TYPE) :
+Character::Character(const Stage & stage, int TYPE) :
   x(0), y(0),
   old_x(0), old_y(0),
   sx(0), sy(0),
@@ -101,7 +101,7 @@ Character::~Character()
 
 void Character::goRight()
 {
-  x+=2;
+  x+=2.0f;
 }
 
 void Character::doLogic()
@@ -109,7 +109,7 @@ void Character::doLogic()
   return;  
 }
 
-void Character::loadAnimSeqs(unsigned int TYPE)
+void Character::loadAnimSeqs(int TYPE)
 {
   spriteSheet = cur_stage->getAnimSeq(TYPE);
   utilX       = spriteSheet->getUtilXInfo()[0];
@@ -122,8 +122,8 @@ void Character::loadAnimSeqs(unsigned int TYPE)
 
 void Character::calcScreenCoords() //const Camera & camera)
 {
-  this->sx = (int) (this->x - GlobalCamera::mm_camera->x);
-  this->sy = (int) (this->y - GlobalCamera::mm_camera->y);
+  this->sx = (this->x - GlobalCamera::mm_camera->x);
+  this->sy = (this->y - GlobalCamera::mm_camera->y);
 }
 
 bool Character::canJumpAgain()
@@ -440,7 +440,7 @@ int Character::getCurrFrameDuration()
   return anim_seqs[curAnimSeq][curAnimFrame].frameDuration;
 }
 
-void Character::setAnimSeq(unsigned int newAnimSeq, bool reset)
+void Character::setAnimSeq(int newAnimSeq, bool reset)
 {
   if (newAnimSeq < anim_seqs.size() && newAnimSeq != curAnimSeq)
   {
@@ -450,7 +450,7 @@ void Character::setAnimSeq(unsigned int newAnimSeq, bool reset)
   }
 }
 
-void Character::resetAnimSeq(unsigned int animSeq)
+void Character::resetAnimSeq(int animSeq)
 {
   if (animSeq < anim_seqs.size())
   {

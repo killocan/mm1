@@ -144,7 +144,7 @@ void Met::adjustToFloor()
       y+=2;
 
 #ifdef DEBUG
-      fprintf(stderr,"FINAL Met: x=[%d] utilX=[%d] y=[%d] vely=[%d] h=[%d]\n",
+      fprintf(stderr,"FINAL Met: x=[%f] utilX=[%f] y=[%f] vely=[%f] h=[%f]\n",
                                     x,     utilX,     y,     vely,     h);
 #endif
       break;

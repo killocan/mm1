@@ -227,7 +227,7 @@ void Player::checkOnCamera()
   return;
 }
 
-void Player::setAnimSeq(unsigned int newAnimSeq, bool reset)
+void Player::setAnimSeq(int newAnimSeq, bool reset)
 {
   if (isHitAnimOn == false)
   {
@@ -839,9 +839,6 @@ void Player::drawCharacter(BITMAP * bmp)
   }
 
   int curSpriteFrame = anim_seqs[curAnimSeq][curAnimFrame].frameNumber;
-
-  //blit(this->spriteSheet->getFrame(curSpriteFrame), bmp, 0, 0, this->sx, this->sy, 
-  //this->spriteSheet->getFrame(curSpriteFrame)->w, this->spriteSheet->getFrame(curSpriteFrame)->h);
 
   int xpos = this->sx;
 

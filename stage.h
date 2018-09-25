@@ -21,7 +21,7 @@ class Stage
     ~Stage();
 
     void createEnemies(std::vector<Character *> & characters_vec);
-    Character * createCharacter(unsigned int TYPE, int x, int y, int vx = 0, int vy = 0, void * param = NULL);
+    Character * createCharacter(int TYPE, int x, int y, int vx = 0, int vy = 0, void * param = NULL);
 
     unsigned char tileAction(int x, int y) const;
     unsigned char tileNumber(int x, int y) const;
@@ -38,7 +38,7 @@ class Stage
     void doCamera(Camera & camera);
     bool cameraSectorHasFgTiles(Camera & camera, Player & player);
 
-    AnimSequence * getAnimSeq(unsigned int TYPE);
+    AnimSequence * getAnimSeq(int TYPE);
     BITMAP * getTileSet();
 
     // For any entity that wants to check collision agains the map.
@@ -54,7 +54,7 @@ class Stage
     bool checkForBoss(int x, int y);
 
     bool has_fg_tiles;
-    unsigned int max_x, max_y;
+    int max_x, max_y;
     int scroll_count;
 
     bool horz_scroll;
@@ -108,7 +108,7 @@ class Stage
 
     bool reach_max_x;
 
-    std::map<unsigned int, AnimSequence *> preLoadedSprites;
+    std::map<int, AnimSequence *> preLoadedSprites;
 
     std::map<int, int> offsetMap;
 

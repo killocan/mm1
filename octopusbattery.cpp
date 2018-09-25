@@ -72,7 +72,7 @@ void OctopusBattery::findBorders(const Stage & stage, int x_map, int y_map)
     }
     minX = (xMin+1)*mm_graphs_defs::TILE_SIZE;
 
-    unsigned int xMax;
+    int xMax;
     for (xMax = x_map; xMax < stage.max_x; xMax++)
     {
       if (stage.tileAction(xMax, y_map) == mm_tile_actions::TILE_SOLID)
@@ -83,12 +83,12 @@ void OctopusBattery::findBorders(const Stage & stage, int x_map, int y_map)
     maxX = (xMax-1)*mm_graphs_defs::TILE_SIZE;
 
     // which wall is closer, left or right?
-    closer = (abs(xMin-x_map) < abs(xMax-x_map)) ? 0 : 1;
+    closer = (abs((int)(xMin-x_map)) < abs((int)(xMax-x_map))) ? 0 : 1;
     isFacingRight = (closer == 0);
   }
   else
   {
-    unsigned int yMin;
+    int yMin;
     for (yMin = y_map; yMin >= 0; yMin--)
     {
       if (stage.tileAction(x_map, yMin) == mm_tile_actions::TILE_SOLID)
@@ -98,7 +98,7 @@ void OctopusBattery::findBorders(const Stage & stage, int x_map, int y_map)
     }
     minY = (yMin+1)*mm_graphs_defs::TILE_SIZE;
 
-    unsigned int yMax;
+    int yMax;
     for (yMax = y_map; yMax < stage.max_y; yMax++)
     {
       if (stage.tileAction(x_map, yMax) == mm_tile_actions::TILE_SOLID)
@@ -109,7 +109,7 @@ void OctopusBattery::findBorders(const Stage & stage, int x_map, int y_map)
     maxY = (yMax-1)*mm_graphs_defs::TILE_SIZE;
 
     // which wall is closer, left or right?
-    closer = (abs(yMin-y_map) < abs(yMax-y_map)) ? 0 : 1;
+    closer = (abs((int)(yMin-y_map)) < abs((int)(yMax-y_map))) ? 0 : 1;
     isFacingDown = (closer == 0);
   }
 }

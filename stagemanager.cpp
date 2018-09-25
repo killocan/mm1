@@ -102,8 +102,10 @@ const std::string & StageManager::getStageFilePath() const
 void StageManager::doMegamanSpawning(BITMAP * buffer, FONT * mm_font)
 {
   bool played_teletransport_sound = false;
+
   int y_goal = player->y;
-  player->y = ((y_goal/mm_graphs_defs::UTIL_H)*mm_graphs_defs::UTIL_H)-player->h;
+  player->y = ((y_goal / mm_graphs_defs::UTIL_H) * mm_graphs_defs::UTIL_H)- (int)player->h;
+  fprintf(stderr,"player.y = %f ygoal = %f\n", player->y, y_goal);
 
   int animCount = 0;
 
@@ -116,7 +118,7 @@ void StageManager::doMegamanSpawning(BITMAP * buffer, FONT * mm_font)
   {
     if (GlobalGameState::game_logic_tick == 1)
     {
-      player->y+=8;
+      player->y+=8.0f;
       if (player->y >= y_goal)
       {
         if (played_teletransport_sound == false)
@@ -281,7 +283,7 @@ static void bhmode(BITMAP * bmp)
 
 static void tvmode(BITMAP * bmp)
 {
-  unsigned int mask[3] = {0xFF3F3F, 0x3FFF3F, 0x3F3FFF};
+  int mask[3] = {0xFF3F3F, 0x3FFF3F, 0x3F3FFF};
   int maskcounter = 0;
 
   // CRT TV MODE
@@ -377,7 +379,7 @@ void StageManager::play()
     player->reset();
     stage->setWaypoint(player);
 
-    camera->y = (player->y/mm_graphs_defs::UTIL_H) * mm_graphs_defs::UTIL_H;
+    camera->y = ((int)player->y / mm_graphs_defs::UTIL_H) * mm_graphs_defs::UTIL_H;
     stage->doCamera(*camera);
     stage->resetReachMaxX();
 

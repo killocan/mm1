@@ -14,7 +14,7 @@ void draw_text(BITMAP * buffer, FONT * mm_font, int x, int y, int fg, int bg, co
   char format[20] = {};
   sprintf(format, "%%.%ds", lenghtToPrint);
 
-  for (unsigned int i = 0; i < strlen(str); i++)
+  for (int i = 0; i < strlen(str); i++)
   {
     textprintf_ex(buffer, mm_font, x, y, fg, bg, format, str);
     //x+=charLen;
