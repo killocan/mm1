@@ -17,7 +17,7 @@ class AnimSequence
     AnimSequence(const char * seqFile, bool keepCopy = false);
     ~AnimSequence();
 
-    BITMAP * getFrame(unsigned int frame_idx);
+    BITMAP * getFrame(int frame_idx);
     int * getUtilXInfo();
     int getFrameHeight(int frameNumber);
 
@@ -110,8 +110,8 @@ void AnimSequence::loadSequences(const char * def_file)
 
 void AnimSequence::loadSprites(const char * seqFile)
 {
-  static unsigned int RED   = makecol32(255,0,0);
-  static unsigned int GREEN = makecol32(0,255,0);
+  static int RED   = makecol32(255,0,0);
+  static int GREEN = makecol32(0,255,0);
 
   std::vector<int> framesLen;
 
@@ -124,7 +124,7 @@ void AnimSequence::loadSprites(const char * seqFile)
 
   int spriteUtilAreaPoints = 0;
   int frame_len = 0;
-  unsigned int pixel     = 0;
+  int pixel     = 0;
   bool heightFound = false;
   for (int i = 0; i < seqBmp->w; i++)
   {
@@ -170,7 +170,7 @@ void AnimSequence::loadSprites(const char * seqFile)
   }
 
   utilXSize[1]=utilXSize[1]-utilXSize[0];
-  for (unsigned int i = 0, x = 0; i < framesLen.size(); i++)
+  for (int i = 0, x = 0; i < framesLen.size(); i++)
   {
     seqFrames.push_back(create_sub_bitmap(seqBmp, x, 1, framesLen[i], seqBmp->h));
     x += framesLen[i] + 1;
@@ -194,7 +194,7 @@ int * AnimSequence::getUtilXInfo()
 
 void AnimSequence::unload()
 {
-  for (unsigned int i = 0; i < seqFrames.size(); i++)
+  for (int i = 0; i < seqFrames.size(); i++)
   {
     destroy_bitmap(seqFrames[i]);
   }
@@ -204,7 +204,7 @@ void AnimSequence::unload()
   seqFrames.clear();
 }
 
-BITMAP * AnimSequence::getFrame(unsigned int frame_idx)
+BITMAP * AnimSequence::getFrame(int frame_idx)
 {
   if (frame_idx >= seqFrames.size())
     return NULL;

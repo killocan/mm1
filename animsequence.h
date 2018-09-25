@@ -26,7 +26,7 @@ class AnimSequence
     AnimSequence(const char * seqFile, bool keepCopy = false);
     ~AnimSequence();
 
-    BITMAP * getFrame(unsigned int frame_idx);
+    BITMAP * getFrame(int frame_idx);
     int * getUtilXInfo();
     int getFrameHeight(int frameNumber);
 

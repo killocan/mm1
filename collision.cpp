@@ -24,10 +24,10 @@ bool Collision::pixelCollision(int object1X, int object1Y, BITMAP *sprite1, int 
     return false;
   }
 
-  unsigned int mask = MASK_COLOR_32;
+  int mask = MASK_COLOR_32;
 
   int x1,x2,y1,y2;
-  unsigned int color1, color2;
+  int color1, color2;
   for (int y = ymin; y < ymax; ++y) 
   {
     // normalize the coordinates.
