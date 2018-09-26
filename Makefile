@@ -23,10 +23,10 @@ endif
 
 ifdef FINAL
 	LDFLAGS += -no-pie -mtune=native -O3
-	CFLAGS += -O3
+	CFLAGS += -O3 -fno-pie
 else
 	LDFLAGS += -no-pie -g
-	CFLAGS += -g -DDEBUG
+	CFLAGS += -fno-pie -g -DDEBUG
 endif
 
 SOURCES=main.cpp mm_math.cpp soundpack.cpp spritefiles.cpp globalgamestate.cpp text_utils.cpp animsequence.cpp energybar.cpp stage.cpp \
