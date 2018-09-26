@@ -88,16 +88,16 @@ Stage::~Stage()
 
 unsigned char Stage::tileAction(int x, int y) const
 {
-  //NOTE: Not supposed to happen, remove on final version.
-  //if (x < 0 || y < 0) return mm_tile_actions::TILE_SOLID;
+  //NOTE: Not supposed to happen, remove on final version. OR IS IT?
+  if (x < 0 || y < 0) return mm_tile_actions::TILE_SOLID;
 
   return map[y][x].action;
 }
 
 unsigned char Stage::tileNumber(int x, int y) const
 {
-  //NOTE: Not supposed to happen, remove on final version.
-  //if (x < 0 || y < 0) return mm_tile_actions::TILE_SOLID;
+  //NOTE: Not supposed to happen, remove on final version. OR IS IT?
+  if (x < 0 || y < 0) return mm_tile_actions::TILE_SOLID;
 
   return map[y][x].tile_number;
 }
