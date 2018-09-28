@@ -1,5 +1,7 @@
 CC=g++
 
+    NO_PIE := "$(shell gcc -v 2>&1 | grep -o -e '[^ ]*pie')"
+
 ifneq (,$(findstring Windows,$(PATH)))
 	LDFLAGS=./libs/win32/libalmp3.a -lalleg
 	CFLAGS=-c -Wall -I./libs_inc
@@ -21,12 +23,17 @@ ifdef PROFILING
 	LDFLAGS += -pg
 endif
 
+ifeq ($(strip $(NO_PIE)),)
+LDFLAGS += -no-pie
+CFLAGS += -fno-pie
+endif
+
 ifdef FINAL
-	LDFLAGS += -no-pie -mtune=native -O3
-	CFLAGS += -O3 -fno-pie
+	LDFLAGS += -mtune=native -O3
+	CFLAGS += -O3
 else
-	LDFLAGS += -no-pie -g
-	CFLAGS += -fno-pie -g -DDEBUG
+	LDFLAGS += -g
+	CFLAGS += -g -DDEBUG
 endif
 
 SOURCES=main.cpp mm_math.cpp soundpack.cpp spritefiles.cpp globalgamestate.cpp text_utils.cpp animsequence.cpp energybar.cpp stage.cpp \
