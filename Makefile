@@ -23,9 +23,9 @@ ifdef PROFILING
 	LDFLAGS += -pg
 endif
 
-ifeq ($(strip $(NO_PIE)),)
-LDFLAGS += -no-pie
-CFLAGS += -fno-pie
+ifneq ($(strip $(NO_PIE)),)
+    LDFLAGS += -no-pie
+    CFLAGS += -fno-pie
 endif
 
 ifdef FINAL
