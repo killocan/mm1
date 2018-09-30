@@ -71,7 +71,24 @@ void FootHolder::doLogic()
 {
   if (this->cur_stage->m_player->onPlatform == true && this->cur_stage->m_player->conPlayer == this)
   {
-    this->cur_stage->m_player->x += this->xstep;
+    Player * p = this->cur_stage->m_player;
+    int tilecoordx, tilecoordy, tiletype;
+
+    if (this->xstep > 0)
+    {
+      if (!p->collisionVer((p->x + p->utilX) + this->xstep + p->utilXLen,
+                           p->y,
+                           tilecoordx, tilecoordy, tiletype))
+        p->x += this->xstep;
+    }
+    else if (this->xstep < 0)
+    {
+      if (!p->collisionVer((p->x + p->utilX) - this->xstep,
+                           p->y,
+                           tilecoordx, tilecoordy, tiletype))
+        p->x += this->xstep;
+    }
+
     this->cur_stage->m_player->y += this->current_decision;
   }
 

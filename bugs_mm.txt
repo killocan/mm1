@@ -2,7 +2,6 @@ BUGS:
 
 - Ajustar corrida para comecar com 1 px depois passar para 3 quando ja correndo.
 - Escada a entrada pela direita ta errado.
-X Evitar que o footholder enfie o megaman na parede
 - Mudar velocidade do scroll vertical da tela. (tem um delay antes de comecar)
 - ao saltar sobre uma escada muito proxima de um teto megaman passa direto, altura do sprite
   faz detectar sprite abaixo do inicio da escada, arrumar um jeito de colidir com altura modificada
