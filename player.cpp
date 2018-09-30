@@ -262,11 +262,11 @@ void Player::normalLogic()
     int tilecoordx, tilecoordy, tiletype;
     if (hitDir < 0)
     {
-      collide = collisionVer(*cur_stage, (x+utilX)-1, y, tilecoordx, tilecoordy, tiletype);
+      collide = collisionVer((x+utilX)-1, y, tilecoordx, tilecoordy, tiletype);
     }
     else
     {
-      collide = collisionVer(*cur_stage, (x+utilX)+1+utilXLen, y, tilecoordx, tilecoordy, tiletype);
+      collide = collisionVer((x+utilX)+1+utilXLen, y, tilecoordx, tilecoordy, tiletype);
     }
 
     if (collide == false)
@@ -321,7 +321,7 @@ void Player::normalLogic()
   int tilecoordy = 0;
   int tiletype  = 0;
   
-  checkStair(*cur_stage);
+  checkStair();
 
   if (cur_stage->horz_scroll == false)
   {
@@ -352,7 +352,7 @@ void Player::normalLogic()
             setAnimSeq(Player::FIRINGRUNNING, false);
         }
 
-        if(collisionVer(*cur_stage, (x+utilX)+velx+utilXLen, y, tilecoordx, tilecoordy, tiletype))
+        if(collisionVer((x+utilX)+velx+utilXLen, y, tilecoordx, tilecoordy, tiletype))
         {
           //This align player with the tile, but it's not necessary since i'm using pivot points.
           //x = tilecoord * mm_graphs_defs::TILE_SIZE - w - 1;
@@ -392,7 +392,7 @@ void Player::normalLogic()
             setAnimSeq(Player::FIRINGRUNNING, false);
         }
 
-        if(collisionVer(*cur_stage, (x+utilX)-velx, y, tilecoordx, tilecoordy, tiletype))
+        if(collisionVer((x+utilX)-velx, y, tilecoordx, tilecoordy, tiletype))
         {
           //This align player with the tile, but its not necessary since i'm using pivot points.
           //x = ((tilecoord + 1) * mm_graphs_defs::TILE_SIZE + 1) + utilX+1;
@@ -433,7 +433,7 @@ void Player::normalLogic()
     //TODO: Should group those two(up,down) under firing = false hehehe...
     if (key[KEY_UP] && firing==false)//!key[KEY_A])
     {
-      if(collisionStair(*cur_stage, x+utilX, y, tilecoordx, tilecoordy, tiletype, true) == true)
+      if(collisionStair(x+utilX, y, tilecoordx, tilecoordy, tiletype, true) == true)
       {
         vely = 0;
 
@@ -475,7 +475,7 @@ void Player::normalLogic()
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {
       // If player is colliding with something and it's a stair tile OR if player 
       // is on the last stair step tile(with nothing bellow) then keep holding on it.
-      if((collisionHor(*cur_stage, x+utilX, y+vely+h, tilecoordx, tilecoordy, true, tiletype) && 
+      if((collisionHor(x+utilX, y+vely+h, tilecoordx, tilecoordy, true, tiletype) &&
         (tiletype == mm_tile_actions::TILE_STAIR || tiletype == mm_tile_actions::TILE_STAIR_BEGIN) && 
         (( (int)(x+utilX) % mm_graphs_defs::TILE_SIZE) < (mm_graphs_defs::TILE_SIZE/2))) ||
         (overstair == true && tiletype == 0))
@@ -501,7 +501,7 @@ void Player::normalLogic()
         }
 
         isFacingDown = true;
-        collisionStair(*cur_stage, x+utilX, y, tilecoordx, tilecoordy, tiletype, true);
+        collisionStair(x+utilX, y, tilecoordx, tilecoordy, tiletype, true);
         x = (tilecoordx * mm_graphs_defs::TILE_SIZE+1) - utilX;
         y += 2;
       }
@@ -666,7 +666,7 @@ void Player::doLogic()
   }
 }
 
-bool Player::collisionStair(const Stage & stage, int x, int y, int &tilecoordx, int &tilecoordy, int &tiletype, bool grabing)
+bool Player::collisionStair(int x, int y, int &tilecoordx, int &tilecoordy, int &tiletype, bool grabing)
 {
   int realFrameHeight = getFrameH();
   y = (y + (h-realFrameHeight));
@@ -680,7 +680,7 @@ bool Player::collisionStair(const Stage & stage, int x, int y, int &tilecoordx, 
   tilecoordy = tileypixels/mm_graphs_defs::TILE_SIZE;
   while(tileypixels <= testend)
   {
-    tiletype = stage.tileAction(tilecoordx, tilecoordy);
+    tiletype = cur_stage->tileAction(tilecoordx, tilecoordy);
     if(tiletype == mm_tile_actions::TILE_STAIR || tiletype == mm_tile_actions::TILE_STAIR_BEGIN)
     {
       return true;
@@ -693,10 +693,10 @@ bool Player::collisionStair(const Stage & stage, int x, int y, int &tilecoordx, 
   return false;
 }
 
-bool Player::checkStair(const Stage & stage)
+bool Player::checkStair()
 {
   static int tilecoordx, tilecoordy, tiletype;
-  return (this->overstair = collisionStair(stage, x+utilX, y, tilecoordx, tilecoordy, tiletype));
+  return (this->overstair = collisionStair(x+utilX, y, tilecoordx, tilecoordy, tiletype));
 }
 
 bool Player::canJumpAgain()

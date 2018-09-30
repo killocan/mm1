@@ -112,14 +112,14 @@ void Gutsman::doLogic()
 
         if (jumping_right == true)
         {
-          if (collisionVer(*cur_stage, (x + utilX) + velx + utilXLen, y, tilecoordx, tilecoordy, tiletype) == false)
+          if (collisionVer((x + utilX) + velx + utilXLen, y, tilecoordx, tilecoordy, tiletype) == false)
           {
             x += velx;
           }
         }
         else
         {
-          if (collisionVer(*cur_stage, (x + utilX) - velx, y, tilecoordx, tilecoordy, tiletype) == false)
+          if (collisionVer((x + utilX) - velx, y, tilecoordx, tilecoordy, tiletype) == false)
           {
             x -= velx;
           }

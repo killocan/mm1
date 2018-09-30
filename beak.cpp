@@ -192,7 +192,7 @@ void Beak::adjustToWall(int x_map, int y_map)
 
   while(true)
   {
-    if(collisionVer(*cur_stage, (x+utilX)+velx+w, y, tilecoordx, tilecoordy, tiletype) == false)
+    if(collisionVer((x+utilX)+velx+w, y, tilecoordx, tilecoordy, tiletype) == false)
     {
       x += dir;
     }

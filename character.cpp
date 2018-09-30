@@ -150,7 +150,7 @@ void Character::doGravitation()
 
   if (curState == Character::FREEZE) return;
 
-  overstair = collisionStair(*cur_stage, x+utilX, y, tilecoordx, tilecoordy, tiletype);
+  overstair = collisionStair(x+utilX, y, tilecoordx, tilecoordy, tiletype);
 
   // Grabstair is true only for megaman.
   if (grabstair == false && cur_stage->horz_scroll == false)
@@ -161,7 +161,7 @@ void Character::doGravitation()
       onground = false;
 
       // If outside map don't test collision, just pretend its all void out there :)
-      if((y+vely >= 0) && collisionHor(*cur_stage, x+utilX, y+vely, tilecoordx, tilecoordy, false, tiletype))
+      if((y+vely >= 0) && collisionHor(x+utilX, y+vely, tilecoordx, tilecoordy, false, tiletype))
       {
         touchCelling();
 
@@ -179,7 +179,7 @@ void Character::doGravitation()
     {
       // If outside map don't test collision, just pretend its all void out there :)
       if((y+vely+h >= 0) &&
-        ((collisionHor(*cur_stage, x+utilX, y+vely+h, tilecoordx, tilecoordy, !overstair, tiletype)) || (onPlatform == true)))
+        ((collisionHor(x+utilX, y+vely+h, tilecoordx, tilecoordy, !overstair, tiletype)) || (onPlatform == true)))
       {
         if (onground == false)
         {
@@ -233,7 +233,7 @@ void Character::touchCelling()
   return;
 }
 
-bool Character::collisionHor(const Stage & stage, int x, int y, int &tilecoordx, int &tilecoordy, bool going_down, int &tiletype)
+bool Character::collisionHor(int x, int y, int &tilecoordx, int &tilecoordy, bool going_down, int &tiletype)
 {
   int tilexpixels = x - (x % mm_graphs_defs::TILE_SIZE);
   int testend     = x + utilXLen;
@@ -242,7 +242,7 @@ bool Character::collisionHor(const Stage & stage, int x, int y, int &tilecoordx,
   tilecoordx = tilexpixels/mm_graphs_defs::TILE_SIZE;
   while(tilexpixels <= testend)
   {
-    tiletype = stage.tileAction(tilecoordx, tilecoordy);
+    tiletype = cur_stage->tileAction(tilecoordx, tilecoordy);
 
     if (tiletype == mm_tile_actions::TILE_DEATH)
     {
@@ -256,7 +256,7 @@ bool Character::collisionHor(const Stage & stage, int x, int y, int &tilecoordx,
     }
     else
     {
-      //tiletype = stage.tileAction(tilecoordx, tilecoordy);
+      //tiletype = cur_stage->tileAction(tilecoordx, tilecoordy);
 
       if (this->overstair == true)
       {
@@ -280,7 +280,7 @@ bool Character::collisionHor(const Stage & stage, int x, int y, int &tilecoordx,
   return false;
 }
 
-bool Character::collisionVer(const Stage & stage, int x, int y, int &tilecoordx, int &tilecoordy, int &tiletype)
+bool Character::collisionVer(int x, int y, int &tilecoordx, int &tilecoordy, int &tiletype)
 {
   int realFrameHeight = getFrameH();
   y = (y + (h-realFrameHeight));
@@ -294,7 +294,7 @@ bool Character::collisionVer(const Stage & stage, int x, int y, int &tilecoordx,
   tilecoordy = tileypixels/mm_graphs_defs::TILE_SIZE;
   while(tileypixels <= testend)
   {
-    tiletype = stage.tileAction(tilecoordx, tilecoordy);
+    tiletype = cur_stage->tileAction(tilecoordx, tilecoordy);
 
     if(tiletype == mm_tile_actions::TILE_SOLID)
     {
@@ -312,12 +312,12 @@ bool Character::collisionVer(const Stage & stage, int x, int y, int &tilecoordx,
   return false;
 }
 
-bool Character::collisionStair(const Stage & stage, int x, int y, int &tilecoordx, int &tilecoordy, int &tiletype, bool grabing)
+bool Character::collisionStair(int x, int y, int &tilecoordx, int &tilecoordy, int &tiletype, bool grabing)
 {
   return false;
 }
 
-bool Character::checkStair(const Stage & stage)
+bool Character::checkStair()
 {
   return false;
 }

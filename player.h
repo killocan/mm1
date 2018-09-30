@@ -19,8 +19,8 @@ class Player : public Character
     void normalLogic();
     void doGravitation();
     virtual void doLogic();
-    virtual bool collisionStair(const Stage & stage, int x, int y, int &tilecoordx, int &tilecoordy, int &tiletype, bool grabing = false);
-    virtual bool checkStair(const Stage & stage);
+    virtual bool collisionStair(int x, int y, int &tilecoordx, int &tilecoordy, int &tiletype, bool grabing = false);
+    virtual bool checkStair();
     //virtual bool handleAnimation(); // Avoid animation when over stair.
     virtual bool handleAnimation(bool * bAnimationEnded = NULL);
     virtual void checkOnCamera(); // megaman never leaves the camera.

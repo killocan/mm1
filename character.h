@@ -29,12 +29,12 @@ class Character
     // Process AI, internal state changes and stuff.
     virtual void doLogic();
 
-    virtual bool collisionVer(const Stage & stage,   int x, int y, int &tilecoordx, int &tilecoordy, int &tiletype);
-    virtual bool collisionHor(const Stage & stage,   int x, int y, int &tilecoordx, int &tilecoordy, bool going_down, int &tiletype);
-    virtual bool collisionStair(const Stage & stage, int x, int y, int &tilecoordx, int &tilecoordy, int &tiletype, bool grabing = false);
-    void calcScreenCoords(); //const Camera & camera);
+    virtual bool collisionVer(int x, int y, int &tilecoordx, int &tilecoordy, int &tiletype);
+    virtual bool collisionHor(int x, int y, int &tilecoordx, int &tilecoordy, bool going_down, int &tiletype);
+    virtual bool collisionStair(int x, int y, int &tilecoordx, int &tilecoordy, int &tiletype, bool grabing = false);
+    void calcScreenCoords();
 
-    virtual bool checkStair(const Stage & stage);
+    virtual bool checkStair();
 
     void goRight();
     void goLeft();

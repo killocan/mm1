@@ -265,7 +265,7 @@ void OctopusBattery::adjustToWall()
   {
     while(true)
     {
-      if(collisionVer(*cur_stage, (x+utilX)+velx+w, y, tilecoordx, tilecoordy, tiletype) == false)
+      if(collisionVer((x+utilX)+velx+w, y, tilecoordx, tilecoordy, tiletype) == false)
       {
         x += dir;
       }
@@ -280,7 +280,7 @@ void OctopusBattery::adjustToWall()
   {
     while(true)
     {
-      if(collisionHor(*cur_stage, x, y+h, tilecoordx, tilecoordy, (closer!=0), tiletype) == false)
+      if(collisionHor(x, y+h, tilecoordx, tilecoordy, (closer!=0), tiletype) == false)
       {
         y += dir;
       }

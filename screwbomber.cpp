@@ -225,7 +225,7 @@ void ScrewBomber::adjustToFloorOrCeiling(int x_map, int y_map)
 
   while(true)
   {
-    if(collisionHor(*cur_stage, x, y+h, tilecoordx, tilecoordy, (closer!=0), tiletype) == false)
+    if(collisionHor(x, y+h, tilecoordx, tilecoordy, (closer!=0), tiletype) == false)
     {
       y += dir;
     }

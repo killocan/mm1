@@ -167,7 +167,7 @@ void Spine::adjustToFloor()
 
   while(true)
   {
-    if(collisionHor(*cur_stage, x+utilX, y+vely+h, tilecoordx, tilecoordy, true, tiletype) == false)
+    if(collisionHor(x+utilX, y+vely+h, tilecoordx, tilecoordy, true, tiletype) == false)
     {
       y += vely;
     }
