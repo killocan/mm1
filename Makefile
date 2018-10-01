@@ -1,6 +1,6 @@
 CC=g++
 
-    NO_PIE := "$(shell gcc -v 2>&1 | grep -o -e '[^ ]*pie')"
+NO_PIE := "$(shell gcc -v 2>&1 | grep -o -e '[^ ]*pie')"
 
 ifneq (,$(findstring Windows,$(PATH)))
 	LDFLAGS=./libs/win32/libalmp3.a -lalleg
@@ -12,7 +12,7 @@ else
 			LDFLAGS=./libs/linux/libalmp3_64.a `allegro-config --libs`
 		else
 			LDFLAGS=./libs/linux/libalmp3.a `allegro-config --libs`
-    	endif
+		endif
 
 	CFLAGS=-c -Wall -I./libs_inc
 	RM=rm -f
@@ -23,9 +23,9 @@ ifdef PROFILING
 	LDFLAGS += -pg
 endif
 
-ifneq ($(strip $(NO_PIE)),)
-    LDFLAGS += -no-pie
-    CFLAGS += -fno-pie
+ifneq ("",$(strip $(NO_PIE)))
+	LDFLAGS += -no-pie
+	CFLAGS += -fno-pie
 endif
 
 ifdef FINAL
@@ -53,7 +53,7 @@ EXECUTABLE=megaman
 all: $(SOURCES) $(EXECUTABLE)
 	
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@ 
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@ 
