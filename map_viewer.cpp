@@ -26,6 +26,7 @@ int main(int argc, char ** argv)
   int step = 16;
 
   allegro_init();
+  install_timer();
   install_keyboard();
 
   set_color_depth(32);
@@ -40,12 +41,12 @@ int main(int argc, char ** argv)
 
   while(!key[KEY_ESC])
   {
-    if (key[KEY_S])
+    if (key[KEY_A])
     {
       if (step == 16) step = 32;
       else if (step == 32) step = 16;
 
-      while(key[KEY_S]);
+      while(key[KEY_A]);
     }
 
     if (key[KEY_RIGHT])
@@ -68,6 +69,17 @@ int main(int argc, char ** argv)
     {
       y+=step;
       rest(150);
+    }
+
+    if (key[KEY_W])
+    {
+      y-=step;
+      while(key[KEY_W]);
+    }
+    else if (key[KEY_S])
+    {
+      y+=step;
+      while(key[KEY_S]);
     }
 
     blit(img, buffer, x,y,0,0, SCREEN_W, SCREEN_H);
