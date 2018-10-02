@@ -434,7 +434,9 @@ void StageManager::play()
           {
             curr_character = *it;
 
-            curr_character->checkOnCamera();
+            if (stage->horz_scroll == false)
+              curr_character->checkOnCamera();
+
             if (curr_character->alive == true)
             {
               if (stopAnimations == false)
