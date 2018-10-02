@@ -774,7 +774,7 @@ void Stage::doCamera(Camera & camera)
 {
   static int dir = 0;
 
-  int camerax = (m_player->x + mm_player_defs::HALFPLAYERWIDTH) - mm_graphs_defs::UTIL_W/2;
+  int camerax = (((int)m_player->x) + mm_player_defs::HALFPLAYERWIDTH) - mm_graphs_defs::UTIL_W/2;
   if (camerax < 0)
   {
     camerax = 0;
