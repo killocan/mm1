@@ -30,10 +30,6 @@ FirePillar::FirePillar(const Stage & stage, int x, int y) : Character(stage, mm_
   offset = 0;
   pausebtwstates = 0;
 
-
-
-  vely          = 1;
-  overstair     = false;
   isFacingRight = true;
 
   colorOffset = 0;
@@ -76,12 +72,17 @@ void FirePillar::hit(mm_weapons::weapon_st * pWeapon)
     Sounds::mm_sounds->play(HIT_ENEMY);
 
     int desl = (int) ceil(float(offset)/mm_graphs_defs::TILE_SIZE);
-    int xd = this->x/mm_graphs_defs::TILE_SIZE;
-    int yd = (this->old_y-mm_graphs_defs::TILE_SIZE)/30; // yes... 30, fuck U hawuhawuahw
-    offset = desl*mm_graphs_defs::TILE_SIZE;
-    if (offset > h) offset = h-4;
+    int xd = ((int)this->x) / mm_graphs_defs::TILE_SIZE;
+    int yd = (((int)this->old_y) - mm_graphs_defs::TILE_SIZE) / mm_graphs_defs::TILE_SIZE;
+
+    offset = desl * mm_graphs_defs::TILE_SIZE;
+
+    if (offset > h)
+      offset = h-4;
+
     this->y = (this->old_y - offset)-4;
     offset+=4;
+
     for (int i = 0; i < MIN(desl,4); ++i, --yd)
     {
       cur_stage->setTileAction(xd,yd,mm_tile_actions::TILE_SOLID);
@@ -95,8 +96,8 @@ void FirePillar::hit(mm_weapons::weapon_st * pWeapon)
 
 void FirePillar::defrost()
 {
-  int xd = this->old_x/mm_graphs_defs::TILE_SIZE;
-  int yd = (this->old_y-mm_graphs_defs::TILE_SIZE)/mm_graphs_defs::TILE_SIZE;
+  int xd = ((int)this->old_x)/mm_graphs_defs::TILE_SIZE;
+  int yd = (((int)this->old_y)-mm_graphs_defs::TILE_SIZE)/mm_graphs_defs::TILE_SIZE;
   for (int i = 0; i < 5; ++i, --yd)
   {
     cur_stage->setTileAction(xd,yd,mm_tile_actions::TILE_VOID);
@@ -169,10 +170,6 @@ void FirePillar::doLogic()
 void FirePillar::drawCharacter(BITMAP * bmp)
 {
   int curSpriteFrame = anim_seqs[curAnimSeq][curAnimFrame].frameNumber;
-  //BITMAP * sprite = this->spriteSheet->getFrame(curSpriteFrame);
-  //masked_blit(sprite, bmp, 0, 0,
-  //            this->sx, this->sy,
-  //            sprite->w, (sprite->h-(sprite->h-offset)));
   
   clear_to_color(sprite, MASK_COLOR_24);
 
@@ -205,8 +202,10 @@ void FirePillar::respawn()
   this->x = this->old_x;
   this->y = this->old_y;
   offset  = 0;
+  colorOffset = 0;
   curState = FirePillar::GOING_UP;
-
+  setAnimSeq(colorOffset);
+  pausebtwstates = 0;
 
   return;
 }

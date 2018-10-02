@@ -34,7 +34,6 @@ class FirePillar : public Character
 
     enum {GOING_UP, GOING_DOWN};
   private:
-    //Stage * cur_stage; // current stage.
     int offset;
     unsigned long pausebtwstates;
     BITMAP * sprite;
