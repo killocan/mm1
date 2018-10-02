@@ -773,6 +773,7 @@ void Stage::scrollForbid(Camera & camera)
 void Stage::doCamera(Camera & camera)
 {
   static int dir = 0;
+  static int scrollDelay = 0;
 
   int camerax = (((int)m_player->x) + mm_player_defs::HALFPLAYERWIDTH) - mm_graphs_defs::UTIL_W/2;
   if (camerax < 0)
@@ -810,32 +811,40 @@ void Stage::doCamera(Camera & camera)
   }
   else if (update_scroll == 1)
   {
+    if (scrollDelay == 4)
+    {
 #ifdef DEBUG
-    fprintf(stderr,"Stage::doCamera - atualizando scrool vertical [%d]\n", scroll_count);
+      fprintf(stderr,"Stage::doCamera - atualizando scrool vertical [%d]\n", scroll_count);
 #endif
 
-    update_scroll = 0;
+      update_scroll = 0;
 
-    if (scroll_count < mm_graphs_defs::TILES_Y)
-    {
-      ++scroll_count;
-      camera.y += (dir*mm_graphs_defs::TILE_SIZE);
-
-      if (m_player->grabstair == true)
+      if (scroll_count < mm_graphs_defs::TILES_Y)
       {
-        m_player->y += (dir * 2);
-        m_player->forceAnimation();
+        ++scroll_count;
+        camera.y += (dir*mm_graphs_defs::TILE_SIZE);
+
+        if (m_player->grabstair == true)
+        {
+          m_player->y += (dir * 2);
+          m_player->forceAnimation();
+        }
+        else
+        {
+          //#warning TODO: VER COM CUIDADO!
+          //player.y+=dir;
+        }
       }
       else
       {
-        //#warning TODO: VER COM CUIDADO!
-        //player.y+=dir;
+        scrollDelay = 0;
+        horz_scroll = false;
+        scroll_count = 0;
       }
     }
     else
     {
-      horz_scroll = false;
-      scroll_count = 0;
+      ++scrollDelay;
     }
   }
 
