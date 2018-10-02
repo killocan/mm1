@@ -27,8 +27,6 @@ ScrewBomber::ScrewBomber(const Stage & stage, int x_map, int y_map) : Character(
 
   this->old_x = this->x;
 
-
-
   vely = velx   = 0;
   overstair     = false;
   isFacingDown  = false;
