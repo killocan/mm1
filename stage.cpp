@@ -52,6 +52,7 @@
 #include "megamanexplosion.h"
 
 #include "gutsman.h"
+#include "fireman.h"
 
 static volatile int update_scroll = 0;
 static void screenscroll_timer()
@@ -76,7 +77,7 @@ Stage::Stage(std::string stage_path, Camera & camera, Player ** player)//, std::
 
   LOCK_VARIABLE(update_scroll);
   LOCK_FUNCTION(screenscroll_timer);
-  install_int(screenscroll_timer, 110);
+  install_int(screenscroll_timer, 100);
 }
 
 Stage::~Stage()
@@ -88,7 +89,6 @@ Stage::~Stage()
 
 unsigned char Stage::tileAction(int x, int y) const
 {
-  //NOTE: Not supposed to happen, remove on final version. OR IS IT?
   if (x < 0 || y < 0) return mm_tile_actions::TILE_SOLID;
 
   return map[y][x].action;
@@ -96,7 +96,6 @@ unsigned char Stage::tileAction(int x, int y) const
 
 unsigned char Stage::tileNumber(int x, int y) const
 {
-  //NOTE: Not supposed to happen, remove on final version. OR IS IT?
   if (x < 0 || y < 0) return mm_tile_actions::TILE_SOLID;
 
   return map[y][x].tile_number;
@@ -175,7 +174,6 @@ void Stage::defineCameraSector(int x, int y, bool state)
   sectors[sector].scroll_forbid = state;
 }
 
-//#define ignore_result(x) ({ __typeof__(x) z = x; (void)sizeof z; })
 #define TEST(r, c) if (r != (size_t)c){fprintf(stderr,"READ ERROR! Stage file corrupted. Line[%d]\n", __LINE__);}
 int Stage::load(const std::string & stage_path, Camera & camera, Player ** player)
 {
@@ -248,7 +246,6 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
 
         sectors[sector].has_boss = true;
       }
-      //else if (map[y][x].action == mm_tile_actions::TILE_FOREGROUND)
       else if (map[y][x].isForeground == true)
       {
         int ydesl = y / mm_graphs_defs::TILES_Y;
@@ -296,7 +293,7 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
 
   preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (mm_spritefiles::WEAPONS_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_SPRITES])));
-  //TODO: load bassed in megaman curr avaliable weapons
+  //TODO: load bassed in megaman curr avaliable weapons *for (w in weapons) if (mm.has(w)) add(sprites(w))
   preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (mm_spritefiles::WEAPONS_ICEMAN, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::WEAPONS_ICEMAN])));
   preLoadedSprites.insert(std::pair<int, AnimSequence *>
@@ -811,7 +808,7 @@ void Stage::doCamera(Camera & camera)
   }
   else if (update_scroll == 1)
   {
-    if (scrollDelay == 4)
+    if (scrollDelay == 5)
     {
 #ifdef DEBUG
       fprintf(stderr,"Stage::doCamera - atualizando scrool vertical [%d]\n", scroll_count);
@@ -828,11 +825,6 @@ void Stage::doCamera(Camera & camera)
         {
           m_player->y += (dir * 2);
           m_player->forceAnimation();
-        }
-        else
-        {
-          //#warning TODO: VER COM CUIDADO!
-          //player.y+=dir;
         }
       }
       else
@@ -1111,6 +1103,11 @@ Character * Stage::createCharacter(int TYPE, int x, int y, int vx, int vy, void 
     case mm_tile_actions::GUTSMAN:
     {
       cur_character = new Gutsman(*this, x, y, param);
+    }
+    break;
+    case mm_tile_actions::FIREMAN:
+    {
+      cur_character = new Fireman(*this, x, y, param);
     }
     break;
   }
