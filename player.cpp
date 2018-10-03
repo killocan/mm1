@@ -593,7 +593,7 @@ void Player::normalLogic()
 struct pt {int x; int y;};
 void Player::die()
 {
-  if (Clock::clockTicks-8 > dyingTimer)
+  if (Clock::clockTicks-7 > dyingTimer)
   {
     static pt explosionPts[] = {{mm_player_defs::PLAYERWIDTH>>1,mm_player_defs::PLAYERHEIGHT>>1},
                                 {0,0},
