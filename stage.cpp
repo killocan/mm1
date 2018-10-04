@@ -77,7 +77,7 @@ Stage::Stage(std::string stage_path, Camera & camera, Player ** player)//, std::
 
   LOCK_VARIABLE(update_scroll);
   LOCK_FUNCTION(screenscroll_timer);
-  install_int(screenscroll_timer, 100);
+  install_int(screenscroll_timer, 40);
 }
 
 Stage::~Stage()
@@ -767,7 +767,7 @@ void Stage::scrollForbid(Camera & camera)
   }
 }
 
-void Stage::doCamera(Camera & camera)
+bool Stage::doCamera(Camera & camera)
 {
   static int dir = 0;
   static int scrollDelay = 0;
@@ -784,12 +784,12 @@ void Stage::doCamera(Camera & camera)
 
   if (horz_scroll == false)
   {
-    if ((m_player->sy + mm_graphs_defs::TILE_SIZE / 2) > mm_graphs_defs::UTIL_H)
+    if ((m_player->sy + m_player->h/2) > mm_graphs_defs::UTIL_H)
     {
       horz_scroll = true;
       dir = 1;
     }
-    else if (m_player->sy < 0 && camera.y != 0)
+    else if ((m_player->sy + m_player->h/2 - 2) < 0 && camera.y != 0)
     {
       //#warning TODO: VER COM CUIDADO!
       // Only scroll UP if megaman is using the stair.
@@ -808,22 +808,21 @@ void Stage::doCamera(Camera & camera)
   }
   else if (update_scroll == 1)
   {
-    if (scrollDelay == 5)
+    update_scroll = 0;
+    if (scrollDelay == 7)
     {
 #ifdef DEBUG
       fprintf(stderr,"Stage::doCamera - atualizando scrool vertical [%d]\n", scroll_count);
 #endif
 
-      update_scroll = 0;
-
-      if (scroll_count < mm_graphs_defs::TILES_Y)
+      if (scroll_count < (mm_graphs_defs::TILES_Y*2))
       {
         ++scroll_count;
-        camera.y += (dir*mm_graphs_defs::TILE_SIZE);
+        camera.y += (dir*(mm_graphs_defs::TILE_SIZE/2));
 
         if (m_player->grabstair == true)
         {
-          m_player->y += (dir * 2);
+          m_player->y += (dir * 0.5f); //2);
           m_player->forceAnimation();
         }
       }
@@ -847,6 +846,8 @@ void Stage::doCamera(Camera & camera)
   }
 
   m_player->calcScreenCoords();
+
+  return horz_scroll;
 }
 
 void Stage::resetReachMaxX()

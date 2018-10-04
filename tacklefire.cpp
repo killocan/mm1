@@ -53,6 +53,9 @@ TackleFire::TackleFireFragment::TackleFireFragment(const Stage & stage, int x, i
 
 void TackleFire::TackleFireFragment::doLogic()
 {
+  if (cur_stage->horz_scroll)
+    curState = TackleFire::TackleFireFragment::WAITING;
+
   switch(curState)
   {
     case TackleFire::TackleFireFragment::GOINGUP:

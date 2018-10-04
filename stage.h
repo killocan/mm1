@@ -35,7 +35,7 @@ class Stage
     //void draw(BITMAP * bmp, const Camera & camera, bool hasFg, bool bg_only=true, bool bg=true);
     void draw(BITMAP * bmp, bool hasFg, bool bg_only=true, bool bg=true);
     void scrollForbid(Camera & camera);
-    void doCamera(Camera & camera);
+    bool doCamera(Camera & camera);
     bool cameraSectorHasFgTiles(Camera & camera, Player & player);
 
     AnimSequence * getAnimSeq(int TYPE);

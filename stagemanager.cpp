@@ -498,6 +498,7 @@ void StageManager::play()
           if (handlingDoor == false)
             stage->doCamera(*camera);
 
+
           mm_weapons::updateWeapons(stage);
 
           doStageSpecifics();
