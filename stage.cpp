@@ -789,7 +789,7 @@ bool Stage::doCamera(Camera & camera)
       horz_scroll = true;
       dir = 1;
     }
-    else if ((m_player->sy + m_player->h/2 - 2) < 0 && camera.y != 0)
+    else if ((m_player->sy + m_player->h/2 - 1) < 0 && camera.y != 0)
     {
       //#warning TODO: VER COM CUIDADO!
       // Only scroll UP if megaman is using the stair.
