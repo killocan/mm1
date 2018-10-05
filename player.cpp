@@ -260,6 +260,9 @@ int Player::handType()
     case mm_weapons::W_CUTMAN_GUN:
       return 0;
     break;
+
+    default:
+      return 1;
   }
 }
 
@@ -362,11 +365,13 @@ void Player::normalLogic()
           {
             if (curAnimSeq != Player::RUNNING)
             {
-              if ((curAnimSeq != Player::STARTINGRUN) && (curAnimSeq != Player::FIRINGRUNNING))
+              if ((curAnimSeq != Player::STARTINGRUN) &&
+                  (curAnimSeq != Player::FIRINGRUNNING))
                 setAnimSeq(Player::STARTINGRUN);
               else
               {
-                if ((curAnimFrameDuration == 0) || (curAnimSeq == Player::FIRINGRUNNING))
+                if ((curAnimFrameDuration == 0) ||
+                    (curAnimSeq == Player::FIRINGRUNNING))
                   setAnimSeq(Player::RUNNING);
               }
             }
@@ -374,17 +379,18 @@ void Player::normalLogic()
               setAnimSeq(Player::RUNNING);
           }
           else
-            setAnimSeq(Player::FIRINGRUNNING, false);
+          {
+            if (handType())
+              setAnimSeq(Player::FIRINGRUNNING, false);
+            else
+              setAnimSeq(Player::FIRINGSTILLHAND);
+          }
         }
 
-        if(collisionVer((x+utilX)+velx+utilXLen, y, tilecoordx, tilecoordy, tiletype))
+        if(!collisionVer((x+utilX)+velx+utilXLen, y, tilecoordx, tilecoordy, tiletype))
         {
-          //This align player with the tile, but it's not necessary since i'm using pivot points.
-          //x = tilecoord * mm_graphs_defs::TILE_SIZE - w - 1;
-        }
-        else
-        {
-          x += velx;
+          if (curAnimSeq != Player::FIRINGSTILLHAND)
+            x += velx;
         }
       }
     }
@@ -414,17 +420,18 @@ void Player::normalLogic()
               setAnimSeq(Player::RUNNING);
           }
           else
-            setAnimSeq(Player::FIRINGRUNNING, false);
+          {
+            if (handType())
+              setAnimSeq(Player::FIRINGRUNNING, false);
+            else
+              setAnimSeq(Player::FIRINGSTILLHAND);
+          }
         }
 
-        if(collisionVer((x+utilX)-velx, y, tilecoordx, tilecoordy, tiletype))
+        if(!collisionVer((x+utilX)-velx, y, tilecoordx, tilecoordy, tiletype))
         {
-          //This align player with the tile, but its not necessary since i'm using pivot points.
-          //x = ((tilecoord + 1) * mm_graphs_defs::TILE_SIZE + 1) + utilX+1;
-        }
-        else
-        {
-          x -= velx;
+          if (curAnimSeq != Player::FIRINGSTILLHAND)
+            x -= velx;
         }
       }
     }
