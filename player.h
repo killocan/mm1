@@ -64,6 +64,7 @@ class Player : public Character
     mm_weapons::WEAPONS curWeapon;
 
   private:
+    int handType();
     virtual bool canJumpAgain();
 
     // Stair related stuff.

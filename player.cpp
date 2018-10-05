@@ -243,6 +243,26 @@ void Player::doGravitation()
   }
 }
 
+int Player::handType()
+{
+  switch(curWeapon)
+  {
+    case mm_weapons::W_MEGA_BUSTER:
+    case mm_weapons::W_ICEMAN_GUN:
+    case mm_weapons::W_ELECMAN_GUN:
+    case mm_weapons::W_FIREMAN_GUN:
+    case mm_weapons::W_PLATFORM_CREATOR:
+      return 1;
+    break;
+
+    case mm_weapons::W_GUTSMAN_GUN:
+    case mm_weapons::W_BOMBMAN_GUN:
+    case mm_weapons::W_CUTMAN_GUN:
+      return 0;
+    break;
+  }
+}
+
 void Player::normalLogic()
 {
   if (bDying == true) return;
@@ -315,22 +335,10 @@ void Player::normalLogic()
   {
     if (grabstair == true)
     {
-      switch(curWeapon)
-      {
-        case mm_weapons::W_MEGA_BUSTER:
-        case mm_weapons::W_ICEMAN_GUN:
-        case mm_weapons::W_ELECMAN_GUN:
-        case mm_weapons::W_FIREMAN_GUN:
-        case mm_weapons::W_PLATFORM_CREATOR:
-          setAnimSeq(Player::FIRINGSTAIR);
-        break;
-
-        case mm_weapons::W_GUTSMAN_GUN:
-        case mm_weapons::W_BOMBMAN_GUN:
-        case mm_weapons::W_CUTMAN_GUN:
-          setAnimSeq(Player::FIRINGSTAIRHAND);
-        break;
-      }
+      if (handType())
+        setAnimSeq(Player::FIRINGSTAIR);
+      else
+        setAnimSeq(Player::FIRINGSTAIRHAND);
     }
   }
 
@@ -430,22 +438,10 @@ void Player::normalLogic()
           setAnimSeq(Player::STANDSTILL);
         else
         {
-          switch(curWeapon)
-          {
-            case mm_weapons::W_MEGA_BUSTER:
-            case mm_weapons::W_ICEMAN_GUN:
-            case mm_weapons::W_ELECMAN_GUN:
-            case mm_weapons::W_FIREMAN_GUN:
-            case mm_weapons::W_PLATFORM_CREATOR:
-              setAnimSeq(Player::FIRINGSTILL);
-              break;
-
-            case mm_weapons::W_GUTSMAN_GUN:
-            case mm_weapons::W_BOMBMAN_GUN:
-            case mm_weapons::W_CUTMAN_GUN:
-              setAnimSeq(Player::FIRINGSTILLHAND);
-              break;
-          }
+          if (handType())
+            setAnimSeq(Player::FIRINGSTILL);
+          else
+            setAnimSeq(Player::FIRINGSTILLHAND);
         }
       }
     }
@@ -608,61 +604,25 @@ void Player::normalLogic()
         {
           if (curAnimSeq == Player::STANDSTILL)
           {
-            switch(curWeapon)
-            {
-              case mm_weapons::W_MEGA_BUSTER:
-              case mm_weapons::W_ICEMAN_GUN:
-              case mm_weapons::W_ELECMAN_GUN:
-              case mm_weapons::W_FIREMAN_GUN:
-              case mm_weapons::W_PLATFORM_CREATOR:
-                setAnimSeq(Player::FIRINGSTILL);
-              break;
-
-              case mm_weapons::W_GUTSMAN_GUN:
-              case mm_weapons::W_BOMBMAN_GUN:
-              case mm_weapons::W_CUTMAN_GUN:
-                setAnimSeq(Player::FIRINGSTILLHAND);
-              break;
-            }
+            if (handType())
+              setAnimSeq(Player::FIRINGSTILL);
+            else
+              setAnimSeq(Player::FIRINGSTILLHAND);
           }
           else if (curAnimSeq == Player::RUNNING)
           {
-            switch(curWeapon)
-            {
-              case mm_weapons::W_MEGA_BUSTER:
-              case mm_weapons::W_ICEMAN_GUN:
-              case mm_weapons::W_ELECMAN_GUN:
-              case mm_weapons::W_FIREMAN_GUN:
-              case mm_weapons::W_PLATFORM_CREATOR:
-                setAnimSeq(Player::FIRINGRUNNING, false);
-              break;
-
-              case mm_weapons::W_GUTSMAN_GUN:
-              case mm_weapons::W_BOMBMAN_GUN:
-              case mm_weapons::W_CUTMAN_GUN:
-                setAnimSeq(Player::FIRINGSTILLHAND);
-              break;
-            }
+            if (handType())
+              setAnimSeq(Player::FIRINGRUNNING, false);
+            else
+              setAnimSeq(Player::FIRINGSTILLHAND);
           }
         }
         else if (grabstair == false)
         {
-          switch(curWeapon)
-          {
-            case mm_weapons::W_MEGA_BUSTER:
-            case mm_weapons::W_ICEMAN_GUN:
-            case mm_weapons::W_ELECMAN_GUN:
-            case mm_weapons::W_FIREMAN_GUN:
-            case mm_weapons::W_PLATFORM_CREATOR:
-              setAnimSeq(Player::FIRINGJUMP);
-            break;
-
-            case mm_weapons::W_GUTSMAN_GUN:
-            case mm_weapons::W_BOMBMAN_GUN:
-            case mm_weapons::W_CUTMAN_GUN:
-              setAnimSeq(Player::FIRINGSTAIRHAND);
-            break;
-          }
+          if (handType())
+            setAnimSeq(Player::FIRINGJUMP);
+          else
+            setAnimSeq(Player::FIRINGSTAIRHAND);
         }
       }
     }
