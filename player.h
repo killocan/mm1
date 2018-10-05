@@ -56,6 +56,8 @@ class Player : public Character
           ENTERINGSTAIR,
           GETHIT,
           STARTINGRUN,
+          FIRINGSTAIRHAND,
+          FIRINGSTILLHAND
          };
 
     std::map<mm_weapons::WEAPONS, int> weapons; // WEAPON, ENERGY LEVEL

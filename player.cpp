@@ -307,14 +307,31 @@ void Player::normalLogic()
   {
     firing = false;
 
-    if (curAnimSeq == Player::FIRINGSTAIR)
+    if (curAnimSeq == Player::FIRINGSTAIR || curAnimSeq == Player::FIRINGSTILLHAND)
       setAnimSeq(Player::UPDOWNSTAIR);
   }
 
   if (firing == true)
   {
     if (grabstair == true)
-      setAnimSeq(Player::FIRINGSTAIR);
+    {
+      switch(curWeapon)
+      {
+        case mm_weapons::W_MEGA_BUSTER:
+        case mm_weapons::W_ICEMAN_GUN:
+        case mm_weapons::W_ELECMAN_GUN:
+        case mm_weapons::W_FIREMAN_GUN:
+        case mm_weapons::W_PLATFORM_CREATOR:
+          setAnimSeq(Player::FIRINGSTAIR);
+        break;
+
+        case mm_weapons::W_GUTSMAN_GUN:
+        case mm_weapons::W_BOMBMAN_GUN:
+        case mm_weapons::W_CUTMAN_GUN:
+          setAnimSeq(Player::FIRINGSTAIRHAND);
+        break;
+      }
+    }
   }
 
   int tilecoordx = 0;
@@ -412,7 +429,24 @@ void Player::normalLogic()
         if (firing == false)
           setAnimSeq(Player::STANDSTILL);
         else
-          setAnimSeq(Player::FIRINGSTILL);
+        {
+          switch(curWeapon)
+          {
+            case mm_weapons::W_MEGA_BUSTER:
+            case mm_weapons::W_ICEMAN_GUN:
+            case mm_weapons::W_ELECMAN_GUN:
+            case mm_weapons::W_FIREMAN_GUN:
+            case mm_weapons::W_PLATFORM_CREATOR:
+              setAnimSeq(Player::FIRINGSTILL);
+              break;
+
+            case mm_weapons::W_GUTSMAN_GUN:
+            case mm_weapons::W_BOMBMAN_GUN:
+            case mm_weapons::W_CUTMAN_GUN:
+              setAnimSeq(Player::FIRINGSTILLHAND);
+              break;
+          }
+        }
       }
     }
 
@@ -572,14 +606,63 @@ void Player::normalLogic()
       {
         if (onground == true) 
         {
-          if (curAnimSeq == Player::STANDSTILL) 
-            setAnimSeq(Player::FIRINGSTILL);
-          else if (curAnimSeq == Player::RUNNING) 
-            setAnimSeq(Player::FIRINGRUNNING, false);
+          if (curAnimSeq == Player::STANDSTILL)
+          {
+            switch(curWeapon)
+            {
+              case mm_weapons::W_MEGA_BUSTER:
+              case mm_weapons::W_ICEMAN_GUN:
+              case mm_weapons::W_ELECMAN_GUN:
+              case mm_weapons::W_FIREMAN_GUN:
+              case mm_weapons::W_PLATFORM_CREATOR:
+                setAnimSeq(Player::FIRINGSTILL);
+              break;
+
+              case mm_weapons::W_GUTSMAN_GUN:
+              case mm_weapons::W_BOMBMAN_GUN:
+              case mm_weapons::W_CUTMAN_GUN:
+                setAnimSeq(Player::FIRINGSTILLHAND);
+              break;
+            }
+          }
+          else if (curAnimSeq == Player::RUNNING)
+          {
+            switch(curWeapon)
+            {
+              case mm_weapons::W_MEGA_BUSTER:
+              case mm_weapons::W_ICEMAN_GUN:
+              case mm_weapons::W_ELECMAN_GUN:
+              case mm_weapons::W_FIREMAN_GUN:
+              case mm_weapons::W_PLATFORM_CREATOR:
+                setAnimSeq(Player::FIRINGRUNNING, false);
+              break;
+
+              case mm_weapons::W_GUTSMAN_GUN:
+              case mm_weapons::W_BOMBMAN_GUN:
+              case mm_weapons::W_CUTMAN_GUN:
+                setAnimSeq(Player::FIRINGSTILLHAND);
+              break;
+            }
+          }
         }
         else if (grabstair == false)
         {
-          setAnimSeq(Player::FIRINGJUMP);
+          switch(curWeapon)
+          {
+            case mm_weapons::W_MEGA_BUSTER:
+            case mm_weapons::W_ICEMAN_GUN:
+            case mm_weapons::W_ELECMAN_GUN:
+            case mm_weapons::W_FIREMAN_GUN:
+            case mm_weapons::W_PLATFORM_CREATOR:
+              setAnimSeq(Player::FIRINGJUMP);
+            break;
+
+            case mm_weapons::W_GUTSMAN_GUN:
+            case mm_weapons::W_BOMBMAN_GUN:
+            case mm_weapons::W_CUTMAN_GUN:
+              setAnimSeq(Player::FIRINGSTAIRHAND);
+            break;
+          }
         }
       }
     }
@@ -846,6 +929,7 @@ void Player::drawCharacter(BITMAP * bmp)
   {
     case Player::FIRINGRUNNING:
     case Player::FIRINGSTILL:
+    case Player::FIRINGSTILLHAND:
     {
       xpos += isFacingRight ? 10 : -10;
     }
