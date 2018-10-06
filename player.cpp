@@ -563,7 +563,12 @@ void Player::normalLogic()
         if (firing == false)
           setAnimSeq(Player::JUMPING);
         else
-          setAnimSeq(Player::FIRINGJUMP);
+        {
+          if (handType())
+            setAnimSeq(Player::FIRINGJUMP);
+          else
+            setAnimSeq(Player::FIRINGJUMPHAND);
+        }
 
         vely=-8;
       }
@@ -584,7 +589,12 @@ void Player::normalLogic()
         if (firing == false)
           setAnimSeq(Player::JUMPING);
         else
-          setAnimSeq(Player::FIRINGJUMP);
+        {
+          if (handType())
+            setAnimSeq(Player::FIRINGJUMP);
+          else
+            setAnimSeq(Player::FIRINGJUMPHAND);
+        }
 
         vely     = -8;
         lockjump = true; 
@@ -629,7 +639,7 @@ void Player::normalLogic()
           if (handType())
             setAnimSeq(Player::FIRINGJUMP);
           else
-            setAnimSeq(Player::FIRINGSTAIRHAND);
+            setAnimSeq(Player::FIRINGJUMPHAND);
         }
       }
     }
@@ -935,7 +945,12 @@ void Player::firingOnJump()
   if (firing == false)
     setAnimSeq(Player::JUMPING);
   else
-    setAnimSeq(Player::FIRINGJUMP);
+  {
+    if (handType())
+      setAnimSeq(Player::FIRINGJUMP);
+    else
+      setAnimSeq(Player::FIRINGJUMPHAND);
+  }
 }
 
 void Player::touchGround()
