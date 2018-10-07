@@ -17,6 +17,8 @@
 #include "camera.h"
 #include "animsequence.h"
 #include "collision.h"
+#include "scenesoundmanager.h"
+#include "sfx.h"
 
 static void handleBombFragment(mm_weapons::weapon_st * pWeapon)
 {
@@ -143,6 +145,7 @@ static void handleBomb(mm_weapons::weapon_st * pWeapon, Stage * stage)
   if (pWeapon->life <= 0)
   {
     pWeapon->alive = false;
+    Sounds::mm_sounds->play(BOMBOMB_HIT);
     createExplosionParts(stage, pWeapon->x, pWeapon->y, true);
   }
 }
@@ -226,6 +229,8 @@ static void handleRollingCutter(mm_weapons::weapon_st * pWeapon, Stage * stage)
                                   pWeapon->bulletSpriteShet->getFrame(pWeapon->frameOffset),
                                   stage->m_player->x, stage->m_player->y, stage->m_player->getFrame()))
     {
+      Sounds::mm_sounds->stopSample(ROLLING_CUTTER);
+
       pWeapon->alive = false;
       return;
     }

@@ -829,6 +829,7 @@ void Player::fire()
       if ((GlobalGameState::playerShots.size() == 0) && (weapons[mm_weapons::W_ELECMAN_GUN] > 0))
       {
         weapons[mm_weapons::W_ELECMAN_GUN]--;
+        Sounds::mm_sounds->play(THUNDER_BEAM);
 
         mm_weapons::createThunderBeam(this);
 
@@ -842,6 +843,7 @@ void Player::fire()
       if ((GlobalGameState::playerShots.size() == 0) && (weapons[mm_weapons::W_CUTMAN_GUN] > 0))
       {
         weapons[mm_weapons::W_CUTMAN_GUN]--;
+        Sounds::mm_sounds->play(ROLLING_CUTTER);
 
         mm_weapons::createRollingCutter(this);
 
@@ -855,6 +857,7 @@ void Player::fire()
       if ((GlobalGameState::playerShots.size() == 0) && (weapons[mm_weapons::W_FIREMAN_GUN] > 0))
       {
         weapons[mm_weapons::W_FIREMAN_GUN]--;
+        Sounds::mm_sounds->play(FIRE_STORM);
 
         mm_weapons::createFireStorm(this);
 
@@ -868,6 +871,7 @@ void Player::fire()
       if ((GlobalGameState::playerShots.size() == 0) && (weapons[mm_weapons::W_PLATFORM_CREATOR] > 0))
       {
         weapons[mm_weapons::W_PLATFORM_CREATOR]--;
+        Sounds::mm_sounds->play(LIGHTNING);
 
         mm_weapons::createMagnetBeam(this);
 
