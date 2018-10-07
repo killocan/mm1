@@ -4,3 +4,4 @@ BUGS:
 - ao saltar sobre uma escada muito proxima de um teto megaman passa direto, altura do sprite
   faz detectar sprite abaixo do inicio da escada, arrumar um jeito de colidir com altura modificada
   somente neste caso ou arrumar um altura real em hor e em ver... algo assim.
+- mudar o boss warning para mudar cor de tile igual animacao da lava
