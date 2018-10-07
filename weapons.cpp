@@ -229,8 +229,6 @@ static void handleRollingCutter(mm_weapons::weapon_st * pWeapon, Stage * stage)
                                   pWeapon->bulletSpriteShet->getFrame(pWeapon->frameOffset),
                                   stage->m_player->x, stage->m_player->y, stage->m_player->getFrame()))
     {
-      Sounds::mm_sounds->stopSample(ROLLING_CUTTER);
-
       pWeapon->alive = false;
       return;
     }
@@ -288,10 +286,10 @@ static void handleFireStormProjectile(mm_weapons::weapon_st * pWeapon)
 static void handleFireStormShield(mm_weapons::weapon_st * pWeapon, Stage * stage)
 {
   int frameNumber[] = {0, 1, 2, 1};
-  int x_0[] = {-20,-30,-20,
-               mm_player_defs::HALFPLAYERWIDTH,
-               mm_player_defs::PLAYERWIDTH, mm_player_defs::PLAYERWIDTH+10, mm_player_defs::PLAYERWIDTH,
-               mm_player_defs::HALFPLAYERWIDTH};
+  int x_0[] = {-20+5,-30+5,-20+5,
+               mm_player_defs::HALFPLAYERWIDTH+5,
+               mm_player_defs::PLAYERWIDTH+5, mm_player_defs::PLAYERWIDTH+10+5, mm_player_defs::PLAYERWIDTH+5,
+               mm_player_defs::HALFPLAYERWIDTH+5};
 
   int y_0[] = {mm_player_defs::PLAYERHEIGHT, mm_player_defs::PLAYERHEIGHT/2, 0,
                -20,
