@@ -18,13 +18,46 @@ FireManStage::FireManStage() : lastCycleTime(0)
 void FireManStage::setupStage()
 {
   stage->setOffset(mm_spritefiles::SCREWBOMBER_SPRITES, 8); // set which sprite color to use.
+
+  bgTileWarning0 = 8;
+  bgTileWarning1 = 35;
+
+  BossDoor::BossDoorSetupParam door1;
+  door1.size = 2;
+  door1.totalSize = 4;
+  door1.orientation = 0;
+  door1.defaultOpen = false;
+  //door1.cameraHack = true;
+
+  BossDoor::BossDoorSetupParam door2;
+  door2.size = 1;
+  door2.totalSize = 4;
+  door2.orientation = 0;
+  door2.defaultOpen = false;
+  //door2.cameraHack = false;
+
+  BossDoor::BossDoorSetupParam door3;
+  door3.size = 1;
+  door3.totalSize = 4;
+  door3.orientation = 0;
+  door3.defaultOpen = true;
+  //door3.cameraHack = false;
+
+  Character * pDoor1C = stage->createCharacter(mm_tile_actions::TILE_DOOR, 174*32, 66*32, 0,0, (void*)&door1);
+  Character * pDoor2C = stage->createCharacter(mm_tile_actions::TILE_DOOR, 223*32, 66*32, 0,0, (void*)&door2);
+  Character * pDoor3C = stage->createCharacter(mm_tile_actions::TILE_DOOR, 224*32, 66*32, 0,0, (void*)&door3);
+  TemporaryCharacterList::mm_tempCharacterLst.push_back(pDoor1C);
+  TemporaryCharacterList::mm_tempCharacterLst.push_back(pDoor2C);
+  TemporaryCharacterList::mm_tempCharacterLst.push_back(pDoor3C);
+  special_chars_vec.push_back(pDoor1C);
+  special_chars_vec.push_back(pDoor2C);
+  special_chars_vec.push_back(pDoor3C);
 }
 
 void FireManStage::doStageSpecifics()
 {
   static Point2D pts[] = { { 2, 2 }, { 2, 36 }, { 138, 2 }, { 104, 36 }, { 138, 36 } };
  
-  // Let dad take care of doors and stuff.
   StageManager::doStageSpecifics();
 
   if ((Clock::clockTicks > 10) && (Clock::clockTicks - 10 > lastCycleTime))
@@ -61,6 +94,6 @@ void FireManStage::doStageSpecifics()
 }
 
 SceneSoundManager * FireManStage::CreateSoundManager()
-{//30766
+{
   return new SceneSoundManager(mm_soundpack::sounds[mm_soundpack::FIREMAN_BG_MUSIC], 5107*44, 30737*44);
 }
