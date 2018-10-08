@@ -32,7 +32,7 @@ class BossDoor : public Character
 
     // Do nothing
     virtual void doGravitation();
-
+    virtual void checkOnCamera();
     virtual void respawn();
 
     void openDoor();

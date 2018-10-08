@@ -10,7 +10,7 @@
 // WSAD - Move uma tela por vez
 // Left/Right/Up/Down - Move um tile por vez
 // I - Mostra a ação no mapa para referencia (não considera o offset, usar tecla 'O' junto)
-// Left CTRL - Salva
+// Left SHIFT - Salva
 // B - Liga flag de foreground.
 // M - Mostra as ações sobre o mapa.
 // CTRL+C + (MOUSE) - Seta pontos de inicio e fim para copia

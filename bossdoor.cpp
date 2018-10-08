@@ -54,8 +54,8 @@ BossDoor::BossDoor(const Stage & stage, int x, int y, void * param) : Character(
 
   if (curState == BossDoor::CLOSED)
   {
-    int xd = (x+mm_graphs_defs::TILE_SIZE+config.size*mm_graphs_defs::TILE_SIZE)/mm_graphs_defs::TILE_SIZE;
-    int yd = y/mm_graphs_defs::TILE_SIZE;
+    int xd = (((int)x)+mm_graphs_defs::TILE_SIZE+config.size*mm_graphs_defs::TILE_SIZE)/mm_graphs_defs::TILE_SIZE;
+    int yd = ((int)y)/mm_graphs_defs::TILE_SIZE;
     xcamblock = xd;
     ycamblock = yd;
     cur_stage->defineCameraSector(xd, yd, true);
@@ -89,15 +89,15 @@ void BossDoor::blockPassage()
 {
   if (config.orientation == 0)
   {
-    int xd = (x+w)/mm_graphs_defs::TILE_SIZE;
-    int yd = y/mm_graphs_defs::TILE_SIZE;
+    int xd = ((int)(x+w))/mm_graphs_defs::TILE_SIZE;
+    int yd = ((int)y)/mm_graphs_defs::TILE_SIZE;
     for (int i = 0; i < config.totalSize; ++i, yd++)
     {
       cur_stage->setTileAction(xd,yd,mm_tile_actions::TILE_SOLID);
     }
 
-    yd = y/mm_graphs_defs::TILE_SIZE;
-    xd = (x-mm_graphs_defs::TILE_SIZE-config.size*mm_graphs_defs::TILE_SIZE)/mm_graphs_defs::TILE_SIZE;
+    yd = ((int)y)/mm_graphs_defs::TILE_SIZE;
+    xd = (((int)x)-mm_graphs_defs::TILE_SIZE-config.size*mm_graphs_defs::TILE_SIZE)/mm_graphs_defs::TILE_SIZE;
     cur_stage->defineCameraSector(xd, yd, true);
     cur_stage->defineCameraSector(xcamblock, ycamblock, false);
 
@@ -132,12 +132,16 @@ void BossDoor::drawCharacter(BITMAP * bmp)
   masked_blit(sprite, bmp, 0, 0,
               this->sx, this->sy,
               sprite->w, sprite->h);
-  
 }
 
 BITMAP * BossDoor::getFrame()
 {
   return sprite;
+}
+
+void BossDoor::checkOnCamera()
+{
+  alive = true;
 }
 
 void BossDoor::doLogic()

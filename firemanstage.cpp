@@ -8,6 +8,7 @@
 #include "defines.h"
 #include "globals.h"
 #include "soundpack.h"
+#include "tileactions.h"
 #include "spritefiles.h"
 
 FireManStage::FireManStage() : lastCycleTime(0)
@@ -27,25 +28,22 @@ void FireManStage::setupStage()
   door1.totalSize = 4;
   door1.orientation = 0;
   door1.defaultOpen = false;
-  //door1.cameraHack = true;
 
   BossDoor::BossDoorSetupParam door2;
   door2.size = 1;
   door2.totalSize = 4;
   door2.orientation = 0;
   door2.defaultOpen = false;
-  //door2.cameraHack = false;
 
   BossDoor::BossDoorSetupParam door3;
   door3.size = 1;
   door3.totalSize = 4;
   door3.orientation = 0;
   door3.defaultOpen = true;
-  //door3.cameraHack = false;
 
-  Character * pDoor1C = stage->createCharacter(mm_tile_actions::TILE_DOOR, 174*32, 66*32, 0,0, (void*)&door1);
-  Character * pDoor2C = stage->createCharacter(mm_tile_actions::TILE_DOOR, 223*32, 66*32, 0,0, (void*)&door2);
-  Character * pDoor3C = stage->createCharacter(mm_tile_actions::TILE_DOOR, 224*32, 66*32, 0,0, (void*)&door3);
+  Character * pDoor1C = stage->createCharacter(mm_tile_actions::TILE_DOOR, 158*32, 6*32, 0,0, (void*)&door1);
+  Character * pDoor2C = stage->createCharacter(mm_tile_actions::TILE_DOOR, 207*32, 6*32, 0,0, (void*)&door2);
+  Character * pDoor3C = stage->createCharacter(mm_tile_actions::TILE_DOOR, 208*32, 6*32, 0,0, (void*)&door3);
   TemporaryCharacterList::mm_tempCharacterLst.push_back(pDoor1C);
   TemporaryCharacterList::mm_tempCharacterLst.push_back(pDoor2C);
   TemporaryCharacterList::mm_tempCharacterLst.push_back(pDoor3C);
