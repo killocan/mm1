@@ -18,7 +18,7 @@ class PicketMan : public Character
       public:
         PicketManHammer(const Stage & stage, int x, int y);
 
-        virtual bool collisionHor(const Stage & stage, int x, int y, int &tilecoordx, int &tilecoordy, bool going_down, int &tiletype);
+        virtual bool collisionHor(int x, int y, int &tilecoordx, int &tilecoordy, bool going_down, int &tiletype);
         virtual void doLogic();
         // This dude is kind of imortal.
         virtual void checkOnCamera();

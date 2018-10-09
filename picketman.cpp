@@ -31,7 +31,7 @@ PicketMan::PicketManHammer::PicketManHammer(const Stage & stage, int x, int y) :
   curState = PicketManHammer::MOVING;
 }
 
-bool PicketMan::PicketManHammer::collisionHor(const Stage & stage, int x, int y, int &tilecoordx, int &tilecoordy, bool going_down, int &tiletype)
+bool PicketMan::PicketManHammer::collisionHor(int x, int y, int &tilecoordx, int &tilecoordy, bool going_down, int &tiletype)
 {
   return false;
 }
@@ -62,8 +62,6 @@ PicketMan::PicketMan(const Stage & stage, int x, int y) : Character(stage, mm_sp
 
   this->old_x = this->x;
   this->old_y = this->y;
-
-
 
   velx = -5;
   if (cur_stage->m_player->x > this->x)
