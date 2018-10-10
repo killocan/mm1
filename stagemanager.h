@@ -7,7 +7,7 @@
 
 #include <string>
 #include <vector>
-//#include <list>
+#include <map>
 
 #include "scenesoundmanager.h"
 #include "bossdoor.h"
@@ -46,7 +46,9 @@ class StageManager
     Camera * camera;
 
     // tiles to switch during boss warning. Used in bossWarning.
-    int bgTileWarning0, bgTileWarning1;
+    //int bgTileWarning0, bgTileWarning1;
+    std::vector<int> bossWarningTiles;
+    std::map<unsigned, unsigned> bossWarningColors;
 
     enum STAGE_STATES {SEARCHING_BOSS_DOOR, HANDLING_DOOR, BOSS_WARNING, INITING_BOSS_FIGHT, FIGHT};
     STAGE_STATES cur_stage_state;

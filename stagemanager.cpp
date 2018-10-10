@@ -56,7 +56,7 @@ StageManager::StageManager()
 
   Clock::clockTicks = 0;
 
-  bgTileWarning0 = bgTileWarning1 = 0;
+  //bgTileWarning0 = bgTileWarning1 = 0;
 
   handlingDoor   = false;
   stopAnimations = false;
@@ -686,20 +686,21 @@ int StageManager::bossWarning()
   {
     warningTimer = Clock::clockTicks;
 
-    int xd = camera->x/mm_graphs_defs::TILE_SIZE;
-    int yd = camera->y/mm_graphs_defs::TILE_SIZE;
-    int x, y;
-
-    for (y = 0; y < mm_graphs_defs::TILES_Y; ++y)
+    for (unsigned int i = 0; i < bossWarningTiles.size(); ++i)
     {
-      xd = camera->x/mm_graphs_defs::TILE_SIZE;
-      for (x = 0; x < mm_graphs_defs::TILES_X; ++x)
-      {
-        unsigned char tile = stage->tileNumber(xd+x,yd+y);
-        if (tile == bgTileWarning0) tile = bgTileWarning1;
-        else if (tile == bgTileWarning1) tile = bgTileWarning0;
+      BITMAP * bmp = stage->getTile(bossWarningTiles[i]);
+      if (bmp == NULL)
+        continue;
 
-        stage->setTileNumber(xd+x,yd+y,tile);
+      unsigned int color;
+      for (int x = 0; x < bmp->w; ++x)
+      {
+        for (int y = 0; y < bmp->h; ++y)
+        {
+          color = _getpixel32(bmp, x, y);
+          if (bossWarningColors.count(color) > 0)
+            _putpixel32(bmp, x, y, bossWarningColors[color]);
+        }
       }
     }
 

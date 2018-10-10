@@ -419,6 +419,14 @@ void Stage::runtimeLoadCharacter(mm_spritefiles::SPRT_TYPE characterSprite)
     (characterSprite, new AnimSequence(mm_spritefiles::sprite_files[characterSprite])));
 }
 
+BITMAP * Stage::getTile(unsigned int index)
+{
+  if (index < tiles.tile_img.size())
+    return tiles.tile_img[index];
+
+  return NULL;
+}
+
 void Stage::createEnemies(std::vector<Character *> & characters_vec)
 {
   for (int y = 0; y < max_y; ++y)

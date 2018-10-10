@@ -30,8 +30,10 @@ void GutsManStage::setupStage()
   stage->setOffset(mm_spritefiles::FLEA_SPRITES,   0); // set which sprite color to use.
   stage->setOffset(mm_spritefiles::FOOTHOLDER_SPRITES, 0);
 
-  bgTileWarning0 = 8;
-  bgTileWarning1 = 35;
+  bossWarningTiles.push_back(8);
+
+  bossWarningColors[0x8c1800] = 0xffffff;
+  bossWarningColors[0xffffff] = 0x8c1800;
 
   stage->hasMovingPlatform = true;
   stage->platformTiles.push_back(21); // normal moviment

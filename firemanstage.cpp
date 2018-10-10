@@ -20,9 +20,6 @@ void FireManStage::setupStage()
 {
   stage->setOffset(mm_spritefiles::SCREWBOMBER_SPRITES, 8); // set which sprite color to use.
 
-  bgTileWarning0 = 8;
-  bgTileWarning1 = 35;
-
   BossDoor::BossDoorSetupParam door1;
   door1.size = 2;
   door1.totalSize = 4;
@@ -50,6 +47,14 @@ void FireManStage::setupStage()
   special_chars_vec.push_back(pDoor1C);
   special_chars_vec.push_back(pDoor2C);
   special_chars_vec.push_back(pDoor3C);
+
+  bossWarningTiles.push_back(8);
+  bossWarningTiles.push_back(18);
+
+  bossWarningColors[0x006000] = 0xbababa;
+  bossWarningColors[0x00a040] = 0xefefef;
+  bossWarningColors[0xbababa] = 0x006000;
+  bossWarningColors[0xefefef] = 0x00a040;
 }
 
 void FireManStage::doStageSpecifics()

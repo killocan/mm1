@@ -40,8 +40,10 @@ class Stage
 
     AnimSequence * getAnimSeq(int TYPE);
     BITMAP * getTileSet();
+    BITMAP * getTile(unsigned int index);
 
-    // For any entity that wants to check collision agains the map.
+
+  // For any entity that wants to check collision agains the map.
     bool genericColHor(int x, int w, int y, int &tilecoordx, int &tilecoordy, bool going_down);
     bool genericColVer(int x, int y, int h, int &tilecoordx, int &tilecoordy);
 
