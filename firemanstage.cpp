@@ -13,6 +13,7 @@
 
 FireManStage::FireManStage() : lastCycleTime(0)
 {
+  stage_number = 4;
   STAGE_PATH = "./fireman_stage";
 }
 

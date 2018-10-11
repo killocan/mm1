@@ -34,15 +34,15 @@ class WeaponMenu
     BITMAP * menuBitmap;
     BITMAP * menuLife;
 
-    int color1, color2, color3;
+    unsigned int color1, color2, color3;
 
     bool creating, destroing;
 
     int curStep;
     int destroyStep;
 
-    static const int menuTileIndex[];
-    static const int menuColors[];
+    static const unsigned int menuTileIndex[];
+    int menuColors[30];
 
     std::vector<bool> availableWeapons;
 

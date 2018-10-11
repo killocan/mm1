@@ -12,6 +12,7 @@
 
 BombManStage::BombManStage()
 {
+  stage_number = 3;
   STAGE_PATH = "./bombman_stage";
 }
 

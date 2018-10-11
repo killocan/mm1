@@ -4,4 +4,3 @@ BUGS:
 - ao saltar sobre uma escada muito proxima de um teto megaman passa direto, altura do sprite
   faz detectar sprite abaixo do inicio da escada, arrumar um jeito de colidir com altura modificada
   somente neste caso ou arrumar um altura real em hor e em ver... algo assim.
-- mudar as cores do menu de acordo com a fase.

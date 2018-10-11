@@ -8,6 +8,7 @@
 
 ElecManStage::ElecManStage()
 {
+  stage_number = 5;
   STAGE_PATH = "./elecman_stage";
 }
 

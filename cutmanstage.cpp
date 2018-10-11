@@ -10,6 +10,7 @@
 
 CutManStage::CutManStage()
 {
+  stage_number = 0;
   STAGE_PATH = "./cutman_stage";
 }
 

@@ -347,7 +347,7 @@ void StageManager::play()
   ssm        = CreateSoundManager();
   sboos      = new SceneSoundManager(mm_soundpack::sounds[mm_soundpack::BOSS_FIGHT_BG_MUSIC], 3147*44, 9543*44);
 
-  weaponMenu = new WeaponMenu(0, player);
+  weaponMenu = new WeaponMenu(stage_number, player);
   EnergyBar::m_player = player;
 
   characters_vec.push_back(player);

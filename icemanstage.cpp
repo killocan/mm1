@@ -8,6 +8,7 @@
 
 IceManStage::IceManStage()
 {
+  stage_number = 2;
   STAGE_PATH = "./iceman_stage";
 }
 

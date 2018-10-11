@@ -14,6 +14,7 @@
 
 GutsManStage::GutsManStage() : bPlayingPlatformSound(false)
 {
+  stage_number = 1;
   STAGE_PATH = "./gutsman_stage";
 }
 
