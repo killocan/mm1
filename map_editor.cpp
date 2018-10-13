@@ -321,7 +321,9 @@ void handle_click(int x, int y, int button)
         {
           if (cur_copy_point == 0)
           {
-            free(selection_data);
+            if (selection_data != NULL)
+              free(selection_data);
+
             clear_bitmap(selection_preview);
             selection_data = NULL;
 
@@ -343,6 +345,7 @@ void handle_click(int x, int y, int button)
             take_shot = true;
             draw_selection = true;
           }
+          while(key[KEY_C]);
         }
         else if (key[KEY_V])
         {
@@ -373,6 +376,8 @@ void handle_click(int x, int y, int button)
 
           draw_selection = false;
           cur_copy_point = 0;
+
+          while(key[KEY_V]);
         }
       }
     }
@@ -665,9 +670,9 @@ int main(int argc, char *argv[])
       int xini,yini,xend,yend;
 
       xini = (pt_ini_point.x<<5) - map_drawx;
-      yini = pt_ini_point.y<<5;
+      yini = (pt_ini_point.y<<5) - map_drawy;
       xend = ((pt_end_point.x<<5)+TILE_SIZE) - map_drawx;
-      yend = (pt_end_point.y<<5)+TILE_SIZE;
+      yend = ((pt_end_point.y<<5)+TILE_SIZE) - map_drawy;
 
       if (take_shot == true)
       {
