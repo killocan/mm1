@@ -3,4 +3,7 @@ BUGS:
 - Ajustar corrida para comecar com 1 px depois passar para 3 quando ja correndo.
 - ao saltar sobre uma escada muito proxima de um teto megaman passa direto, altura do sprite
   faz detectar sprite abaixo do inicio da escada, arrumar um jeito de colidir com altura modificada
-  somente neste caso ou arrumar um altura real em hor e em ver... algo assim.
+  somente nqeste caso ou arrumar um altura real em hor e em ver... algo assim.
+- Bug com o tacke fire (quando pega ele sob a camera)
+- Bug com o killer bullet (tem q ter um limite de onde aparece e explosao ao morrer do tipo da explosao
+  do hyperbomp
