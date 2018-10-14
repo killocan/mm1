@@ -27,11 +27,9 @@ Spine::Spine(const Stage & stage, int xmap, int ymap) : Character(stage, mm_spri
 
   this->old_x = this->x;
 
-
-
-  vely          = 1;
+  vely          = 1.0f;
   overstair     = false;
-  isFacingRight = true;
+  isFacingRight = false;
   colorOffset   = 0;
 
   colorOffset = cur_stage->getOffset(mm_spritefiles::SPINE_SPRITES);
@@ -99,7 +97,7 @@ void Spine::doLogic()
   int ph = cur_stage->m_player->h;
   int pxl = cur_stage->m_player->x + cur_stage->m_player->utilX + cur_stage->m_player->utilXLen;
   int pxr = cur_stage->m_player->x + cur_stage->m_player->utilX;
-  if (((py+ph)/mm_graphs_defs::TILE_SIZE) == (this->y/mm_graphs_defs::TILE_SIZE))
+  if ((((int)(py+ph))/mm_graphs_defs::TILE_SIZE) == (((int)this->y)/mm_graphs_defs::TILE_SIZE))
   {
     //maxX + tilesize cause maxX points on the first pixel of last tile.
     //Original game does not test this.
@@ -108,7 +106,7 @@ void Spine::doLogic()
       //Also different from original (there this enemy just blinks).
       curState = Spine::ACTIVE;
       setAnimSeq(colorOffset + Spine::ACTIVE);
-      velx = 4;
+      velx = 3.5f;
     }
     else
     {
@@ -173,7 +171,7 @@ void Spine::adjustToFloor()
     }
     else
     {
-      y+=2;
+      y+=2.0f;
 
 #ifdef DEBUG
       fprintf(stderr,"FINAL Spine: x=[%f] utilX=[%f] y=[%f] vely=[%f] h=[%f]\n",
@@ -220,7 +218,7 @@ void Spine::respawn()
   this->x = this->old_x;
   this->y = this->old_y;
 
-  isFacingRight = true;
+  isFacingRight = cur_stage->m_player->x <= this->x ? false : true;
 
   curState = Spine::ROAMING;
   resetAnimSeq(colorOffset + Spine::ROAMING);

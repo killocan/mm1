@@ -17,7 +17,7 @@ class Spine : public Character
 
     virtual void doLogic();
 
-    // Do nothing
+  // Do nothing
     virtual void doGravitation();
 
     virtual void hit(mm_weapons::weapon_st * pWeapon);
