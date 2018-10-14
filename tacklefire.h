@@ -23,6 +23,7 @@ class TackleFire : public Character
         virtual void doLogic();
         virtual void checkOnCamera();
         virtual void respawn();
+        virtual void drawCharacter(BITMAP * bmp);
         void resetState();
         void setWait();
 
