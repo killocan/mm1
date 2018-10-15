@@ -111,7 +111,7 @@ void TackleFire::TackleFireFragment::doLogic()
     break;
     case TackleFire::TackleFireFragment::WAITING:
     {
-      ;
+      canCollidePlayer = false;
     }
     break;
     case Character::FREEZE:
@@ -232,6 +232,24 @@ TackleFire::TackleFire(const Stage & stage, int x, int y)
   TemporaryCharacterList::mm_tempCharacterLst.push_back(fragments[0]);
   TemporaryCharacterList::mm_tempCharacterLst.push_back(fragments[1]);
   TemporaryCharacterList::mm_tempCharacterLst.push_back(fragments[2]);
+
+  internalSprite = create_bitmap(10,10);
+#ifdef DEBUG
+  clear_to_color(internalSprite, makecol(0,0,255));
+#else
+  clear_to_color(internalSprite, MASK_COLOR_24);
+#endif
+}
+
+TackleFire::~TackleFire()
+{
+  destroy_bitmap(internalSprite);
+  internalSprite = NULL;
+}
+
+BITMAP * TackleFire::getFrame()
+{
+  return internalSprite;
 }
 
 void TackleFire::doLogic()
@@ -254,47 +272,12 @@ void TackleFire::doLogic()
       {
         cur = dynamic_cast <TackleFire::TackleFireFragment*> (fragments[i]);
         cur->resetState();
+        cur->canCollidePlayer = true;
         //curState = TackleFire::TackleFireFragment::GOINGUP;
       }
     }
   }
 }
-
-/*
-void TackleFire::checkOnCamera(Camera * camera)
-{
-  if (this->x >= camera->x && this->x <= camera->x+camera->w &&
-      this->y >= camera->y && this->y <= camera->y+camera->h)
-  {
-    if (onCamera == false && alive == false)
-    {
-      alive = true;
-    }
-
-    onCamera = true;
-  }
-  else
-  {
-    if (alive == true)
-    {
-      alive    = false;
-      respawn();
-    }
-
-    // In the original game, if one character get it's first x coord
-    // behind the camera it's marked as "outside" camare clipping.
-    if (this->x >= camera->x && this->x <= camera->x+camera->w &&
-        this->y >= camera->y && this->y <= camera->y+camera->h)
-    {
-      onCamera = true;
-    }
-    else
-    {
-      onCamera = false;
-    }
-  }
-}
-*/
 
 bool TackleFire::handleAnimation(bool * bAnimationEnded)
 {
@@ -321,5 +304,8 @@ void TackleFire::respawn()
 
 void TackleFire::drawCharacter(BITMAP * bmp)
 {
+#ifdef DEBUG
+  draw_sprite(bmp, internalSprite, sx, sy);
+#endif
   return;
 }

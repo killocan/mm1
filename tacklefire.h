@@ -33,13 +33,14 @@ class TackleFire : public Character
     };
 
     TackleFire(const Stage & stage, int x, int y);
+    ~TackleFire();
 
     virtual void doLogic();
+    virtual BITMAP * getFrame();
     virtual bool handleAnimation(bool * bAnimationEnded = NULL);
     virtual void doGravitation();
     virtual void respawn();
     virtual void drawCharacter(BITMAP * bmp);
-    //virtual void checkOnCamera(Camera * camera);
 
     enum {CONTROLLING};
 
@@ -47,4 +48,5 @@ class TackleFire : public Character
     //Stage * cur_stage; // current stage.
     int fragmentsAlive;
     Character * fragments[3];
+    BITMAP * internalSprite;
 };
