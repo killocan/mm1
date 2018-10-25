@@ -3,8 +3,8 @@
  * http://killocan.blogspot.com
 */
 
+#include "defines.h"
 #include "weaponchargerlittle.h"
-
 #include "spritefiles.h"
 #include "stage.h"
 
@@ -12,7 +12,7 @@ WeaponChargerLittle::WeaponChargerLittle(const Stage & stage, int x, int y, void
   : TempCharacter(stage, mm_spritefiles::LITTLE_WEAPON_RECHARGE_SPRITES)
 {
   this->x = x;
-  this->y = y;
+  this->y = y + (mm_graphs_defs::TILE_SIZE/2);
 
   this->old_x = this->x;
   this->old_y = this->y;

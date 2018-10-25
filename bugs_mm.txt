@@ -4,7 +4,7 @@ BUGS:
 - ao saltar sobre uma escada muito proxima de um teto megaman passa direto, altura do sprite
   faz detectar sprite abaixo do inicio da escada, arrumar um jeito de colidir com altura modificada
   somente nqeste caso ou arrumar um altura real em hor e em ver... algo assim.
-- Bug com o tacke fire (export sprite limpo para colisao com player)
+X Bug com o tacke fire (export sprite limpo para colisao com player)
 - Bug com o killer bullet (tem q ter um limite de onde aparece e explosao ao morrer do tipo da explosao
   do hyperbomp
 - Corrigir Spawn dos lifes(energia e arma) para nao parecer q tao caindo os pequenos.
