@@ -908,7 +908,7 @@ Character * Stage::createCharacter(int TYPE, int x, int y, int vx, int vy, void 
     break;
     case mm_tile_actions::TILE_ENEMY_KILLERBULLET:
     {
-      cur_character = new KillerBullet(*this, x, y);
+      cur_character = new KillerBullet(*this, x, y, param);
     }
     break;
     case mm_tile_actions::TILE_ENEMY_SPINE:

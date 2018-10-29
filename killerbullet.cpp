@@ -23,11 +23,9 @@
 
 //Killer Bullet
 
-KillerBullet::KillerBullet(const Stage & stage, int x, int y) : Character(stage, mm_spritefiles::KILLERBULLET_SPRITES)
+KillerBullet::KillerBullet(const Stage & stage, int x, int y, void * pTemp) : Character(stage, mm_spritefiles::KILLERBULLET_SPRITES)
 {
   this->x = (GlobalCamera::mm_camera->x + GlobalCamera::mm_camera->w);
-
-
 
   this->old_y = cur_stage->m_player->y-16;
 
@@ -45,6 +43,17 @@ KillerBullet::KillerBullet(const Stage & stage, int x, int y) : Character(stage,
   curState = KillerBullet::MOVING;
 
   life  = 1;
+
+  active_sectors = NULL;
+  if (pTemp != NULL)
+  {
+    active_sectors = (int*) pTemp;
+  }
+}
+
+KillerBullet::~KillerBullet()
+{
+    delete active_sectors;
 }
 
 void KillerBullet::doLogic()
@@ -57,7 +66,7 @@ void KillerBullet::doLogic()
       ang  += 0.06f;
 
       // Subtract since screen coords are inverted for Y
-      this->y = this->old_y - (int) tempY;
+      this->y = this->old_y - tempY;
       this->x += this->velx;
 
       if (((this->sx+this->w) < 0) ||
@@ -115,7 +124,24 @@ void KillerBullet::hit(mm_weapons::weapon_st * pWeapon)
 
 void KillerBullet::checkOnCamera()
 {
-  alive = true;
+  int ydesl = ((int)cur_stage->m_player->y) / mm_graphs_defs::TILES_Y;
+  int xdesl = ((int)cur_stage->m_player->x) / mm_graphs_defs::TILES_X;
+  int sector = ydesl*(cur_stage->max_x / mm_graphs_defs::TILES_X) + xdesl;
+
+  bool found = false;
+  for (int i = 0; active_sectors[i] != -1; ++i)
+  {
+    if (active_sectors[i] == sector)
+    {
+      found = true;
+      break;
+    }
+  }
+
+  if (found)
+    alive = true;
+  else
+    alive = false;
 }
 
 void KillerBullet::respawn()

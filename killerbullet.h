@@ -13,7 +13,8 @@ class Stage;
 class KillerBullet : public Character
 {
   public:
-    KillerBullet(const Stage & stage, int x, int y);
+    KillerBullet(const Stage & stage, int x, int y, void * pTemp);
+    ~KillerBullet();
 
     virtual void doLogic();
 
@@ -31,7 +32,6 @@ class KillerBullet : public Character
     enum {MOVING};
 
   private:
-    // For smooth sin move.
     float tempY, ang;
-    //Stage * cur_stage; // current stage.
+    int * active_sectors;
 };
