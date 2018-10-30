@@ -12,11 +12,12 @@
 class GlobalGameState
 {
   public:
-    //static AnimSequence * weaponsFrames[mm_weapons::WEAPONS_NUMBER];
-    //static void loadWeaponsFrames();
     static std::list<mm_weapons::weapon_st> playerShots;
     static std::list<mm_weapons::weapon_st> enemyShots;
     static bool hasPlatformGun;
+
+    static bool earthquake;
+    static int  earthquakecount;
 
     static bool allEnemysDefeated;
     static bool enemyDefeated[6];

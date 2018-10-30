@@ -10,6 +10,9 @@ std::list<mm_weapons::weapon_st> GlobalGameState::enemyShots;
 
 bool GlobalGameState::hasPlatformGun          = true;
 
+bool GlobalGameState::earthquake              = false;
+int  GlobalGameState::earthquakecount         = 0;
+
 bool GlobalGameState::allEnemysDefeated       = false;
 bool GlobalGameState::enemyDefeated[6]        = {true, true, true, true, true, true};
 int  GlobalGameState::enemyClearPoints[6]     = {50000, 80000, 90000, 30000, 50000, 100000};

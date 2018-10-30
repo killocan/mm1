@@ -530,6 +530,27 @@ void StageManager::play()
         game_over = false;
       }
 
+      // Save camera for gutsman earth quake
+      int old_camera_x = GlobalCamera::mm_camera->x;
+      int old_camera_y = GlobalCamera::mm_camera->y;
+
+      if (GlobalGameState::earthquake == true)
+      {
+        static int eq_x=-4, eq_y=4;
+        static int quake_values[4] = {-5,-3,3,5};
+
+        int old_eq = eq_x;
+        while (eq_x == old_eq) eq_x = quake_values[rand()%4];
+        old_eq = eq_y;
+        while (eq_y == old_eq) eq_y = quake_values[rand()%4];
+
+        --GlobalGameState::earthquakecount;
+        if (GlobalGameState::earthquakecount == 0) GlobalGameState::earthquake = false;
+
+        GlobalCamera::mm_camera->x += eq_x<<1;
+        GlobalCamera::mm_camera->y += eq_y<<1;
+      }
+
       //Most of time there are no FG tiles.
       if (stage->has_fg_tiles == false)
       {
@@ -612,6 +633,10 @@ void StageManager::play()
         }
       }
 
+      // Restore camera x,y.
+      GlobalCamera::mm_camera->x = old_camera_x;
+      GlobalCamera::mm_camera->y = old_camera_y;
+
       if (weapon_menu == true)
       {
         weapon_menu = weaponMenu->inputAndDraw(m_buffer);
@@ -638,6 +663,12 @@ void StageManager::play()
                     player->x, player->y, player->velx, player->vely);
       textprintf_ex(m_buffer, font, 1, 20, makecol(255,255,255), 0, "camera.x:[%d] camera.y:[%d]",
                     camera->x, camera->y);
+
+      int ydesl = ((int)player->y) / mm_graphs_defs::TILES_Y;
+      int xdesl = ((int)player->x) / mm_graphs_defs::TILES_X;
+      int sector = ydesl*(stage->max_x / mm_graphs_defs::TILES_X) + xdesl;
+
+      textprintf_ex(m_buffer, font, 1, 30, makecol(255,255,255), 0, "SECTOR = [%d]", sector);
 #endif
 
 #ifdef FPS_IN_GAME

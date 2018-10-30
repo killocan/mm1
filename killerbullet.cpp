@@ -115,7 +115,10 @@ void KillerBullet::hit(mm_weapons::weapon_st * pWeapon)
 
   if (life <= 0)
   {
+    //TODO: make sure if it should drop an item!
     die();
+
+    mm_weapons::createExplosionParts(cur_stage, x, y, false);
     respawn();
   }
 

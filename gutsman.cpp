@@ -107,7 +107,7 @@ void Gutsman::doLogic()
         }
       }
       else
-      { 
+      {
         int tilecoordx, tilecoordy, tiletype;
 
         if (jumping_right == true)
@@ -130,6 +130,8 @@ void Gutsman::doLogic()
           curState = Gutsman::DECIDING;
           setAnimSeq(Gutsman::DECIDING);
           jumping = false;
+
+          GlobalGameState::earthquake = true;
         }
       }
     }

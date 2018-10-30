@@ -177,9 +177,11 @@ void Character::doGravitation()
     }
     else
     {
+      int current_height = getFrameH();
       // If outside map don't test collision, just pretend its all void out there :)
       if((y+vely+h >= 0) &&
-        ((collisionHor(x+utilX, y+vely+h, tilecoordx, tilecoordy, !overstair, tiletype)) || (onPlatform == true)))
+        //((collisionHor(x+utilX, y+vely+h, tilecoordx, tilecoordy, !overstair, tiletype)) || (onPlatform == true)))
+        ((collisionHor(x+utilX, y+vely+current_height, tilecoordx, tilecoordy, !overstair, tiletype)) || (onPlatform == true)))
       {
         if (onground == false)
         {

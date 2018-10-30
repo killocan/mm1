@@ -42,7 +42,7 @@ static void handleBombFragment(mm_weapons::weapon_st * pWeapon)
   }
 }
 
-static void createExplosionParts(Stage * stage, float x, float y, bool player_created)
+void mm_weapons::createExplosionParts(Stage * stage, float x, float y, bool player_created)
 {
   static float vx_0[] = {1.0f, -1.0f, 0.0f,  0.0f, 3.0f, 3.0f,  -3.0f, -3.0f};
   static float vy_0[] = {0.0f, 0.0f,  -1.0f, 1.0f, 3.0f, -3.0f, 3.0f,  -3.0f};
@@ -73,7 +73,10 @@ static void createExplosionParts(Stage * stage, float x, float y, bool player_cr
     explosion_part.w = explosion_part.bulletSpriteShet->getFrame(explosion_part.frameOffset)->w;
     explosion_part.h = explosion_part.bulletSpriteShet->getFrame(explosion_part.frameOffset)->h;
 
-    GlobalGameState::playerShots.push_back(explosion_part);
+    if (player_created)
+      GlobalGameState::playerShots.push_back(explosion_part);
+    else
+      GlobalGameState::enemyShots.push_back(explosion_part);
   }
   for (int i = 0; i < 4; ++i)
   {
@@ -99,7 +102,10 @@ static void createExplosionParts(Stage * stage, float x, float y, bool player_cr
     explosion_part.w = explosion_part.bulletSpriteShet->getFrame(explosion_part.frameOffset)->w;
     explosion_part.h = explosion_part.bulletSpriteShet->getFrame(explosion_part.frameOffset)->h;
 
-    GlobalGameState::playerShots.push_back(explosion_part);
+    if (player_created)
+      GlobalGameState::playerShots.push_back(explosion_part);
+    else
+      GlobalGameState::enemyShots.push_back(explosion_part);
   }
 }
 
@@ -146,7 +152,7 @@ static void handleBomb(mm_weapons::weapon_st * pWeapon, Stage * stage)
   {
     pWeapon->alive = false;
     Sounds::mm_sounds->play(BOMBOMB_HIT);
-    createExplosionParts(stage, pWeapon->x, pWeapon->y, true);
+    mm_weapons::createExplosionParts(stage, pWeapon->x, pWeapon->y, true);
   }
 }
 

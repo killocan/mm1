@@ -122,6 +122,7 @@ namespace mm_weapons
 
   void createHyperBomb(Player *player);
   void createHyperBomb(Character * character, int x, int y, float vx, float vy, int offset);
+  void createExplosionParts(Stage * stage, float x, float y, bool player_created);
 
   void createThunderBeam(Player *player);
   void createThunderBeam(Character * character, int x, int y, float vx, float vy, int offset);
