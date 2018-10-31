@@ -16,6 +16,7 @@ class Gutsman : public Character
     Gutsman(const Stage & stage, int x, int y, void * param);
 
     virtual void doLogic();
+    virtual void touchGround();
 
     virtual void fire();
 
@@ -26,5 +27,6 @@ class Gutsman : public Character
     enum { DECIDING, SHOW_OFF, PRE_JUMP, JUMP, PRE_JUMP_ATTACK, JUMP_ATTACK, ATTACK, };
 
   private:
+    bool bFirstTime;
     bool jumping, jumping_right;
 };

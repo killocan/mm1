@@ -19,6 +19,8 @@ FireManStage::FireManStage() : lastCycleTime(0)
 
 void FireManStage::setupStage()
 {
+  stage->runtimeLoadCharacter(mm_spritefiles::KILLERBULLET_SPRITES);
+
   stage->setOffset(mm_spritefiles::SCREWBOMBER_SPRITES, 8); // set which sprite color to use.
 
   BossDoor::BossDoorSetupParam door1;
@@ -48,6 +50,16 @@ void FireManStage::setupStage()
   special_chars_vec.push_back(pDoor1C);
   special_chars_vec.push_back(pDoor2C);
   special_chars_vec.push_back(pDoor3C);
+
+  int * sectors = new int[4];
+  sectors[0] = 6;
+  sectors[1] = 7;
+  sectors[2] = 8;
+  sectors[3] = -1;
+  Character * pKillerBullet = stage->createCharacter(mm_tile_actions::TILE_ENEMY_KILLERBULLET,
+                                                     110*32, 9*32, 0,0, (void*)sectors);
+  //TemporaryCharacterList::mm_tempCharacterLst.push_back(pKillerBullet);
+  characters_vec.push_back(pKillerBullet);
 
   bossWarningTiles.push_back(8);
   bossWarningTiles.push_back(18);

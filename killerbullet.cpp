@@ -27,9 +27,9 @@ KillerBullet::KillerBullet(const Stage & stage, int x, int y, void * pTemp) : Ch
 {
   this->x = (GlobalCamera::mm_camera->x + GlobalCamera::mm_camera->w);
 
-  this->old_y = cur_stage->m_player->y-16;
+  this->old_y = y; //cur_stage->m_player->y-16;
 
-  velx          = -3;
+  velx          = -3.0f;
   overstair     = false;
   isFacingRight = false;
   ang           = M_PI_2;
@@ -53,7 +53,7 @@ KillerBullet::KillerBullet(const Stage & stage, int x, int y, void * pTemp) : Ch
 
 KillerBullet::~KillerBullet()
 {
-    delete active_sectors;
+  delete [] active_sectors;
 }
 
 void KillerBullet::doLogic()
@@ -115,9 +115,8 @@ void KillerBullet::hit(mm_weapons::weapon_st * pWeapon)
 
   if (life <= 0)
   {
-    //TODO: make sure if it should drop an item!
-    die();
-
+    //TODO: check if it should drop an item!
+    //die();
     mm_weapons::createExplosionParts(cur_stage, x, y, false);
     respawn();
   }
@@ -127,8 +126,10 @@ void KillerBullet::hit(mm_weapons::weapon_st * pWeapon)
 
 void KillerBullet::checkOnCamera()
 {
-  int ydesl = ((int)cur_stage->m_player->y) / mm_graphs_defs::TILES_Y;
-  int xdesl = ((int)cur_stage->m_player->x) / mm_graphs_defs::TILES_X;
+  int yd = ((int)cur_stage->m_player->y)/mm_graphs_defs::TILE_SIZE;
+  int xd = ((int)cur_stage->m_player->x)/mm_graphs_defs::TILE_SIZE;
+  int ydesl = yd / mm_graphs_defs::TILES_Y;
+  int xdesl = xd / mm_graphs_defs::TILES_X;
   int sector = ydesl*(cur_stage->max_x / mm_graphs_defs::TILES_X) + xdesl;
 
   bool found = false;

@@ -38,11 +38,29 @@ Gutsman::Gutsman(const Stage & stage, int x_map, int y_map, void * param) : Char
 
   life  = 1;
   alive = true;
+
+  bFirstTime = true;
 }
 
 bool Gutsman::handleAnimation(bool * bAnimationEnded)
 {
   return false;
+}
+
+void Gutsman::touchGround()
+{
+  if (bFirstTime == true)
+  {
+    bFirstTime = false;
+    return;
+  }
+
+  if (GlobalGameState::earthquake == false)
+  {
+    Sounds::mm_sounds->play(EARTHQUAKE);
+    GlobalGameState::earthquake = true;
+    GlobalGameState::earthquakecount = 120;
+  }
 }
 
 void Gutsman::doLogic()
@@ -130,8 +148,6 @@ void Gutsman::doLogic()
           curState = Gutsman::DECIDING;
           setAnimSeq(Gutsman::DECIDING);
           jumping = false;
-
-          GlobalGameState::earthquake = true;
         }
       }
     }

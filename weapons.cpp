@@ -431,8 +431,11 @@ void mm_weapons::updateWeapons(Stage * stage)
   {
     weapon_st * pWeapon = &(*it);
 
-    pWeapon->x += pWeapon->vx;
-    pWeapon->y += pWeapon->vy;
+    // Each weapon has particular behaviour.
+    doWeaponSpecifics(pWeapon, stage);
+
+    //pWeapon->x += pWeapon->vx;
+    //pWeapon->y += pWeapon->vy;
 
     pWeapon->sx = ((int) pWeapon->x) - GlobalCamera::mm_camera->x;
     pWeapon->sy = ((int) pWeapon->y) - GlobalCamera::mm_camera->y;

@@ -545,7 +545,7 @@ void StageManager::play()
         while (eq_y == old_eq) eq_y = quake_values[rand()%4];
 
         --GlobalGameState::earthquakecount;
-        if (GlobalGameState::earthquakecount == 0) GlobalGameState::earthquake = false;
+        if (GlobalGameState::earthquakecount <= 0) GlobalGameState::earthquake = false;
 
         GlobalCamera::mm_camera->x += eq_x<<1;
         GlobalCamera::mm_camera->y += eq_y<<1;
@@ -664,8 +664,10 @@ void StageManager::play()
       textprintf_ex(m_buffer, font, 1, 20, makecol(255,255,255), 0, "camera.x:[%d] camera.y:[%d]",
                     camera->x, camera->y);
 
-      int ydesl = ((int)player->y) / mm_graphs_defs::TILES_Y;
-      int xdesl = ((int)player->x) / mm_graphs_defs::TILES_X;
+      int yd = ((int)player->y)/mm_graphs_defs::TILE_SIZE;
+      int xd = ((int)player->x)/mm_graphs_defs::TILE_SIZE;
+      int ydesl =  yd / mm_graphs_defs::TILES_Y;
+      int xdesl =  xd / mm_graphs_defs::TILES_X;
       int sector = ydesl*(stage->max_x / mm_graphs_defs::TILES_X) + xdesl;
 
       textprintf_ex(m_buffer, font, 1, 30, makecol(255,255,255), 0, "SECTOR = [%d]", sector);
