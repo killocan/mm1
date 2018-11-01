@@ -30,8 +30,6 @@ SniperJoe::SniperJoe(const Stage & stage, int x, int y) : Character(stage, mm_sp
   this->old_x = this->x;
   this->old_y = this->y;
 
-
-
   velx          = -5;
   vely          = 1;
   overstair     = false;

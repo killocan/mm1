@@ -35,8 +35,6 @@ SuperCutter::SuperCutter(const Stage & stage, int x, int y) : Character(stage, m
   this->old_x = this->x;
   this->old_y = this->y;
 
-
-
   velx          = 0;
   overstair     = false;
   isFacingRight = false;
@@ -68,7 +66,7 @@ void SuperCutter::move()
   this->x = (int) tempX;
 }
 
-bool SuperCutter::collisionHor(const Stage & stage,   int x, int y, int &tilecoordx, int &tilecoordy, bool going_down, int &tiletype)
+bool SuperCutter::collisionHor(int x, int y, int &tilecoordx, int &tilecoordy, bool going_down, int &tiletype)
 {
   return false;
 }

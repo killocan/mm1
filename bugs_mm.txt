@@ -5,4 +5,9 @@ BUGS:
   somente nqeste caso ou arrumar um altura real em hor e em ver... algo assim.
 X Bug com o killer bullet (tem q ter um limite de onde aparece e explosao ao morrer do tipo da explosao
   do hyperbomb
-- Testar TODOS inimigos
+X Testar TODOS inimigos (PENG e KILLER BULLET, DEIXAR PENG IGUAL E DAR TIMEOUT PARA EVITAR APARECER LOGO QUE CAMERA
+  CAI NO PERSONAGEM)
+- Picketman (ver a curva... no jogo é spoton no mesmo x e falha em y diferente.
+- Lista temporaria tem q testar se megaman esta invencivel e permitir bonus e life e charge de arma colidir
+  sempre. (mudar testa para dentro do player (vai percorrer a lista toda.. mas...)
+- mudar o metodo Die do character para ter com e sem dropar bonus point

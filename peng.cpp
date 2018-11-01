@@ -27,8 +27,6 @@ Peng::Peng(const Stage & stage, int x, int y) : Character(stage, mm_spritefiles:
 {
   this->x = (GlobalCamera::mm_camera->x + GlobalCamera::mm_camera->w);
 
-
-
   this->old_y = cur_stage->m_player->y;
 
   velx          = -3;

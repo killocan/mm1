@@ -16,7 +16,7 @@ class SuperCutter : public Character
     SuperCutter(const Stage & stage, int x, int y);
 
     virtual void doLogic();
-    virtual bool collisionHor(const Stage & stage,   int x, int y, int &tilecoordx, int &tilecoordy, bool going_down, int &tiletype);
+    virtual bool collisionHor(int x, int y, int &tilecoordx, int &tilecoordy, bool going_down, int &tiletype);
 
     virtual void hit(mm_weapons::weapon_st * pWeapon);
     virtual void respawn();
