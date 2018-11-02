@@ -69,6 +69,8 @@ Bombomb::Bombomb(const Stage & stage, int x, int y) : Character(stage, mm_sprite
   colorOffset = cur_stage->getOffset(mm_spritefiles::BOMBOMB_SPRITES);
   setAnimSeq(colorOffset + Bombomb::MOVING);
   curState = Bombomb::WAITING;
+
+  dropItem = false;
 }
 
 void Bombomb::die()
