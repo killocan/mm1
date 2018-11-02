@@ -27,7 +27,7 @@ KillerBullet::KillerBullet(const Stage & stage, int x, int y, void * pTemp) : Ch
 {
   this->x = (GlobalCamera::mm_camera->x + GlobalCamera::mm_camera->w);
 
-  this->old_y = y; //cur_stage->m_player->y-16;
+  this->old_y = y;
 
   velx          = -3.0f;
   overstair     = false;
@@ -36,7 +36,7 @@ KillerBullet::KillerBullet(const Stage & stage, int x, int y, void * pTemp) : Ch
 
   colorOffset = cur_stage->getOffset(mm_spritefiles::KILLERBULLET_SPRITES);
 
-  setAnimSeq(colorOffset + KillerBullet::MOVING);
+  setAnimSeq(colorOffset + KillerBullet::WAITING);
   h = getFrameH();
   w = getFrameW();
 
@@ -49,6 +49,8 @@ KillerBullet::KillerBullet(const Stage & stage, int x, int y, void * pTemp) : Ch
   {
     active_sectors = (int*) pTemp;
   }
+
+  ticks = Clock::clockTicks;
 }
 
 KillerBullet::~KillerBullet()
@@ -60,6 +62,15 @@ void KillerBullet::doLogic()
 {
   switch(curState)
   {
+    case KillerBullet::WAITING:
+    {
+      if ((Clock::clockTicks - ticks) > 20)
+      {
+        ticks = Clock::clockTicks;
+        curState = KillerBullet::MOVING;
+      }
+    }
+    break;
     case KillerBullet::MOVING:
     {
       tempY = 80.0f * cos(ang);
@@ -126,7 +137,7 @@ void KillerBullet::hit(mm_weapons::weapon_st * pWeapon)
 
 void KillerBullet::checkOnCamera()
 {
-  int yd = ((int)cur_stage->m_player->y)/mm_graphs_defs::TILE_SIZE;
+  int yd = ((int) (cur_stage->m_player->y + (cur_stage->m_player->h/1.5f))) / mm_graphs_defs::TILE_SIZE;
   int xd = ((int)cur_stage->m_player->x)/mm_graphs_defs::TILE_SIZE;
   int ydesl = yd / mm_graphs_defs::TILES_Y;
   int xdesl = xd / mm_graphs_defs::TILES_X;
@@ -142,22 +153,33 @@ void KillerBullet::checkOnCamera()
     }
   }
 
-  if (found)
+  if (found && cur_stage->horz_scroll == false)
+  {
     alive = true;
-  else
-    alive = false;
+  }
+  else if (curState != KillerBullet::WAITING)
+  {
+    respawn();
+    alive   = false;
+  }
 }
 
 void KillerBullet::respawn()
 {
   life  = 1;
-  alive = true;
+  //alive = true;
 
-  this->x     = (GlobalCamera::mm_camera->x + GlobalCamera::mm_camera->w);
-  this->old_y = cur_stage->m_player->y-16;
+  int offset = 16;
+  if (cur_stage->m_player->sy > 400)
+    offset += 2*mm_graphs_defs::TILE_SIZE;
+
+  this->x     = (GlobalCamera::mm_camera->x + GlobalCamera::mm_camera->w) + (2*mm_graphs_defs::TILE_SIZE);
+  this->old_y = cur_stage->m_player->y-offset;
+  this->y = this->old_y;
   ang = M_PI_2;
 
-  curState = KillerBullet::MOVING;
+  ticks = Clock::clockTicks;
+  curState = KillerBullet::WAITING;
 
   return;
 }

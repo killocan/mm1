@@ -29,9 +29,10 @@ class KillerBullet : public Character
     // This dude is kind of imortal.
     virtual void checkOnCamera();
 
-    enum {MOVING};
+    enum {WAITING, MOVING};
 
   private:
     float tempY, ang;
     int * active_sectors;
+    unsigned long ticks;
 };
