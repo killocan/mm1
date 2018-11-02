@@ -671,6 +671,9 @@ void StageManager::play()
       int sector = ydesl*(stage->max_x / mm_graphs_defs::TILES_X) + xdesl;
 
       textprintf_ex(m_buffer, font, 1, 30, makecol(255,255,255), 0, "SECTOR = [%d]", sector);
+
+      textprintf_ex(m_buffer, font, 1, 40, makecol(255,255,255), 0, "SX:[%d] SY:[%d]",
+                    player->sx, player->sy);
 #endif
 
 #ifdef FPS_IN_GAME
