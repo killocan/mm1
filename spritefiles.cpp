@@ -76,5 +76,6 @@ namespace mm_spritefiles
     "./game_data/willy_seq.dat",
 
     "./game_data/magnet_beam_seq.dat",
+    "./game_data/fireman_moving_flame_seq.dat",
   };
 }

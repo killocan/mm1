@@ -54,6 +54,8 @@
 #include "gutsman.h"
 #include "fireman.h"
 
+#include "movingflame.h"
+
 static volatile int update_scroll = 0;
 static void screenscroll_timer()
 {
@@ -943,7 +945,7 @@ Character * Stage::createCharacter(int TYPE, int x, int y, int vx, int vy, void 
     break;
     case mm_tile_actions::TILE_ENEMY_PENG:
     {
-      cur_character = new Peng(*this, x, y);
+      cur_character = new Peng(*this, x, y, param);
     }
     break;
     case mm_tile_actions::TILE_ENEMY_BIGEYE:
@@ -1080,7 +1082,6 @@ Character * Stage::createCharacter(int TYPE, int x, int y, int vx, int vy, void 
     case mm_tile_actions::CRAZYRAZY_LOWER_CHAR:
     {
       cur_character = new CrazyRazy::CrazyRazyFragmentLowerHalf(*this, x, y);
-      cur_character->velx = vx;
     }
     break;
     case mm_tile_actions::CRAZYRAZY_UPPER_CHAR:
@@ -1117,6 +1118,11 @@ Character * Stage::createCharacter(int TYPE, int x, int y, int vx, int vy, void 
     case mm_tile_actions::FIREMAN:
     {
       cur_character = new Fireman(*this, x, y, param);
+    }
+    break;
+    case mm_tile_actions::MOVING_FLAME:
+    {
+      cur_character = new MovingFlame(*this, x, y, param);
     }
     break;
   }

@@ -79,6 +79,7 @@ namespace mm_tile_actions
     CWUO1P,
     WILLY,
 
-    MAGNET_BEAM
+    MAGNET_BEAM,
+    MOVING_FLAME
   };
 }
