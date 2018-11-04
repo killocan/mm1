@@ -41,6 +41,7 @@ class CrazyRazy : public Character
         virtual void hit(mm_weapons::weapon_st * pWeapon);
 
         enum {MOVING=6};
+        unsigned long ticks;
     };
 
     CrazyRazy(const Stage & stage, int x, int y);

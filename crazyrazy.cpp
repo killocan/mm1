@@ -187,20 +187,35 @@ CrazyRazy::CrazyRazyFragmentLowerHalf::CrazyRazyFragmentLowerHalf(const Stage & 
   h = getFrameH();
 
   curState = CrazyRazyFragmentLowerHalf::MOVING;
-  isFacingRight = velx>0;//x < cur_stage->m_player->x;
-  //velx = (isFacingRight) ? 2 : -2;
+  isFacingRight = x < cur_stage->m_player->x;
+  velx = 3.0f;
   vely = 1;
+
+  ticks = Clock::clockTicks;
 }
 
 void CrazyRazy::CrazyRazyFragmentLowerHalf::doLogic()
 {
-  isFacingRight = velx>0;//x < cur_stage->m_player->x;
-
   switch(curState)
   {
     case CrazyRazyFragmentLowerHalf::MOVING:
     {
-      this->x += velx;
+      int tilecoordx, tilecoordy, tiletype;
+      if (isFacingRight == true)
+      {
+        if(collisionVer(x+velx+utilXLen-8, y, tilecoordx, tilecoordy, tiletype) == false)
+        {
+          x += velx;
+        }
+      }
+      else
+      {
+        if(collisionVer(x+velx+14, y, tilecoordx, tilecoordy, tiletype) == false)
+        {
+          x -= velx;
+        }
+      }
+
       if (this->sx < 0)
       {
         alive = false;
@@ -208,7 +223,7 @@ void CrazyRazy::CrazyRazyFragmentLowerHalf::doLogic()
       }
 
       Character::handleAnimation();
-      if (abs(this->x-this->old_x) > 192)
+      if ((Clock::clockTicks - ticks) > 40)
       {
         this->y+=16;
         die();
@@ -233,15 +248,14 @@ void CrazyRazy::CrazyRazyFragmentLowerHalf::hit(mm_weapons::weapon_st * pWeapon)
 CrazyRazy::CrazyRazy(const Stage & stage, int x, int y) : Character(stage, mm_spritefiles::CRAZYRAZY_SPRITES),
                      bDieUpper(false)
 {
-  // Map coords to global world coords
-  this->x = x;//*mm_graphs_defs::TILE_SIZE;
-  this->y = y;//*mm_graphs_defs::TILE_SIZE;
+  this->x = x;
+  this->y = y;
 
   this->old_y = this->y;
   this->old_x = this->x;
 
-  velx = -3;
-  isFacingRight = cur_stage->m_player->x > this->x;
+  velx = 3.0f;
+  isFacingRight = false;
 
   curState = CrazyRazy::MOVING;
   setAnimSeq(CrazyRazy::MOVING);
@@ -265,8 +279,7 @@ void CrazyRazy::hit(mm_weapons::weapon_st * pWeapon)
 {
   Sounds::mm_sounds->play(HIT_ENEMY);
 
-  int /*xhit,*/ yhit;
-  //xhit = abs((int)pWeapon->xcol - this->x);
+  int yhit;
   yhit = abs((int)pWeapon->ycol - this->y);
 
   switch(pWeapon->weapon)
@@ -278,7 +291,7 @@ void CrazyRazy::hit(mm_weapons::weapon_st * pWeapon)
     {
       pWeapon->alive = false;
 
-      if (yhit >= (h/2.0f))
+      if (yhit >= ((int)h/2))
       {
         life--;
       }
@@ -312,7 +325,7 @@ void CrazyRazy::die()
     {
       // Die and create explosion for lower and upper part.
       int x = this->x + abs((getFrame()->w-32)>>1);
-      TemporaryCharacterList::mm_tempCharacterLst.push_back(cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, x, this->y+16));
+      TemporaryCharacterList::mm_tempCharacterLst.push_back(cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, x, this->y+32));
       TemporaryCharacterList::mm_tempCharacterLst.push_back(cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, x, this->y));
     }
     else
@@ -322,7 +335,7 @@ void CrazyRazy::die()
       TemporaryCharacterList::mm_tempCharacterLst.push_back(pFragment00);
 
       int x = this->x + abs((getFrame()->w-32)>>1);
-      TemporaryCharacterList::mm_tempCharacterLst.push_back(cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, x, this->y+16));
+      TemporaryCharacterList::mm_tempCharacterLst.push_back(cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, x, this->y+32));
     }
   }
 
@@ -339,7 +352,6 @@ void CrazyRazy::doLogic()
       isFacingRight = cur_stage->m_player->x > this->x;
 
       int px = cur_stage->m_player->x;
-      // When player pass through cause it's invencible(blinking).
       bool hasPlayerCrossed = (px > this->x);
       if (collideWithPlayer == true || hasPlayerCrossed == true)
       {
@@ -354,10 +366,23 @@ void CrazyRazy::doLogic()
         respawn();
       }
 
-      // laziness
       if (rand()%10000 < 100) fire();
 
-      this->x += velx;
+      int tilecoordx, tilecoordy, tiletype;
+      if (isFacingRight == true)
+      {
+        if(collisionVer((x+utilX)+velx+utilXLen, y, tilecoordx, tilecoordy, tiletype) == false)
+        {
+          x += velx;
+        }
+      }
+      else
+      {
+        if(collisionVer((x+utilX)-velx, y, tilecoordx, tilecoordy, tiletype) == false)
+        {
+          x -= velx;
+        }
+      }
     }
     break;
     case Character::FREEZE:
@@ -377,8 +402,6 @@ void CrazyRazy::respawn()
   collideWithPlayer = false;
   bDieUpper         = false;
 
-  curState      = CrazyRazy::MOVING;
+  curState = CrazyRazy::MOVING;
   resetAnimSeq(CrazyRazy::MOVING);
-
-  return;
 }
