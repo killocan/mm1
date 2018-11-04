@@ -126,8 +126,7 @@ void KillerBullet::hit(mm_weapons::weapon_st * pWeapon)
 
   if (life <= 0)
   {
-    //TODO: check if it should drop an item!
-    //die();
+    die();
     mm_weapons::createExplosionParts(cur_stage, x, y, false);
     respawn();
   }
@@ -167,7 +166,6 @@ void KillerBullet::checkOnCamera()
 void KillerBullet::respawn()
 {
   life  = 1;
-  //alive = true;
 
   int offset = 16;
   if (cur_stage->m_player->sy > 400)
@@ -180,6 +178,4 @@ void KillerBullet::respawn()
 
   ticks = Clock::clockTicks;
   curState = KillerBullet::WAITING;
-
-  return;
 }
