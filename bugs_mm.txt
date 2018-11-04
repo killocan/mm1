@@ -3,6 +3,5 @@ BUGS:
 - ao saltar sobre uma escada muito proxima de um teto megaman passa direto, altura do sprite
   faz detectar sprite abaixo do inicio da escada, arrumar um jeito de colidir com altura modificada
   somente nqeste caso ou arrumar um altura real em hor e em ver... algo assim.
-X Testar TODOS inimigos (PENG e KILLER BULLET, DEIXAR PENG IGUAL)
 - Lista temporaria tem q testar se megaman esta invencivel e permitir bonus e life e charge de arma colidir
   sempre. (mudar testa para dentro do player (vai percorrer a lista toda.. mas...)
