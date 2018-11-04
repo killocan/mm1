@@ -13,7 +13,8 @@ class Stage;
 class Peng : public Character
 {
   public:
-    Peng(const Stage & stage, int x, int y);
+    Peng(const Stage & stage, int x, int y, void * pTemp);
+    ~Peng();
 
     virtual void doLogic();
 
@@ -26,10 +27,12 @@ class Peng : public Character
     // This dude is kind of imortal.
     virtual void checkOnCamera();
 
-    enum {MOVING};
+    enum {WAITING, MOVING};
 
   private:
     // For smooth sin move.
     float tempY, ang;
+    int * active_sectors;
+    unsigned long ticks;
     //Stage * cur_stage; // current stage.
 };
