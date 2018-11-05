@@ -51,6 +51,9 @@ Watcher::WatcherFragment::WatcherFragment(const Stage & stage, int x, int y)
 
 void Watcher::WatcherFragment::doLogic()
 {
+  if (cur_stage->horz_scroll)
+    curState = Watcher::WatcherFragment::WAITING;
+
   if (cur_stage->m_player->alive == false)
   {
     this->alive = false;
@@ -247,6 +250,12 @@ void Watcher::WatcherFragment::respawn()
   resetAnimSeq(Watcher::WatcherFragment::RESTING);
 
   return;
+}
+
+void Watcher::WatcherFragment::drawCharacter(BITMAP * bmp)
+{
+  if (this->curState != Watcher::WatcherFragment::WAITING)
+    Character::drawCharacter(bmp);
 }
 
 Watcher::Watcher(const Stage & stage, int x, int y) 

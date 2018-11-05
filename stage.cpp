@@ -1125,6 +1125,11 @@ Character * Stage::createCharacter(int TYPE, int x, int y, int vx, int vy, void 
       cur_character = new MovingFlame(*this, x, y, param);
     }
     break;
+    case mm_tile_actions::MOVING_FLAME_FRAGMENT:
+    {
+      cur_character = new MovingFlame::MovingFlameFragment(*this, x, y, param);
+    }
+    break;
   }
 
   return (cur_character);

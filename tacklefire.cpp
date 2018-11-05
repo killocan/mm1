@@ -205,7 +205,6 @@ void TackleFire::TackleFireFragment::drawCharacter(BITMAP * bmp)
     Character::drawCharacter(bmp);
 }
 
-
 TackleFire::TackleFire(const Stage & stage, int x, int y) 
   : Character(stage, mm_spritefiles::TACKLEFIRE_SPRITES)
 {
@@ -216,6 +215,7 @@ TackleFire::TackleFire(const Stage & stage, int x, int y)
   this->old_y = y;
 
   curState = TackleFire::CONTROLLING;
+  canCollidePlayer = false;
 
   fragmentsAlive = 3;
 
@@ -298,8 +298,6 @@ void TackleFire::respawn()
     if (cur->curState == TackleFire::TackleFireFragment::WAITING)
       cur->setWait();
   }
-  
-  return;
 }
 
 void TackleFire::drawCharacter(BITMAP * bmp)

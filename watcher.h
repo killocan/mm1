@@ -23,8 +23,10 @@ class Watcher : public Character
         virtual void doLogic();
         virtual void checkOnCamera();
         virtual void respawn();
+        virtual void drawCharacter(BITMAP * bmp);
 
-        void resetState(int x, int y);
+
+      void resetState(int x, int y);
         void setWait();
 
         enum {WAITING, CHASING, OPENING, OPEN, FIRING, CLOSING, FLEEING, RESTING};
