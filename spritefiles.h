@@ -75,7 +75,7 @@ namespace mm_spritefiles
     WILLY_SPRITES,
 
     MAGNET_BEAM_SPRITES,
-    MOVING_FLAME_SPRITES
+    MOVING_FLAME_SPRITES,
   };
 
   extern const char * sprite_files[];

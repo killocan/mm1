@@ -80,6 +80,7 @@ namespace mm_tile_actions
     WILLY,
 
     MAGNET_BEAM,
-    MOVING_FLAME
+    MOVING_FLAME,
+    MOVING_FLAME_FRAGMENT,
   };
 }
