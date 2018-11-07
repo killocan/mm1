@@ -31,7 +31,7 @@ class AnimSequence
     BITMAP * seqBmp;
     std::vector<BITMAP *> seqFrames;
     std::vector<int>      frameHeight;
-    int utilXSize[2];//X,Len
+    int utilXSize[2];
 
     std::vector<std::vector<FrameInfoSt> > anim_seqs;
 };
@@ -223,6 +223,9 @@ void update_game_logic_tick()
   game_logic_tick = 1;
 }
 
+int rotations[] = {0, 64, 128, 196};
+int cur_rotation = 0;
+bool rotation_mode = false;
 int main(int argc, char ** argv)
 {
 	BITMAP * buffer;
@@ -288,18 +291,40 @@ int main(int argc, char ** argv)
 			cur_frame_duration = seq->getAnimSeq()[cur_seq][cur_frame_num].frameDuration;
 		}
 
+		if (key[KEY_R])
+    {
+      rotation_mode = !rotation_mode;
+      while(key[KEY_R]);
+    }
 		if (key[KEY_A])
 		{
-			while(key[KEY_A]);
 			invertDraw = !invertDraw;
+      while(key[KEY_A]);
 		}
 
 		cur_frame = seq->getAnimSeq()[cur_seq][cur_frame_num].frameNumber;
-		if(!invertDraw)
-			draw_sprite(buffer, seq->getFrame(cur_frame), (SCREEN_W/2) - (w/2), (SCREEN_H/2) - (h/2));
-		else
-			draw_sprite_h_flip(buffer, seq->getFrame(cur_frame), (SCREEN_W/2) - (w/2), (SCREEN_H/2) - (h/2));
+		if (!rotation_mode)
+    {
+      if (!invertDraw)
+        draw_sprite(buffer, seq->getFrame(cur_frame), (SCREEN_W / 2) - (w / 2), (SCREEN_H / 2) - (h / 2));
+      else
+        draw_sprite_h_flip(buffer, seq->getFrame(cur_frame), (SCREEN_W / 2) - (w / 2), (SCREEN_H / 2) - (h / 2));
+    }
+    else
+    {
+      rotate_sprite(buffer,
+                    seq->getFrame(cur_frame),
+                    (SCREEN_W / 2) - (w / 2), (SCREEN_H / 2) - (h / 2),
+                    itofix(rotations[cur_rotation]));
+    }
 
+    if (key[KEY_RIGHT])
+    {
+      cur_rotation++;
+      if (cur_rotation == 4) cur_rotation = 0;
+
+      while(key[KEY_RIGHT]);
+    }
 		textprintf_ex(buffer, font, 5, 5,  makecol(255,255,255), -1, "N de Sequencias: [%d]", num_seqs);
 		textprintf_ex(buffer, font, 5, 15, makecol(255,255,255), -1, "Sequencia atual: [%d]", cur_seq);
 		textprintf_ex(buffer, font, 5, 25, makecol(255,255,255), -1, "N de Frames da Sequencia atual: [%d]", seq_frames);
@@ -307,6 +332,7 @@ int main(int argc, char ** argv)
 		textprintf_ex(buffer, font, 5, 45, makecol(255,255,255), -1, "Duração do Frame Atual: [%d]", cur_frame_duration);
 		textprintf_ex(buffer, font, 5, 55, makecol(255,255,255), -1, "Frame na Sequencia: [%d]", cur_frame);
 		textprintf_ex(buffer, font, 5, 65, makecol(255,255,255), -1, "Sentido Direita: [%d]", !invertDraw);
+    textprintf_ex(buffer, font, 5, 75, makecol(255,255,255), -1, "Rotacao: [%d]", rotations[cur_rotation]);
 
 		blit(buffer, screen, 0,0,0,0, SCREEN_W, SCREEN_H);
 		clear_bitmap(buffer);
