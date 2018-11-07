@@ -83,11 +83,13 @@ void MovingFlame::MovingFlameFragment::logicType1()
   }
 
   int dx = abs(this->x - (target_x[current_target]*32));
-  int dy = abs(this->y - (target_y[current_target]*32));
+  int dy = abs((this->y-15) - (target_y[current_target]*32));
   int dist = sqrt(pow(dx,2) + pow(dy,2));
-  fprintf(stderr,"dist[%d]\n",dist);
-  if (dist <= 5)
+
+  if (dist <= 15)
   {
+    this->x = new_x[current_target];
+    this->y = new_y[current_target];
     rotation = target_rotation[current_target];
     current_target++;
   }
@@ -219,9 +221,9 @@ MovingFlame::MovingFlame(const Stage & stage, int x, int y, void * param)
     int ypos = 14 * 32;
 
     fragments[0] = cur_stage->createCharacter(mm_tile_actions::MOVING_FLAME_FRAGMENT, xpos,ypos, 0,0, (void*)20);
-    fragments[1] = cur_stage->createCharacter(mm_tile_actions::MOVING_FLAME_FRAGMENT, xpos,ypos, 0,0, (void*)40);
-    fragments[2] = cur_stage->createCharacter(mm_tile_actions::MOVING_FLAME_FRAGMENT, xpos,ypos, 0,0, (void*)60);
-    fragments[3] = cur_stage->createCharacter(mm_tile_actions::MOVING_FLAME_FRAGMENT, xpos,ypos, 0,0, (void*)80);
+    fragments[1] = cur_stage->createCharacter(mm_tile_actions::MOVING_FLAME_FRAGMENT, xpos,ypos, 0,0, (void*)60);
+    fragments[2] = cur_stage->createCharacter(mm_tile_actions::MOVING_FLAME_FRAGMENT, xpos,ypos, 0,0, (void*)100);
+    fragments[3] = cur_stage->createCharacter(mm_tile_actions::MOVING_FLAME_FRAGMENT, xpos,ypos, 0,0, (void*)140);
 
     TemporaryCharacterList::mm_tempCharacterLst.push_back(fragments[0]);
     TemporaryCharacterList::mm_tempCharacterLst.push_back(fragments[1]);

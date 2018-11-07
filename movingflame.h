@@ -30,15 +30,17 @@ public:
 
     enum {ACTIVE, DEAD, DELAY};
 
+    const int target_x[4] = {106, 100, 100, 109};
+    const int target_y[4] = {21,  20,  25,  24};
+    const int new_x[4] = {107*32-15, 100*32, 100*32, 108*32+2};
+    const int new_y[4] = {20*32+16,  20*32+16,  24*32+16,  24*32+16};
+    const int target_rotation[4] = {64, 0, 196, 0};
   private:
     int rotation;
     unsigned long delay;
     unsigned long old_delay;
     unsigned long ticks;
 
-    const int target_x[4] = {106, 100, 100, 109};
-    const int target_y[4] = {21,  20,  25,  24};
-    const int target_rotation[4] = {64, 0, 196, 0};
     int current_target;
   };
 

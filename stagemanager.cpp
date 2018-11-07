@@ -112,6 +112,19 @@ void StageManager::doMegamanSpawning(BITMAP * buffer, FONT * mm_font)
   player->setAnimSeq(Player::SPAWNING);
   player->curAnimFrame = 0;
 
+  clear_bitmap(buffer);
+  stage->draw(buffer, true, false, true);
+  player->calcScreenCoords();
+  player->drawCharacter(buffer);
+  stage->draw(m_buffer, true, false, false);
+  blit(buffer,screen,0,0,0,0,SCREEN_W,SCREEN_H);
+#ifndef DEBUG
+  textout_centre_ex(screen, mm_font, "READY",
+                    SCREEN_W/2, SCREEN_H/2,
+                    makecol(255,255,255), -1);
+  rest(3000);
+#endif
+
   bool goingToCheckpoint = true;
   while(goingToCheckpoint == true && animCount < 4)
   {
@@ -385,13 +398,6 @@ void StageManager::play()
     camera->y = ((int)player->y / mm_graphs_defs::UTIL_H) * mm_graphs_defs::UTIL_H;
     stage->doCamera(*camera);
     stage->resetReachMaxX();
-
-#ifndef DEBUG
-    textout_centre_ex(screen, mm_font, "READY",
-                      SCREEN_W/2, SCREEN_H/2,
-                      makecol(255,255,255), -1);
-    rest(3000);
-#endif
 
     doMegamanSpawning(m_buffer, mm_font);
     //TemporaryCharacterList::mm_tempCharacterLst.remove_if(tempCharacterClean);
