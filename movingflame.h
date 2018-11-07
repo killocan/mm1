@@ -26,11 +26,20 @@ public:
 
     void resetState();
     void logicType0();
+    void logicType1();
 
-    enum {ACTIVE, DEAD};
+    enum {ACTIVE, DEAD, DELAY};
 
   private:
     int rotation;
+    unsigned long delay;
+    unsigned long old_delay;
+    unsigned long ticks;
+
+    const int target_x[4] = {106, 100, 100, 109};
+    const int target_y[4] = {21,  20,  25,  24};
+    const int target_rotation[4] = {64, 0, 196, 0};
+    int current_target;
   };
 
   MovingFlame(const Stage & stage, int x, int y, void * param);
