@@ -341,6 +341,12 @@ void Character::drawCharacter(BITMAP * bmp)
   }
 }
 
+void Character::drawCharacter(BITMAP *bmp, int rotation)
+{
+  int curSpriteFrame = anim_seqs[curAnimSeq][curAnimFrame].frameNumber;
+  rotate_sprite(bmp, this->spriteSheet->getFrame(curSpriteFrame), this->sx, this->sy, itofix(rotation));
+}
+
 int Character::getFrameH()
 {
   int curSpriteFrame = anim_seqs[curAnimSeq][curAnimFrame].frameNumber;

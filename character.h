@@ -46,6 +46,7 @@ class Character
     virtual void firingOnJump(); // What to do firing during a jump?
 
     virtual void drawCharacter(BITMAP * bmp);
+    virtual void drawCharacter(BITMAP * bmp, int rotation);
 
     // Return curr frame, frame_w & frame_h(logic size not the real one)
     virtual BITMAP * getFrame(); // Virtual, so subclasses could manipulate and deliver customized bitmaps for colision check.
