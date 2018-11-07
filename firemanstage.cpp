@@ -61,9 +61,12 @@ void FireManStage::setupStage()
                                                      110*32, 9*32, 0,0, (void*)sectors);
   characters_vec.push_back(pKillerBullet);
 
-  Character * pMovingFlame = stage->createCharacter(mm_tile_actions::MOVING_FLAME,
+  Character * pMovingFlame0 = stage->createCharacter(mm_tile_actions::MOVING_FLAME,
                                                     110*32, 31*32, 0,0, (void*)NULL);
-  characters_vec.push_back(pMovingFlame);
+  Character * pMovingFlame1 = stage->createCharacter(mm_tile_actions::MOVING_FLAME,
+                                                    110*32, 16*32, 0,0, (void*)1);
+  characters_vec.push_back(pMovingFlame0);
+  characters_vec.push_back(pMovingFlame1);
 
   bossWarningTiles.push_back(8);
   bossWarningTiles.push_back(18);
