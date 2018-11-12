@@ -55,6 +55,7 @@
 #include "fireman.h"
 
 #include "movingflame.h"
+#include "disappearingblock.h"
 
 static volatile int update_scroll = 0;
 static void screenscroll_timer()
@@ -1128,6 +1129,16 @@ Character * Stage::createCharacter(int TYPE, int x, int y, int vx, int vy, void 
     case mm_tile_actions::MOVING_FLAME_FRAGMENT:
     {
       cur_character = new MovingFlame::MovingFlameFragment(*this, x, y, param);
+    }
+    break;
+    case mm_tile_actions::TILE_TIMER_PLATFORM:
+    {
+      cur_character = new DisappearingBlock(*this, x, y, param);
+    }
+    break;
+    case mm_tile_actions::TILE_TIMER_PLATFORM_FRAGMENT:
+    {
+      cur_character = new DisappearingBlock::DisappearingBlockFragment(*this, x, y, param);
     }
     break;
   }

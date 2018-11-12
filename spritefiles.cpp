@@ -32,7 +32,7 @@ namespace mm_spritefiles
     "./game_data/octopusbattery_seq.dat", //H
     "./game_data/octopusbattery_seq.dat", //V
     "./game_data/screwbomber_seq.dat",
-    "./game_data/platform.dat",
+    "./game_data/disappearingblock_seq.dat",
     "./game_data/move_platform_seq.dat",
     "./game_data/sparkle_seq.dat",
     "./game_data/lightning_seq.dat",
