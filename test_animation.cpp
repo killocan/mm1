@@ -223,7 +223,7 @@ void update_game_logic_tick()
   game_logic_tick = 1;
 }
 
-int rotations[] = {0, 64, 128, 196};
+int rotations[] = {0, 64, 128, 192};
 int cur_rotation = 0;
 bool rotation_mode = false;
 int main(int argc, char ** argv)
