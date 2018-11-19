@@ -24,7 +24,7 @@ int main(int argc, char ** argv)
 	x = 0;
 	putpixel(caixas, 0,0, makecol(255,0,0));
 	putpixel(caixas, 1,0, makecol(255,0,0));
-	for (i = 0; i < 11; ++i)
+	for (i = 0; i < q; ++i)
 	{
 		rectfill(caixas, x, 1, x+w-1, h, makecol(255,0,255));
 		x += w+1;
