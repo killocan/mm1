@@ -9,3 +9,4 @@
 - Fases do cutman, bombman, electman, iceman
 - IA dos chefes
 - Fases do DR WILLY
+- Add 10,000 points to score if it was a rematch (FROM ASM)
