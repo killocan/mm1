@@ -77,7 +77,7 @@ void MovingFlame::MovingFlameFragment::logicType1()
     case 64:
       this->x -= this->velx;
     break;
-    case 196:
+    case 192:
       this->x += this->velx;
     break;
   }
