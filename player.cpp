@@ -41,6 +41,8 @@ Player::Player(const Stage & stage) : Character(stage, 0), lives(2)
   bDying = false;
   dyingTimer = 0;
   dieStep = 0;
+
+  conPlayer = NULL;
 }
 
 void Player::reset()
@@ -78,6 +80,8 @@ void Player::reset()
   dieStep = 0;
 
   touchSpike = false;
+
+  conPlayer = NULL;
 }
 
 void Player::forceAnimation()
@@ -103,7 +107,7 @@ void Player::hit(mm_weapons::weapon_st * pWeapon)
     return;
   }
 
-  //fprintf(stderr,"> Player HIT! By bullet[%d]\n", pWeapon->weapon);
+  fprintf(stderr,"> Player HIT! By bullet[%d]\n", pWeapon->weapon);
 }
 
 void Player::hit(Character * pCharacter)
@@ -157,12 +161,25 @@ void Player::hit(Character * pCharacter)
 
   // Do not cause harm to megaman.
   if (pCharacter->type == mm_spritefiles::MOVING_PLATFORM_SPRITES ||
-      pCharacter->type == mm_spritefiles::FOOTHOLDER_SPRITES)
+      pCharacter->type == mm_spritefiles::FOOTHOLDER_SPRITES ||
+      pCharacter->type == mm_spritefiles::TIMER_PLATFORM_SPRITES)
   {
-    bool bOverPlatform = abs((this->y+mm_player_defs::PLAYERHEIGHT) - pCharacter->y) < 15;
+    bool bOverPlatform = (y < pCharacter->y) && abs((this->y+mm_player_defs::PLAYERHEIGHT) - pCharacter->y) < 15;
+    if (pCharacter->type == mm_spritefiles::TIMER_PLATFORM_SPRITES)
+    {
+      /*if (bOverPlatform == false)
+      {
+        if (x < pCharacter->x)
+          x -= velx;
+        else
+          x += velx;
+      }*/
+    }
+
     if ((this->vely >= 0) && (pCharacter->isPlatform == true))
     {
-      int offset = pCharacter->type == mm_spritefiles::MOVING_PLATFORM_SPRITES ? 4 : 3;
+      int offset = (pCharacter->type == mm_spritefiles::MOVING_PLATFORM_SPRITES) ? 4 : 3;
+
       if (bOverPlatform == true)// && pCharacter->isPlatform == true)
       {
         this->y = pCharacter->y-mm_player_defs::PLAYERHEIGHT + offset;
@@ -390,7 +407,9 @@ void Player::normalLogic()
         if(!collisionVer((x+utilX)+velx+utilXLen, y, tilecoordx, tilecoordy, tiletype))
         {
           if (curAnimSeq != Player::FIRINGSTILLHAND)
-            x += velx;
+          {
+              x += velx;
+          }
         }
       }
     }
@@ -722,6 +741,7 @@ void Player::doLogic()
   else
   {
     normalLogic();
+
     onPlatform = false;
   }
 }
