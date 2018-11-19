@@ -16,8 +16,17 @@ public:
   class DisappearingBlockFragment : public Character
   {
   public:
+    struct DisappearingBlockSetupParam
+    {
+      int x,y;
+      unsigned long delayFirstShow;
+      unsigned long delayOnScreen;
+      unsigned long delayNextShow;
+    };
+
     DisappearingBlockFragment(const Stage & stage, int x, int y, void * param);
 
+    virtual void drawCharacter(BITMAP * bmp);
     virtual void doGravitation();
     virtual void doLogic();
     virtual void checkOnCamera();
@@ -28,10 +37,11 @@ public:
     enum {WAITING1, SHOWING, ALIVE, WAITING2, DEAD};
 
   private:
-    unsigned long delay1;
-    unsigned long delay2;
-    unsigned long delay;
+    unsigned long delayFirstShow;
+    unsigned long delayOnScreen;
+    unsigned long delayNextShow;
     unsigned long ticks;
+    bool firstShow;
   };
 
   DisappearingBlock(const Stage & stage, int x, int y, void * param);

@@ -378,7 +378,8 @@ bool Character::handleAnimation(bool * bAnimationEnded)
       defrost();
     }
 
-    // Either or not the anim cicle ended.
+    // Either or not the full anim cicle ended, the function itself
+    // returns based on current frame not whole animation cycle.
     bEnded = this->nextAnimFrame();
 
     if (bAnimationEnded != NULL)

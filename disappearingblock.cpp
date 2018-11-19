@@ -30,14 +30,15 @@ DisappearingBlock::DisappearingBlockFragment::DisappearingBlockFragment(const St
   this->old_x = x;
   this->old_y = y;
 
-  if (param != 0)
-  {
-    delay = (unsigned long) param;
-  }
+  DisappearingBlockSetupParam * p = (DisappearingBlockSetupParam*) param;
+  this->delayFirstShow = p->delayFirstShow;
+  this->delayOnScreen  = p->delayOnScreen;
+  this->delayNextShow  = p->delayNextShow;
 
-  velx = vely = 6.0f;
+  this->ticks           = Clock::clockTicks;
+  this->firstShow       = true;
 
-  isFacingRight = false;
+  isFacingRight = true;
 
   colorOffset = cur_stage->getOffset(mm_spritefiles::TIMER_PLATFORM_SPRITES);
   setAnimSeq(colorOffset + DisappearingBlock::DisappearingBlockFragment::WAITING1);
@@ -46,9 +47,15 @@ DisappearingBlock::DisappearingBlockFragment::DisappearingBlockFragment(const St
 
   curState = DisappearingBlock::DisappearingBlockFragment::WAITING1;
 
-  canCollidePlayer = true;
-
   alive = true;
+}
+
+void DisappearingBlock::DisappearingBlockFragment::drawCharacter(BITMAP * bmp)
+{
+  int tempY = sy;
+  sy += 5;
+  Character::drawCharacter(bmp);
+  sy = tempY;
 }
 
 void DisappearingBlock::DisappearingBlockFragment::doGravitation()
@@ -72,6 +79,69 @@ void DisappearingBlock::DisappearingBlockFragment::doLogic()
 {
   if (cur_stage->horz_scroll)
     curState = DisappearingBlock::DisappearingBlockFragment::DEAD;
+
+  switch (curState)
+  {
+    case DisappearingBlock::DisappearingBlockFragment::WAITING1:
+    {
+      if ((Clock::clockTicks - this->ticks) > this->delayFirstShow)
+      {
+        setAnimSeq(colorOffset + DisappearingBlock::DisappearingBlockFragment::SHOWING);
+        this->curState = DisappearingBlock::DisappearingBlockFragment::SHOWING;
+      }
+    }
+    break;
+    case DisappearingBlock::DisappearingBlockFragment::SHOWING:
+    {
+      bool bAnimEnded;
+      handleAnimation(&bAnimEnded);
+
+      if (bAnimEnded)
+      {
+        setAnimSeq(colorOffset + DisappearingBlock::DisappearingBlockFragment::ALIVE);
+        this->curState = DisappearingBlock::DisappearingBlockFragment::ALIVE;
+        this->ticks = Clock::clockTicks;
+
+        int xd = ((int)this->x)/mm_graphs_defs::TILE_SIZE;
+        int yd = ((int)this->y)/mm_graphs_defs::TILE_SIZE;
+        cur_stage->setTileAction(xd,yd,mm_tile_actions::TILE_SOLID);
+      }
+    }
+    break;
+    case DisappearingBlock::DisappearingBlockFragment::ALIVE:
+    {
+      if ((Clock::clockTicks - this->ticks) > this->delayOnScreen)
+      {
+        setAnimSeq(colorOffset + DisappearingBlock::DisappearingBlockFragment::WAITING1);
+        this->curState = DisappearingBlock::DisappearingBlockFragment::WAITING2;
+        this->ticks = Clock::clockTicks;
+
+        int xd = ((int)this->x)/mm_graphs_defs::TILE_SIZE;
+        int yd = ((int)this->y)/mm_graphs_defs::TILE_SIZE;
+        cur_stage->setTileAction(xd,yd,mm_tile_actions::TILE_VOID);
+      }
+    }
+    break;
+    case DisappearingBlock::DisappearingBlockFragment::WAITING2:
+    {
+      if ((Clock::clockTicks - this->ticks) > this->delayNextShow)
+      {
+        setAnimSeq(colorOffset + DisappearingBlock::DisappearingBlockFragment::SHOWING);
+        this->curState = DisappearingBlock::DisappearingBlockFragment::SHOWING;
+        this->ticks = Clock::clockTicks;
+      }
+    }
+    break;
+    case DisappearingBlock::DisappearingBlockFragment::DEAD:
+    {
+      setAnimSeq(colorOffset + DisappearingBlock::DisappearingBlockFragment::WAITING1);
+
+      int xd = ((int)this->x)/mm_graphs_defs::TILE_SIZE;
+      int yd = ((int)this->y)/mm_graphs_defs::TILE_SIZE;
+      cur_stage->setTileAction(xd,yd,mm_tile_actions::TILE_VOID);
+    }
+    break;
+  }
 }
 
 void DisappearingBlock::DisappearingBlockFragment::respawn()
@@ -81,10 +151,8 @@ void DisappearingBlock::DisappearingBlockFragment::respawn()
   this->x = this->old_x;
   this->y = this->old_y;
 
-  {
-    ticks = Clock::clockTicks;
-    curState = DisappearingBlock::DisappearingBlockFragment::WAITING1;
-  }
+  ticks = Clock::clockTicks;
+  curState = DisappearingBlock::DisappearingBlockFragment::WAITING1;
 }
 
 void DisappearingBlock::DisappearingBlockFragment::resetState()
@@ -114,7 +182,24 @@ DisappearingBlock::DisappearingBlock(const Stage & stage, int x, int y, void * p
 
   if (param != NULL)
   {
+    std::vector<DisappearingBlock::DisappearingBlockFragment::DisappearingBlockSetupParam>
+      * blocks = (std::vector<DisappearingBlock::DisappearingBlockFragment::DisappearingBlockSetupParam> *) param;
 
+    std::vector<DisappearingBlock::DisappearingBlockFragment::DisappearingBlockSetupParam>::iterator i;
+    DisappearingBlock::DisappearingBlockFragment::DisappearingBlockSetupParam * blockSetup;
+    for (i = blocks->begin(); i != blocks->end(); ++i)
+    {
+      blockSetup = &(*i);
+      Character * p = cur_stage->createCharacter(mm_tile_actions::TILE_TIMER_PLATFORM_FRAGMENT,
+                                                 blockSetup->x, blockSetup->y, 0,0, (void*)blockSetup);
+      TemporaryCharacterList::mm_tempCharacterLst.push_back(p);
+      fragments.push_back(p);
+    }
+  }
+  else
+  {
+    fprintf(stderr,"ERROR! MISSING BLOCKS SETUP INFO.\n");
+    exit(-1);
   }
 }
 
@@ -126,10 +211,15 @@ DisappearingBlock::~DisappearingBlock()
 
 void DisappearingBlock::doLogic()
 {
-  /*switch(curState)
+  for (unsigned i = 0; i < fragments.size(); ++i)
   {
-
-  }*/
+    if (fragments[i]->curState == DisappearingBlock::DisappearingBlockFragment::DEAD)
+    {
+      DisappearingBlock::DisappearingBlockFragment * cur;
+      cur = dynamic_cast <DisappearingBlock::DisappearingBlockFragment *> (fragments[i]);
+      cur->respawn();
+    }
+  }
 }
 
 void DisappearingBlock::doGravitation()
@@ -152,10 +242,9 @@ BITMAP * DisappearingBlock::getFrame()
 
 void DisappearingBlock::respawn()
 {
-  /*
   DisappearingBlock::DisappearingBlockFragment * cur;
 
-  for (int i = 0; i < 4; ++i)
+  for (unsigned i = 0; i < fragments.size(); ++i)
   {
     if (fragments[i]->curState == DisappearingBlock::DisappearingBlockFragment::DEAD)
     {
@@ -163,5 +252,4 @@ void DisappearingBlock::respawn()
       cur->resetState();
     }
   }
-  */
 }

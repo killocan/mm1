@@ -11,6 +11,8 @@ class IceManStage : public StageManager
 {
   public:
     IceManStage();
-  protected:
+    virtual void setupStage();
+
+protected:
     SceneSoundManager * CreateSoundManager();
 };
