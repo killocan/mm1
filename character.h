@@ -74,6 +74,8 @@ class Character
     virtual void checkOnCamera();
     virtual bool canJumpAgain();
 
+    int getCurState();
+
     float x, y;
     float old_x, old_y;
     int sx, sy;

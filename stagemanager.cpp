@@ -158,18 +158,15 @@ void StageManager::doMegamanSpawning(BITMAP * buffer, FONT * mm_font)
 
     if (stage->has_fg_tiles == false)
     {
-      //stage->draw(buffer, *camera, false);
       stage->draw(buffer, false);
       player->calcScreenCoords();//*camera);
       player->drawCharacter(buffer);
     }
     else
     {
-      //stage->draw(buffer, *camera, true, false, true);
       stage->draw(buffer, true, false, true);
       player->calcScreenCoords();//*camera);
       player->drawCharacter(buffer);
-      //stage->draw(m_buffer, *camera, true, false, false);
       stage->draw(m_buffer, true, false, false);
     }
 
@@ -182,23 +179,6 @@ void StageManager::doMegamanSpawning(BITMAP * buffer, FONT * mm_font)
   //Stand still sequence.
   player->setAnimSeq(Player::STANDSTILL);
 }
-
-#if 0
-void StageManager::doDraw()
-{
-  Character * curr_character = NULL;
-  std::vector<Character *>::iterator it;
-
-  stage->draw(m_buffer, *camera);
-
-  for (it = characters_vec.begin(); it != characters_vec.end(); ++it)
-  {
-    curr_character = *it;
-    curr_character->calcScreenCoords(*camera);
-    curr_character->drawCharacter(m_buffer);
-  }
-}
-#endif
 
 /**
  * Check for collisions between player bullets and enemies AND
@@ -284,7 +264,8 @@ static void bhmode(BITMAP * bmp)
     for (uint32_t x = 0; x < wsize; x+=sizeof(uint32_t))
     {
       color = bmp_read32(pxr+x);
-      // Should be divided by 3, but i'm doing it divided by 4, just to avoid a division (big time on fps usage +/- 70fps gain)
+      // Should be divided by 3, but i'm doing it divided by 4(bit shiffting),
+      // just to avoid a division (big time on fps usage +/- 70fps gain)
       color = (((unsigned char)(color)) + ((unsigned char)(color>>8)) + ((unsigned char)(color>>16))) >> 2;
       color = color | (color << 8) | (color << 16);
       bmp_write32(pxw+x, color);
@@ -354,7 +335,7 @@ static bool tempCharacterClean(const Character* value)
 void StageManager::play()
 {
   stage  = new Stage(getStageFilePath(), *camera, &player);//, characters_vec);
-  setupStage(); // Workaround :)
+  setupStage();
   stage->createEnemies(characters_vec); // Load all enemys.
 
   ssm        = CreateSoundManager();
@@ -405,11 +386,13 @@ void StageManager::play()
     playing = true;
     while(playing == true)
     {
+#ifdef DEBUG
       if (key[KEY_Q])
       {
         playing = !(game_over = true);
         break;
       }
+#endif
 
       if (key[KEY_P] && weapon_menu == false)
       {

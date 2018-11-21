@@ -368,21 +368,10 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
 
   *player = new Player(*this);
   Player * cur_player = m_player = *player;
-  cur_player->sx = 0;
-  cur_player->sy = 0;
   cur_player->x = waypoints[cur_waypoint].x;
   cur_player->y = waypoints[cur_waypoint].y;
   cur_player->old_x = cur_player->x;
   cur_player->old_y = cur_player->y;
-  cur_player->h = mm_player_defs::PLAYERHEIGHT;
-  cur_player->w = mm_player_defs::PLAYERWIDTH;
-  cur_player->velx = mm_player_defs::VELMOVING;
-  cur_player->vely = 0;
-  cur_player->isFacingRight  = true;
-  cur_player->isFacingDown   = false;
-  cur_player->lockjump   = false;
-  cur_player->grabstair  = false;
-  cur_player->overstair  = false;
 
 #ifdef DEBUG
   fprintf(stderr,"Load weapons.\n");
@@ -804,7 +793,7 @@ bool Stage::doCamera(Camera & camera)
     {
       //#warning TODO: VER COM CUIDADO!
       // Only scroll UP if megaman is using the stair.
-      if (m_player->grabstair == true)
+      if (m_player->grabstair == true && m_player->getCurState() == Player::ONSTAIR)
       {
         horz_scroll = true;
         dir = -1;
@@ -823,7 +812,7 @@ bool Stage::doCamera(Camera & camera)
     if (scrollDelay == 7)
     {
 #ifdef DEBUG
-      fprintf(stderr,"Stage::doCamera - atualizando scrool vertical [%d]\n", scroll_count);
+      fprintf(stderr,"Stage::doCamera - atualizando scrool vertical [%d] \n", scroll_count);
 #endif
 
       if (scroll_count < (mm_graphs_defs::TILES_Y*2))

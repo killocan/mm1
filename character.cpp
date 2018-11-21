@@ -444,6 +444,11 @@ void Character::defrost()
   return;
 }
 
+int Character::getCurState()
+{
+  return curState;
+}
+
 int Character::getCurrFrameDuration()
 {
   return anim_seqs[curAnimSeq][curAnimFrame].frameDuration;

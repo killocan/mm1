@@ -22,7 +22,7 @@ Player::Player(const Stage & stage) : Character(stage, 0), lives(2)
 {
   lockJumpAccel = false;
   curWeapon     = mm_weapons::W_MEGA_BUSTER;
-  curState      = 0;
+  curState      = Player::SPAWNING;
   alive         = true;
 
   isGettingOut  = false;
@@ -43,6 +43,18 @@ Player::Player(const Stage & stage) : Character(stage, 0), lives(2)
   dieStep = 0;
 
   conPlayer = NULL;
+
+  this->sx = 0;
+  this->sy = 0;
+  this->h = mm_player_defs::PLAYERHEIGHT;
+  this->w = mm_player_defs::PLAYERWIDTH;
+  this->velx = mm_player_defs::VELMOVING;
+  this->vely = 0;
+  this->isFacingRight  = true;
+  this->isFacingDown   = false;
+  this->lockjump   = false;
+  this->grabstair  = false;
+  this->overstair  = false;
 }
 
 void Player::reset()
@@ -58,7 +70,7 @@ void Player::reset()
 
   lockJumpAccel = false;
   curWeapon     = mm_weapons::W_MEGA_BUSTER;
-  curState      = 0;
+  curState      = Player::SPAWNING;
   alive         = true;
 
   isGettingOut  = false;
