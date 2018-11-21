@@ -1,12 +1,12 @@
-- Inimigo que corre pelo background da fase do fireman
-- Plataforma que desaparece com o tempo
+X Plataforma que desaparece com o tempo
 - CMAKE
-- Arma do gutsman
 - Magnetic gun
+- Arma do gutsman
+- Mover criação de partes do picket crazyrazy watcher... para dentro da classe do mesmo e tirar do stage.cpp
 - Corrida do megaman aceleracao gradual. (Ajustar corrida para comecar com 1 px depois passar para 3 quando ja correndo.)
 - Chao de gelo e acelerecao correpondente para fase do iceman
 - Waypoints
 - Fases do cutman, bombman, electman, iceman
 - IA dos chefes
 - Fases do DR WILLY
-- Add 10,000 points to score if it was a rematch (FROM ASM)
+- Add 10,000 points to score if it was a rematch (FROM ASM finlandes)
