@@ -14,7 +14,7 @@ else
 			LDFLAGS=./libs/linux/libalmp3.a `allegro-config --libs`
 		endif
 
-	CFLAGS=-c -Wall -I./libs_inc
+	CFLAGS=-c -Wall -I./libs_inc -std=c++11
 	RM=rm -f
 endif
 
