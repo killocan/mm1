@@ -793,7 +793,8 @@ bool Stage::doCamera(Camera & camera)
     {
       //#warning TODO: VER COM CUIDADO!
       // Only scroll UP if megaman is using the stair.
-      if (m_player->grabstair == true && m_player->getCurState() == Player::ONSTAIR)
+      if (m_player->grabstair == true &&
+          (m_player->getCurAnimSeqState() == Player::ONSTAIR || m_player->getCurAnimSeqState() == Player::UPDOWNSTAIR))
       {
         horz_scroll = true;
         dir = -1;
