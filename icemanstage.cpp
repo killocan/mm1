@@ -28,7 +28,7 @@ void IceManStage::setupStage()
 
   DisappearingBlock::DisappearingBlockFragment::DisappearingBlockSetupParam block1;
   block1.x = 24<<5;
-  block1.y = 9<<5;
+  block1.y = 10<<5;
   block1.delayFirstShow = 10;
   block1.delayOnScreen = 120;
   block1.delayNextShow = 120;

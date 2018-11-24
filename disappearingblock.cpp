@@ -48,6 +48,8 @@ DisappearingBlock::DisappearingBlockFragment::DisappearingBlockFragment(const St
   curState = DisappearingBlock::DisappearingBlockFragment::WAITING1;
 
   alive = true;
+
+  canCollidePlayer = true;
 }
 
 void DisappearingBlock::DisappearingBlockFragment::drawCharacter(BITMAP * bmp)
@@ -86,6 +88,8 @@ void DisappearingBlock::DisappearingBlockFragment::doLogic()
     {
       if ((Clock::clockTicks - this->ticks) > this->delayFirstShow)
       {
+        Sounds::mm_sounds->play(DBLOCK);
+
         setAnimSeq(colorOffset + DisappearingBlock::DisappearingBlockFragment::SHOWING);
         this->curState = DisappearingBlock::DisappearingBlockFragment::SHOWING;
       }
@@ -126,6 +130,8 @@ void DisappearingBlock::DisappearingBlockFragment::doLogic()
     {
       if ((Clock::clockTicks - this->ticks) > this->delayNextShow)
       {
+        Sounds::mm_sounds->play(DBLOCK);
+
         setAnimSeq(colorOffset + DisappearingBlock::DisappearingBlockFragment::SHOWING);
         this->curState = DisappearingBlock::DisappearingBlockFragment::SHOWING;
         this->ticks = Clock::clockTicks;

@@ -179,34 +179,35 @@ void Player::hit(Character * pCharacter)
     bool bOverPlatform = (y < pCharacter->y) && abs((this->y+mm_player_defs::PLAYERHEIGHT) - pCharacter->y) < 15;
     if (pCharacter->type == mm_spritefiles::TIMER_PLATFORM_SPRITES)
     {
-      /*if (bOverPlatform == false)
+      if (this->y+10 > pCharacter->y)
       {
-        if (x < pCharacter->x)
-          x -= velx;
+        if (isFacingRight)
+        {
+          this->x = (pCharacter->x - this->w)-6;
+          return;
+        }
         else
-          x += velx;
-      }*/
+        {
+          this->x = ((pCharacter->x + pCharacter->w) - this->utilX)+2;
+          return;
+        }
+      }
     }
 
     if ((this->vely >= 0) && (pCharacter->isPlatform == true))
     {
       int offset = (pCharacter->type == mm_spritefiles::MOVING_PLATFORM_SPRITES) ? 4 : 3;
 
-      if (bOverPlatform == true)// && pCharacter->isPlatform == true)
+      if (bOverPlatform == true)
       {
         this->y = pCharacter->y-mm_player_defs::PLAYERHEIGHT + offset;
         onPlatform = true;
         this->conPlayer = pCharacter;
       }
-      else
-      {
-        //pCharacter->hasPlayer = false;
-      }
       return;
     }
     else
     {
-      //pCharacter->hasPlayer = false;
       return;
     }
   }

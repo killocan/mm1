@@ -1,6 +1,6 @@
 /* Allegro datafile object indexes, produced by grabber v4.4.2, Unix */
 /* Datafile: /home/marcos/megaman/sounds/mm_sfx/sfx.dat */
-/* Date: Tue Oct 30 22:34:38 2018 */
+/* Date: Sat Nov 24 01:12:34 2018 */
 /* Do not hand edit! */
 
 #define BOSS_SELECTED                    0        /* SAMP */
@@ -23,7 +23,7 @@
 #define SAMPLE_17                        17       /* SAMP */
 #define PLATFORM_MOVE                    18       /* SAMP */
 #define SAMPLE_19                        19       /* SAMP */
-#define SAMPLE_20                        20       /* SAMP */
+#define DBLOCK                           20       /* SAMP */
 #define SAMPLE_21                        21       /* SAMP */
 #define DOOR                             22       /* SAMP */
 #define ROLLING_CUTTER                   23       /* SAMP */
