@@ -10,3 +10,5 @@ create_frames_bitmap
 test_animation
 vsync.dat
 .idea*
+cmake-build-debug
+cmake-build-debug/*

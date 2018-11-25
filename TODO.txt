@@ -1,5 +1,3 @@
-X Plataforma que desaparece com o tempo
-- CMAKE
 - Magnetic gun
 - Arma do gutsman
 - Mover criação de partes do picket crazyrazy watcher... para dentro da classe do mesmo e tirar do stage.cpp
