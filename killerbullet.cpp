@@ -5,8 +5,8 @@
 
 #include <allegro.h>
 #define _USE_MATH_DEFINES
-#include <math.h>
-#include <stdio.h>
+#include <cmath>
+#include <cstdio>
 
 #include "killerbullet.h"
 

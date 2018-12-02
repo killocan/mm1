@@ -4,7 +4,7 @@
 */
 
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 
 #include "moveplatform.h"
 #include "stage.h"

@@ -3,9 +3,6 @@
  * http://killocan.blogspot.com
 */
 
-#include <math.h>
-#include <stdio.h>
-
 #include "bigeye.h"
 #include "stage.h"
 #include "tileactions.h"
@@ -28,8 +25,6 @@ BigEye::BigEye(const Stage & stage, int x, int y) : Character(stage, mm_spritefi
 
   this->old_x = this->x;
   this->old_y = this->y;
-
-
 
   vely          = 1;
   overstair     = false;

@@ -4,7 +4,7 @@
 */
 
 #include "scenesoundmanager.h"
-#include <stdio.h>
+#include <cstdio>
 
 SceneSoundManager::SceneSoundManager(const std::string & fileName, int loop_ini, int track_end)
   : data(NULL), music(NULL), curDataOk(false), bIsPlaying(false)

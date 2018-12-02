@@ -6,7 +6,7 @@
 #include "mm_math.h"
 #include "defines.h"
 #include <allegro.h>
-#include <stdio.h>
+#include <cstdio>
 
 void MM_Math::CalculateVector2D(int p1x, int p1y, int p2x, int p2y, double & velx, double & vely)
 {

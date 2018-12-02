@@ -1,7 +1,5 @@
 CC=g++
 
-NO_PIE := "$(shell gcc -v 2>&1 | grep -o -e '[^ ]*pie')"
-
 ifneq (,$(findstring Windows,$(PATH)))
 	LDFLAGS=./libs/win32/libalmp3.a -lalleg
 	CFLAGS=-c -Wall -I./libs_inc
@@ -14,6 +12,7 @@ else
 			LDFLAGS=./libs/linux/libalmp3.a `allegro-config --libs`
 		endif
 
+	NO_PIE := "$(shell gcc -v 2>&1 | grep -o -e '[^ ]*pie')"
 	CFLAGS=-c -Wall -I./libs_inc -std=c++11
 	RM=rm -f
 endif

@@ -3,8 +3,8 @@
  * http://killocan.blogspot.com
 */
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 
 #include "footholder.h"
 #include "stage.h"

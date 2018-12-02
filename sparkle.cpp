@@ -3,8 +3,8 @@
  * http://killocan.blogspot.com
 */
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 
 #include "sparkle.h"
 #include "stage.h"

@@ -3,7 +3,7 @@
  * http://killocan.blogspot.com
 */
 
-#include <stdio.h>
+#include <cstdio>
 #include "collision.h"
 
 bool Collision::pixelCollision(int object1X, int object1Y, BITMAP *sprite1, int object2X, int object2Y, BITMAP *sprite2,

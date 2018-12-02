@@ -8,7 +8,7 @@
 #include "spritefiles.h"
 #include "stage.h"
 
-#include <stdio.h>
+#include <cstdio>
 
 BonusPoint::BonusPoint(const Stage & stage, int x, int y, void * pTemp)
   : TempCharacter(stage, mm_spritefiles::BONUS_POINT_SPRITES)

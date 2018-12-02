@@ -5,7 +5,7 @@
 
 #include <allegro.h>
 #include <math.h>
-#include <stdio.h>
+#include <cstdio>
 
 #include "blader.h"
 #include "stage.h"

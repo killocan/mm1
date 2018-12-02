@@ -3,7 +3,7 @@
  * http://killocan.blogspot.com
 */
 
-#include <math.h>
+#include <cmath>
 
 #include "weapons.h"
 #include "tileactions.h"

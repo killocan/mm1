@@ -3,7 +3,7 @@
  * http://killocan.blogspot.com
 */
 
-#include <stdio.h>
+#include <iostream>
 
 #include "beak.h"
 #include "stage.h"
@@ -205,8 +205,8 @@ void Beak::adjustToWall(int x_map, int y_map)
       }
 
 #ifdef DEBUG
-      fprintf(stderr,"FINAL Beak: x=[%f] utilX=[%f] y=[%f] vely=[%f] h=[%f]\n",
-                                    x,     utilX,     y,     vely,     h);
+	  std::cerr << "FINAL Beak: x=[" << x << " utilX=[" << utilX << "] y=[" << y << "] vely=[" << vely << "] h=[" << h <<"]"
+		        << std::endl;
 #endif
       break;
     }

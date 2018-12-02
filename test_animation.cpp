@@ -1,6 +1,6 @@
 #include <vector>
 
-#include <stdio.h>
+#include <cstdio>
 #include <string>
 
 #include <allegro.h>

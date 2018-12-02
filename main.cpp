@@ -4,7 +4,7 @@
 */
 
 #include <allegro.h>
-#include <stdio.h>
+#include <cstdio>
 
 #include "defines.h"
 #include "globals.h"

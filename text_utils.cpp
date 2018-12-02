@@ -4,7 +4,7 @@
 */
 
 #include <allegro.h>
-#include <stdio.h>
+#include <cstdio>
 
 #include "text_utils.h"
     

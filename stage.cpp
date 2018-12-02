@@ -3,7 +3,7 @@
  * http://killocan.blogspot.com
 */
 
-#include <stdio.h>
+#include <cstdio>
 
 #include "stage.h"
 

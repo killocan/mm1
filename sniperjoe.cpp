@@ -3,8 +3,8 @@
  * http://killocan.blogspot.com
 */
 
-#include <math.h>
-#include <stdio.h>
+#include <cmath>
+#include <cstdio>
 
 #include "sniperjoe.h"
 #include "stage.h"

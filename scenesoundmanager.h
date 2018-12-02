@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include <limits.h>
-
 #include <allegro.h>
 #include <string>
 

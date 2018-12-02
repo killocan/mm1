@@ -4,8 +4,8 @@
 */
 
 #include <allegro.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 
 #include "menu.h"
 #include "globals.h"
