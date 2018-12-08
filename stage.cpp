@@ -50,6 +50,7 @@
 #include "hitexplosion.h"
 #include "explosionlittle.h"
 #include "megamanexplosion.h"
+#include "magneticbeam.h"
 
 #include "gutsman.h"
 #include "fireman.h"
@@ -1131,6 +1132,11 @@ Character * Stage::createCharacter(int TYPE, int x, int y, int vx, int vy, void 
       cur_character = new DisappearingBlock::DisappearingBlockFragment(*this, x, y, param);
     }
     break;
+	case mm_tile_actions::MAGNET_BEAM:
+	{
+		cur_character = new MagneticBeam(*this, x, y);
+	}
+	break;
   }
 
   return (cur_character);

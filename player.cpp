@@ -174,7 +174,8 @@ void Player::hit(Character * pCharacter)
   // Do not cause harm to megaman.
   if (pCharacter->type == mm_spritefiles::MOVING_PLATFORM_SPRITES ||
       pCharacter->type == mm_spritefiles::FOOTHOLDER_SPRITES ||
-      pCharacter->type == mm_spritefiles::TIMER_PLATFORM_SPRITES)
+      pCharacter->type == mm_spritefiles::TIMER_PLATFORM_SPRITES ||
+	  pCharacter->type == mm_spritefiles::WEAPONS_MAGNETIC)
   {
     bool bOverPlatform = (y < pCharacter->y) && abs((this->y+mm_player_defs::PLAYERHEIGHT) - pCharacter->y) < 15;
     if (pCharacter->type == mm_spritefiles::TIMER_PLATFORM_SPRITES)
