@@ -10,7 +10,7 @@
 #include "stage.h"
 #include "tileactions.h"
 #include "defines.h"
-
+#include "magneticbeamhandler.h"
 #include "scenesoundmanager.h"
 #include "globals.h"
 #include "globalgamestate.h"
@@ -20,6 +20,10 @@
 
 MagneticBeam::MagneticBeam(const Stage & stage, int x, int y) : Character(stage, mm_spritefiles::WEAPONS_MAGNETIC)
 {
+  this->pos = MagneticBeamHandler::instance()->addBeam(this);
+
+  this->commited = false;
+
   this->x = x;
   this->y = y;
   this->old_x = this->x;
@@ -60,12 +64,56 @@ void MagneticBeam::doLogic()
 	this->alive = false;
   }
 
-  if (cur_stage->m_player->fireKeyPressed)
+  if (cur_stage->m_player->fireKeyPressed && !commited)
   {
-	this->y = cur_stage->m_player->y + 20.0f;
+	calculateXY();
+  }
+  else
+  {
+    MagneticBeamHandler::instance()->commit();
+    commited = true;
   }
 }
 
 void MagneticBeam::doGravitation()
 {
+}
+
+void MagneticBeam::commit()
+{
+  commited = true;
+  MagneticBeamHandler::instance()->removeBeam(this);
+}
+
+void MagneticBeam::calculateXY()
+{
+  if (cur_stage->m_player->grabstair == false)
+  {
+    x = (float)(cur_stage->m_player->x + 72);
+    if (cur_stage->m_player->isFacingRight == false)
+    {
+      x -= 115.0f;
+    }
+
+    if (cur_stage->m_player->onground == true)
+    {
+      y = (float)(cur_stage->m_player->y + 32.0f);
+    }
+    else
+    {
+      y = (float)(cur_stage->m_player->y + 18.0f);
+    }
+  }
+  else
+  {
+    x = (float)(cur_stage->m_player->x + 64.0f);
+    if (cur_stage->m_player->isFacingRight == false)
+    {
+      x -= 96.0f;
+    }
+
+    y = (float)(cur_stage->m_player->y + 21.0f);
+  }
+
+  this->x *= this->w * this->pos;
 }

@@ -11,7 +11,7 @@
 #include "defines.h"
 #include "spritefiles.h"
 #include "energybar.h"
-
+#include "magneticbeamhandler.h"
 #include "scenesoundmanager.h"
 #include "globals.h"
 #include "globalgamestate.h"
@@ -647,7 +647,8 @@ void Player::normalLogic()
     }
 
     //static bool fireKeyPressed = false;
-    if (key[KEY_A] && (fireKeyPressed == false || curWeapon == mm_weapons::W_PLATFORM_CREATOR))
+    if (key[KEY_A] &&
+       (fireKeyPressed == false || (curWeapon == mm_weapons::W_PLATFORM_CREATOR && MagneticBeamHandler::instance()->canCreateAgain())))
     {
       fireKeyPressed = true;
       fire();

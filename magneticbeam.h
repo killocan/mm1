@@ -20,7 +20,13 @@ public:
 
   virtual void doGravitation();
 
+  void commit();
+
   enum {STATIC, BLINKING};
 private:
+  void calculateXY();
+
   unsigned long lifetime;
+  bool commited;
+  int pos;
 };
