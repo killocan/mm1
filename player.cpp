@@ -42,6 +42,8 @@ Player::Player(const Stage & stage) : Character(stage, 0), lives(2)
   dyingTimer = 0;
   dieStep = 0;
 
+  fireKeyPressed = false;
+
   conPlayer = NULL;
 
   this->sx = 0;
@@ -92,6 +94,8 @@ void Player::reset()
   dieStep = 0;
 
   touchSpike = false;
+
+  fireKeyPressed = false;
 
   conPlayer = NULL;
 }
@@ -642,8 +646,8 @@ void Player::normalLogic()
       }
     }
 
-    static bool fireKeyPressed = false;
-    if (key[KEY_A] && fireKeyPressed == false)
+    //static bool fireKeyPressed = false;
+    if (key[KEY_A] && (fireKeyPressed == false || curWeapon == mm_weapons::W_PLATFORM_CREATOR))
     {
       fireKeyPressed = true;
       fire();
@@ -902,16 +906,15 @@ void Player::fire()
     break;
     case mm_weapons::W_PLATFORM_CREATOR:
     {
-      if ((GlobalGameState::playerShots.size() == 0) && (weapons[mm_weapons::W_PLATFORM_CREATOR] > 0))
-      {
-        weapons[mm_weapons::W_PLATFORM_CREATOR]--;
-        Sounds::mm_sounds->play(LIGHTNING);
+	  //weapons[mm_weapons::W_PLATFORM_CREATOR]--;
+	  Sounds::mm_sounds->play(LIGHTNING);
+	  //TODO: MUDAR o tamanho dele a cada iteracao, tipo lenght++ ate tocar numa parede
+	  //ou soltar o botao, fica mais facil gerenciar o xy. Criar metodo que retorna
+	  //se pode atirar de novo e evitar que nao saia da animacao de atirando.
+	  mm_weapons::createMagnetBeam(this);
 
-        mm_weapons::createMagnetBeam(this);
-
-        firing = true;
-        lastShot = Clock::clockTicks;
-      }
+	  firing = true;
+	  lastShot = Clock::clockTicks;
     }
     break;
     default:
@@ -922,11 +925,6 @@ void Player::fire()
       }
     break;
   }
-
-  //if ((firing == false)) //&& (Clock::clockTicks-30 > lastShot))
-  //{
-  //  firing = true;
-  //}
 }
 
 void Player::drawCharacter(BITMAP * bmp)

@@ -924,30 +924,30 @@ void mm_weapons::createMagnetBeam(Player *player)
 
   if (player->grabstair == false)
   {
-    x = (float)(player->x + 54);
+    x = (float)(player->x + 72);
     if (player->isFacingRight == false)
     {
-      x -= 75.0f;
+      x -= 115.0f;
     }
 
     if (player->onground == true)
     {
-      y = (float)(player->y + 22.0f);
+      y = (float)(player->y + 32.0f);
     }
     else
     {
-      y = (float)(player->y + 12.0f);
+      y = (float)(player->y + 18.0f);
     }
   }
   else
   {
-    x = (float)(player->x + 52.0f);
+    x = (float)(player->x + 64.0f);
     if (player->isFacingRight == false)
     {
-      x -= 58.0f;
+      x -= 96.0f;
     }
 
-    y = (float)(player->y + 12.0f);
+    y = (float)(player->y + 21.0f);
   }
 
   Character * magnet_beam = player->cur_stage->createCharacter(mm_tile_actions::MAGNET_BEAM, x, y, 0, 0, NULL);

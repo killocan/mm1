@@ -42,6 +42,8 @@ class Player : public Character
 
     bool lockJumpAccel;
 
+	bool fireKeyPressed;
+
     enum {
           SPAWNING, 
           STANDSTILL, 

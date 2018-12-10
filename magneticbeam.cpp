@@ -55,9 +55,14 @@ void MagneticBeam::doLogic()
   bool bAnimEnded;
   handleAnimation(&bAnimEnded);
 
-  if ((Clock::clockTicks - lifetime) > 200)
+  if ((Clock::clockTicks - lifetime) > 300)
   {
 	this->alive = false;
+  }
+
+  if (cur_stage->m_player->fireKeyPressed)
+  {
+	this->y = cur_stage->m_player->y + 20.0f;
   }
 }
 

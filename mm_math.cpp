@@ -11,8 +11,8 @@
 void MM_Math::CalculateVector2D(int p1x, int p1y, int p2x, int p2y, double & velx, double & vely)
 {
   // Calculates angle between p1 and p2
-  double co      = fabs(double(p2y - p1y));
-  double ca      = fabs(double(p2x - p1x));
+  double co      = fabs(double(p2y) - double(p1y));
+  double ca      = fabs(double(p2x) - double(p1x));
   double hip     = sqrt(pow(ca,2.0) + pow(co,2.0));
   double sinang  = co/hip;
   double angreal = asin(sinang);
