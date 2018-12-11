@@ -68,7 +68,7 @@ void MagneticBeamHandler::clear()
 
 bool MagneticBeamHandler::canCreateAgain()
 {
-  return false;
+  return true;
 }
 
 int MagneticBeamHandler::beamsCount()

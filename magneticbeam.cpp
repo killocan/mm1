@@ -82,7 +82,7 @@ void MagneticBeam::doGravitation()
 void MagneticBeam::commit()
 {
   commited = true;
-  MagneticBeamHandler::instance()->removeBeam(this);
+  //MagneticBeamHandler::instance()->removeBeam(this);
 }
 
 void MagneticBeam::calculateXY()
@@ -115,5 +115,5 @@ void MagneticBeam::calculateXY()
     y = (float)(cur_stage->m_player->y + 21.0f);
   }
 
-  this->x *= this->w * this->pos;
+  this->x += this->w * this->pos;
 }
