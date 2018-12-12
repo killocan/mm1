@@ -68,11 +68,6 @@ void MagneticBeamHandler::commit()
   canShootAgain = false;
 }
 
-void MagneticBeamHandler::clear()
-{
-  beams.clear();
-}
-
 bool MagneticBeamHandler::canCreateAgain()
 {
   return canShootAgain;
