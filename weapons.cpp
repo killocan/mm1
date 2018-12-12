@@ -19,6 +19,8 @@
 #include "collision.h"
 #include "scenesoundmanager.h"
 #include "sfx.h"
+#include "magneticbeamhandler.h"
+
 
 static void handleBombFragment(mm_weapons::weapon_st * pWeapon)
 {
@@ -920,6 +922,9 @@ void mm_weapons::createFireStorm(Character * character, int x, int y, float vx, 
 
 void mm_weapons::createMagnetBeam(Player *player)
 {
+  if (Clock::clockTicks - MagneticBeamHandler::instance()->lastInsert < 5)
+	return;
+
   float x, y;
 
   if (player->grabstair == false)

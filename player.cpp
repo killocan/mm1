@@ -683,6 +683,7 @@ void Player::normalLogic()
     }
     else if ((!key[KEY_A]) && (fireKeyPressed == true))
     {
+	  MagneticBeamHandler::instance()->newBeams();
       fireKeyPressed = false;
     }
   }
@@ -909,9 +910,7 @@ void Player::fire()
     {
 	  //weapons[mm_weapons::W_PLATFORM_CREATOR]--;
 	  Sounds::mm_sounds->play(LIGHTNING);
-	  //TODO: MUDAR o tamanho dele a cada iteracao, tipo lenght++ ate tocar numa parede
-	  //ou soltar o botao, fica mais facil gerenciar o xy. Criar metodo que retorna
-	  //se pode atirar de novo e evitar que nao saia da animacao de atirando.
+
 	  mm_weapons::createMagnetBeam(this);
 
 	  firing = true;

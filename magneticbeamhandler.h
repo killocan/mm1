@@ -25,6 +25,9 @@ public:
   void clear();
   bool canCreateAgain();
   int beamsCount();
+  void newBeams();
+
+  unsigned long lastInsert;
 
 private:
   MagneticBeamHandler();
@@ -32,4 +35,5 @@ private:
   static MagneticBeamHandler * instance_ptr;
   Stage * curStage;
   std::vector<MagneticBeam *> beams;
+  bool canShootAgain;
 };

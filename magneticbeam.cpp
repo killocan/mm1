@@ -59,7 +59,7 @@ void MagneticBeam::doLogic()
   bool bAnimEnded;
   handleAnimation(&bAnimEnded);
 
-  if ((Clock::clockTicks - lifetime) > 300)
+  if (commited && ((Clock::clockTicks - lifetime) > 200))
   {
 	this->alive = false;
   }
@@ -68,10 +68,17 @@ void MagneticBeam::doLogic()
   {
 	calculateXY();
   }
-  else
+  else if (commited == false)
   {
     MagneticBeamHandler::instance()->commit();
-    commited = true;
+	if (!cur_stage->m_player->fireKeyPressed) MagneticBeamHandler::instance()->newBeams();
+  }
+
+  int ta1 = cur_stage->tileActionUnnormalized(int(x) + 1.0f, int(y) + 1.0f);
+  int ta2 = cur_stage->tileActionUnnormalized(int(x) + int(w) - 1.0f, int(y) + 1.0f);
+  if (!commited && (ta1 == mm_tile_actions::TILE_SOLID || ta2 == mm_tile_actions::TILE_SOLID))
+  {
+	  MagneticBeamHandler::instance()->commit();
   }
 }
 
@@ -82,7 +89,7 @@ void MagneticBeam::doGravitation()
 void MagneticBeam::commit()
 {
   commited = true;
-  //MagneticBeamHandler::instance()->removeBeam(this);
+  lifetime = Clock::clockTicks;
 }
 
 void MagneticBeam::calculateXY()
@@ -115,5 +122,8 @@ void MagneticBeam::calculateXY()
     y = (float)(cur_stage->m_player->y + 21.0f);
   }
 
-  this->x += this->w * this->pos;
+  if (cur_stage->m_player->isFacingRight)
+    this->x += this->w * (this->pos - 1);
+  else
+	this->x -= this->w * (this->pos - 1);
 }
