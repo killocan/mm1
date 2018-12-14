@@ -8,6 +8,9 @@
 #include "character.h"
 #include "magneticbeam.h"
 #include "stage.h"
+#include "sfx.h"
+#include "scenesoundmanager.h"
+#include "weapons.h"
 
 MagneticBeamHandler * MagneticBeamHandler::instance_ptr = NULL;
 
@@ -35,6 +38,12 @@ void MagneticBeamHandler::setup(Stage * stage)
 int MagneticBeamHandler::addBeam(MagneticBeam * b)
 {
   int c = beams.size();
+  if (c == 0)
+  {
+    curStage->m_player->weapons[mm_weapons::W_PLATFORM_CREATOR]--;
+  	Sounds::mm_sounds->play(LIGHTNING);
+  }
+
   beams.push_back(b);
 
   lastInsert = Clock::clockTicks;

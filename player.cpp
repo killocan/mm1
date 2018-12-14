@@ -181,7 +181,7 @@ void Player::hit(Character * pCharacter)
       pCharacter->type == mm_spritefiles::TIMER_PLATFORM_SPRITES ||
 	  pCharacter->type == mm_spritefiles::WEAPONS_MAGNETIC)
   {
-    bool bOverPlatform = (y < pCharacter->y) && abs((this->y+mm_player_defs::PLAYERHEIGHT) - pCharacter->y) < 15;
+    bool bOverPlatform = (y < pCharacter->y && vely > 0) && abs((this->y+mm_player_defs::PLAYERHEIGHT) - pCharacter->y) < 15;
     if (pCharacter->type == mm_spritefiles::TIMER_PLATFORM_SPRITES)
     {
       if (this->y+10 > pCharacter->y)
@@ -908,10 +908,7 @@ void Player::fire()
     break;
     case mm_weapons::W_PLATFORM_CREATOR:
     {
-	  //weapons[mm_weapons::W_PLATFORM_CREATOR]--;
-	  Sounds::mm_sounds->play(LIGHTNING);
-
-	  mm_weapons::createMagnetBeam(this);
+      mm_weapons::createMagnetBeam(this);
 
 	  firing = true;
 	  lastShot = Clock::clockTicks;
