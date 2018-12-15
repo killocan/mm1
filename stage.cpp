@@ -55,6 +55,7 @@
 #include "gutsman.h"
 #include "fireman.h"
 
+#include "magneticbeamhandler.h"
 #include "movingflame.h"
 #include "disappearingblock.h"
 
@@ -82,6 +83,8 @@ Stage::Stage(std::string stage_path, Camera & camera, Player ** player)//, std::
   LOCK_VARIABLE(update_scroll);
   LOCK_FUNCTION(screenscroll_timer);
   install_int(screenscroll_timer, 40);
+
+  MagneticBeamHandler::instance()->setup(this);
 }
 
 Stage::~Stage()

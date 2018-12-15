@@ -908,10 +908,13 @@ void Player::fire()
     break;
     case mm_weapons::W_PLATFORM_CREATOR:
     {
-      mm_weapons::createMagnetBeam(this);
+	  if (weapons[mm_weapons::W_PLATFORM_CREATOR] > 0)
+  	  {
+		  mm_weapons::createMagnetBeam(this);
 
-	  firing = true;
-	  lastShot = Clock::clockTicks;
+  		  firing = true;
+		  lastShot = Clock::clockTicks;
+	  }
     }
     break;
     default:
