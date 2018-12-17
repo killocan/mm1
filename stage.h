@@ -32,7 +32,6 @@ class Stage
     void setTileAction(int x, int y, unsigned char action);
     void setTileNumber(int x, int y, unsigned char tile_number);
 
-    //void draw(BITMAP * bmp, const Camera & camera, bool hasFg, bool bg_only=true, bool bg=true);
     void draw(BITMAP * bmp, bool hasFg, bool bg_only=true, bool bg=true);
     void scrollForbid(Camera & camera);
     bool doCamera(Camera & camera);
@@ -43,7 +42,7 @@ class Stage
     BITMAP * getTile(unsigned int index);
 
 
-  // For any entity that wants to check collision agains the map.
+    // For any entity that wants to check collision agains the map.
     bool genericColHor(int x, int w, int y, int &tilecoordx, int &tilecoordy, bool going_down);
     bool genericColVer(int x, int y, int h, int &tilecoordx, int &tilecoordy);
 
@@ -66,7 +65,6 @@ class Stage
     bool hasMovingPlatform;
     std::vector<int> platformTiles;
 
-    //TODO: delete...
     void resetReachMaxX();
 
     void runtimeLoadCharacter(mm_spritefiles::SPRT_TYPE);
@@ -96,7 +94,6 @@ class Stage
 
     struct tiles_t
     {
-      //std::vector<RLE_SPRITE*> tile_img_rle;
       std::vector<BITMAP*> tile_img;
       std::vector<int> x_pos;
     };
@@ -114,8 +111,7 @@ class Stage
 
     std::map<int, int> offsetMap;
 
-    //inline void tileDraw(BITMAP * bmp, int tile_number, int x, int y);
     void loadTiles(const std::string & stage_file);
-    int load(const std::string & stage_path, Camera & camera, Player ** player); //, std::vector<Character *> & characters_vec);
+    int load(const std::string & stage_path, Camera & camera, Player ** player);
     int unload();
 };

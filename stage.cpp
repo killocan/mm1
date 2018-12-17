@@ -827,7 +827,7 @@ bool Stage::doCamera(Camera & camera)
 
         if (m_player->grabstair == true)
         {
-          m_player->y += (dir * 0.5f); //2);
+          m_player->y += (dir * 0.5f);
           m_player->forceAnimation();
         }
       }

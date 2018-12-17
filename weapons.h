@@ -80,7 +80,7 @@ namespace mm_weapons
     // x,y coord where collision happen.
     int xcol, ycol;
 
-    int life; // How far the weapon should live?
+    int life; // How long the weapon should live?
 
     unsigned long ticks; // to control time related stuff
 

@@ -73,15 +73,13 @@ class Player : public Character
     // Stair related stuff.
     bool isGettingOut;
     bool isGettingIn;
-    bool isHitAnimOn;
-
     // Hit animation
+    bool isHitAnimOn;
     bool bHide;
     bool bDraw;
     unsigned long blinkBegin;
     int blinkCount;
     int hitDir;
-
     // Dying animation
     bool bDying;
     unsigned long dyingTimer;
