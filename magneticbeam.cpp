@@ -54,8 +54,22 @@ BITMAP * MagneticBeam::getFrame()
   return (this->spriteSheet->getFrame(0));
 }
 
+void MagneticBeam::checkOnCamera()
+{
+  if (this->y < GlobalCamera::mm_camera->y || this->y > GlobalCamera::mm_camera->y+GlobalCamera::mm_camera->h)
+  {
+    alive = false;
+  }
+}
+
 void MagneticBeam::doLogic()
 {
+  if (cur_stage->horz_scroll)
+  {
+    alive = false;
+    return;
+  }
+
   bool bAnimEnded;
   handleAnimation(&bAnimEnded);
 

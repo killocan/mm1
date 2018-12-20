@@ -1,4 +1,3 @@
-- MagneticGun Out of camera.
 - Arma do gutsman
 - Ignorar colisao com tiles fora da camera
 - Mover criação de partes do picket crazyrazy watcher... para dentro da classe do mesmo e tirar do stage.cpp

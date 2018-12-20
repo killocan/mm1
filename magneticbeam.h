@@ -17,7 +17,7 @@ public:
   virtual void doLogic();
   virtual void drawCharacter(BITMAP * bmp);
   virtual BITMAP * getFrame();
-
+  virtual void checkOnCamera();
   virtual void doGravitation();
 
   void commit();
