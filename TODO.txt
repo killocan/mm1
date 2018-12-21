@@ -1,4 +1,4 @@
-- PicketMan (ajustar colisao horizontal para nao travar em paredes)
+- ajustar saida do magnetic beam
 - Ignorar colisao com tiles fora da camera
 - Arma do gutsman
 - Mover criação de partes do picket crazyrazy watcher... para dentro da classe do mesmo e tirar do stage.cpp

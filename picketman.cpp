@@ -63,16 +63,13 @@ PicketMan::PicketMan(const Stage & stage, int x, int y) : Character(stage, mm_sp
   this->old_x = this->x;
   this->old_y = this->y;
 
-  velx = -5;
-  if (cur_stage->m_player->x > this->x)
-    velx *= -1;
+  velx = 5.0f;
+  vely = 1.0f;
 
-  vely          = 1;
   overstair     = false;
   isFacingRight = false;
   colorOffset   = 0;
 
-  //colorOffset = cur_stage->getOffset(mm_spritefiles::PicketMan_SPRITES);
   setAnimSeq(colorOffset + PicketMan::APPEARING);
   h = getFrameH();
   w = getFrameW();
@@ -111,7 +108,6 @@ void PicketMan::fire()
 
 void PicketMan::doLogic()
 {
-  //int tilecoordx, tilecoordy, tiletype;
   int px  = cur_stage->m_player->x;
 
   isFacingRight = px > x;
@@ -121,9 +117,23 @@ void PicketMan::doLogic()
   {
     case PicketMan::APPEARING:
     {
+	  int tilecoordx, tilecoordy, tiletype;
       if (onground == false)
       {
-        x += velx;
+	    if (isFacingRight == true)
+		{
+		  if (collisionVer(x  + velx + w, y, tilecoordx, tilecoordy, tiletype) == false)
+		  {
+		    x += velx;
+		  }
+		}
+		else
+		{
+		  if (collisionVer(x - velx, y, tilecoordx, tilecoordy, tiletype) == false)
+		  {
+		    x -= velx;
+		  }
+		}
       }
       else
       {
@@ -156,11 +166,6 @@ void PicketMan::doLogic()
     break;
     case PicketMan::FIRING:
     {
-      //if (cur_stage->m_player->alive == false)
-      //{
-      //  break;
-      //}
-
       cycleDone = Character::handleAnimation();
       if (cycleDone == true)
       {
@@ -228,57 +233,15 @@ void PicketMan::hit(mm_weapons::weapon_st * pWeapon)
   return;
 }
 
-#if 0
-void PicketMan::checkOnCamera(Camera * camera)
-{
-  if (this->x >= camera->x && this->x <= camera->x+camera->w &&
-      this->y >= camera->y && this->y <= camera->y+camera->h)
-  {
-    if (onCamera == false && alive == false)
-    {
-      if (this->x > cur_stage->m_player->x)
-      {
-        alive = true;
-      }
-    }
-
-    onCamera = true;
-  }
-  else
-  {
-    if (alive == true)
-    {
-      alive    = false;
-      respawn();
-    }
-
-    if (this->x >= camera->x && this->x <= camera->x+camera->w &&
-        this->y >= camera->y && this->y <= camera->y+camera->h)
-    {
-      onCamera = true;
-    }
-    else
-    {
-      onCamera = false;
-    }
-  }
-}
-#endif
-
 void PicketMan::respawn()
 {
   life  = 10;
 
-  //this->x = (GlobalCamera::mm_camera->x + GlobalCamera::mm_camera->w);
   this->x = this->old_x;
   this->y = this->old_y;
 
-  this->vely = 1;
-  this->velx = -5;
-  if (cur_stage->m_player->x > this->x)
-    velx *= -1;
-
-  isFacingRight = false;
+  this->vely = 1.0f;
+  this->velx = 5.0f;
 
   resetAnimSeq(colorOffset + PicketMan::APPEARING);
   curState = PicketMan::APPEARING;
