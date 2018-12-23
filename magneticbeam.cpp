@@ -73,7 +73,7 @@ void MagneticBeam::doLogic()
   bool bAnimEnded;
   handleAnimation(&bAnimEnded);
 
-  if (commited && ((Clock::clockTicks - lifetime) > 200))
+  if (commited && ((Clock::clockTicks - lifetime) > 220))
   {
 	this->alive = false;
   }

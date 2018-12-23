@@ -1,4 +1,3 @@
-- ajustar saida do magnetic beam
 - Ignorar colisao com tiles fora da camera
 - Arma do gutsman
 - Mover criação de partes do picket crazyrazy watcher... para dentro da classe do mesmo e tirar do stage.cpp
@@ -10,3 +9,5 @@
 - Fases do DR WILLY
 - ajustar pontos, uso de arma e damage de tudo.
 - Add 10,000 points to score if it was a rematch (FROM ASM finlandes)
+- ajustar magnetic beam SE estiver atrapalhando, verificar se esta dentro de tiles e jogar para dentro 100%
+  evitando que o mm fique preso.
