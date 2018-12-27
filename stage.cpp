@@ -96,14 +96,14 @@ Stage::~Stage()
 
 unsigned char Stage::tileAction(int x, int y) const
 {
-  if (x < 0 || y < 0) return mm_tile_actions::TILE_SOLID;
+  if (x < 0 || y < 0) return mm_tile_actions::TILE_VOID;
 
   return map[y][x].action;
 }
 
 unsigned char Stage::tileNumber(int x, int y) const
 {
-  if (x < 0 || y < 0) return mm_tile_actions::TILE_SOLID;
+  if (x < 0 || y < 0) return mm_tile_actions::TILE_VOID;
 
   return map[y][x].tile_number;
 }
