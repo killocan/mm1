@@ -175,13 +175,14 @@ void Player::hit(Character * pCharacter)
     break;
   }
 
+
   // Do not cause harm to megaman.
   if (pCharacter->type == mm_spritefiles::MOVING_PLATFORM_SPRITES ||
       pCharacter->type == mm_spritefiles::FOOTHOLDER_SPRITES ||
       pCharacter->type == mm_spritefiles::TIMER_PLATFORM_SPRITES ||
 	  pCharacter->type == mm_spritefiles::WEAPONS_MAGNETIC)
   {
-	  float diff = 15.0f;
+	float diff = 15.0f;
 	if (pCharacter->type == mm_spritefiles::WEAPONS_MAGNETIC)
 		diff = 13.0f;
 

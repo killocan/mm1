@@ -134,8 +134,8 @@ bool Character::canJumpAgain()
 void Character::die()
 {
   int x,y;
-  x = this->x + abs((getFrame()->w-32)/2);
-  y = this->y + abs((getFrame()->h-32)/2);
+  x = this->x + abs((getFrame()->w-32)/2.0f);
+  y = this->y + abs((getFrame()->h-32)/2.0f);
   TemporaryCharacterList::mm_tempCharacterLst.push_back(cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, x, y));
 
   if (dropItem == true)
@@ -156,12 +156,13 @@ void Character::doGravitation()
   if (grabstair == false && cur_stage->horz_scroll == false)
   {
     // Goind UP
-    if(vely < 0)
+    if(vely < 0.0f)
     {
       onground = false;
 
       // If outside map don't test collision, just pretend its all void out there :)
-      if((y+vely >= 0) && collisionHor(x+utilX, y+vely, tilecoordx, tilecoordy, false, tiletype))
+      float scrypos = (y+vely) - GlobalCamera::mm_camera->y;
+      if((scrypos >= 0.0f) && collisionHor(x+utilX, y+vely, tilecoordx, tilecoordy, false, tiletype))
       {
         touchCelling();
 
@@ -177,10 +178,11 @@ void Character::doGravitation()
     }
     else
     {
-      int current_height = h; //getFrameH();
+      //TODO: USAR PARA CORRIGIR BUG QUANDO COLIDE E TEM ESCADA LOGO ABAIXO
+      int current_height = h;
       // If outside map don't test collision, just pretend its all void out there :)
-      if((y+vely+h >= 0) &&
-        //((collisionHor(x+utilX, y+vely+h, tilecoordx, tilecoordy, !overstair, tiletype)) || (onPlatform == true)))
+      float scrypos = (y+vely+h) - GlobalCamera::mm_camera->y;
+      if((scrypos >= 0.0f) &&
         ((collisionHor(x+utilX, y+vely+current_height, tilecoordx, tilecoordy, !overstair, tiletype)) || (onPlatform == true)))
       {
         if (onground == false)
@@ -194,7 +196,7 @@ void Character::doGravitation()
 
         // 1 so we test against the ground again 
         // in the next frame (0 would test against the ground in the next+1 frame)
-        vely = 1;
+        vely = 1.0f;
 
         if(canJumpAgain())
         {

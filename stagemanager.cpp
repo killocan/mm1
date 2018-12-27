@@ -319,19 +319,6 @@ static bool tempCharacterKill(const Character* value)
   return true;
 }
 
-#if 0
-static bool tempCharacterClean(const Character* value)
-{
-  if (value->type != mm_tile_actions::TILE_DOOR)
-  {
-    delete value;
-    return true;
-  }
-
-  return false;
-}
-#endif
-
 void StageManager::play()
 {
   stage  = new Stage(getStageFilePath(), *camera, &player);//, characters_vec);
