@@ -98,5 +98,4 @@ void GutsmanRock::doLogic()
 
 void GutsmanRock::doGravitation()
 {
-
 }

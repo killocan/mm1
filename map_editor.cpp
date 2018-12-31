@@ -414,12 +414,13 @@ void load_actions(char * path, int num_actions)
   actions.coords = new point_t[num_actions];
   int x=20,y=10;
 
-  char img_name[80];
+  char img_name[1024];
   for (int i = 0; i < num_actions; i++)
   {
     sprintf(img_name, "%s/%02d.bmp",path,i);
 
-    actions.tile_img[i] = load_bitmap(img_name, NULL);
+    BITMAP * tmp = load_bitmap(img_name, NULL);
+    actions.tile_img[i] = tmp;
     actions.coords[i].x = x;
     actions.coords[i].y = y;
 
@@ -472,20 +473,16 @@ int main(int argc, char *argv[])
   map_drawx=map_drawy=0;
 
   allegro_init();
+  install_timer();
   install_mouse();
   install_keyboard();
-  install_timer();
 
-  set_color_depth(32);  
-  set_gfx_mode(GFX_AUTODETECT_WINDOWED, UTIL_W+200, UTIL_H+UTIL_H_EX, 0, 0);
-
-  buffer            = create_bitmap(SCREEN_W, SCREEN_H);
-  selection_preview = create_bitmap(185, 150);
-
-  clear_bitmap(selection_preview);
  
-  char filename[255]={};
-  char dirpath[255] = {};
+  set_color_depth(32);
+  set_gfx_mode(GFX_AUTODETECT_WINDOWED, 1024, 768, 0, 0);
+
+  char filename[1024]={};
+  char dirpath[1024] ={};
   if (argc > 1)
   {
     sprintf(filename, "%s/stage.dat", argv[1]);
@@ -493,13 +490,18 @@ int main(int argc, char *argv[])
   }
   else
   {
-    if (file_select_ex("Load megaman map", dirpath, "d", 80, 640, 480) == 0)
+    if (file_select_ex("Load megaman map", dirpath, "d", 1024, 1024, 768) == 0)
     {
       exit(-1);
     }
 
     sprintf(filename, "%s/stage.dat", dirpath);
   }
+
+  buffer = create_bitmap(1024, 768);
+  selection_preview = create_bitmap(185, 150);
+
+  clear_bitmap(selection_preview);
 
   if ((fp = fopen(filename, "rb")) != NULL)
   {
@@ -701,4 +703,4 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-END_OF_MAIN();
+END_OF_MAIN()

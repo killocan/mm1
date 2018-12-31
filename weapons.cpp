@@ -960,6 +960,6 @@ void mm_weapons::createMagnetBeam(Player *player)
   TemporaryCharacterList::mm_tempCharacterLst.push_back(magnet_beam);
 }
 
-void createMagnetBeam(Character * character, int x, int y, float vx, float vy, int offset)
+void mm_weapons::createMagnetBeam(Character * character, int x, int y, float vx, float vy, int offset)
 {
 }
