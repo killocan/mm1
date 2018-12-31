@@ -99,3 +99,11 @@ void GutsmanRock::doLogic()
 void GutsmanRock::doGravitation()
 {
 }
+
+void GutsmanRock::checkOnCamera()
+{
+  if (life > 0)
+  {
+    alive = true;
+  }
+}

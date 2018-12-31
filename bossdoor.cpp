@@ -103,6 +103,31 @@ void BossDoor::blockPassage()
 
     hasBeenUsed = true;
   }
+  else
+  {
+    int xd = ((int)(x+w))/mm_graphs_defs::TILE_SIZE;
+    int yd = ((int)y)/mm_graphs_defs::TILE_SIZE;
+    for (int i = 0; i < config.totalSize; ++i, xd++)
+    {
+      cur_stage->setTileAction(xd,yd,mm_tile_actions::TILE_SOLID);
+    }
+
+    switch (config.blockedSide)
+    {
+      case 0:
+        yd = ((int)y)/mm_graphs_defs::TILE_SIZE - (mm_graphs_defs::TILE_SIZE<<1);
+      break;
+      case 1:
+        yd = ((int)y)/mm_graphs_defs::TILE_SIZE + (mm_graphs_defs::TILE_SIZE<<1);
+      break;
+    }
+    xd = (((int)x)-mm_graphs_defs::TILE_SIZE;
+
+    cur_stage->defineCameraSector(xd, yd, true);
+    cur_stage->defineCameraSector(xcamblock, ycamblock, false);
+
+    hasBeenUsed = true;
+  }
 }
 
 void BossDoor::drawCharacter(BITMAP * bmp)

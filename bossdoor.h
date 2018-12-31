@@ -18,8 +18,8 @@ class BossDoor : public Character
       int size;
       int totalSize;
       int orientation;
+      int blockedSide; // 0 - UP, 1 - DOWN, 2 - LEFT, 3 - RIGHT
       bool defaultOpen;
-      //bool cameraHack;
     };
 
     BossDoor(const Stage & stage, int x, int y, void * param);

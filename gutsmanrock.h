@@ -17,6 +17,7 @@ class GutsmanRock : public Character
 
     virtual void doLogic();
     virtual void doGravitation();
+    virtual void checkOnCamera();
 
     enum {STILL, BLINKING, ATTACHED_TO_MEGAMAN};
 };
