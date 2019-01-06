@@ -51,7 +51,6 @@ void GutsmanRock::doLogic()
   Player * player = cur_stage->m_player;
   if (life > 0)
   {
-    //TODO: just calc the distance between both sprites centers... only one if :)
     if (this->x < player->x)
     {
       if (player->x - (this->x + this->w) > 4)
@@ -84,15 +83,33 @@ void GutsmanRock::doLogic()
   }
   else
   {
-    int xd, yd;
-    xd = this->x / mm_graphs_defs::TILE_SIZE;
-    yd = this->y / mm_graphs_defs::TILE_SIZE;
-    cur_stage->setTileAction(xd,     yd,     mm_tile_actions::TILE_VOID);
-    cur_stage->setTileAction(xd + 1, yd,     mm_tile_actions::TILE_VOID);
-    cur_stage->setTileAction(xd,     yd + 1, mm_tile_actions::TILE_VOID);
-    cur_stage->setTileAction(xd + 1, yd + 1, mm_tile_actions::TILE_VOID);
+    die();
+  }
+}
 
-    alive = false;
+void GutsmanRock::die()
+{
+  int xd, yd;
+  xd = this->x / mm_graphs_defs::TILE_SIZE;
+  yd = this->y / mm_graphs_defs::TILE_SIZE;
+  cur_stage->setTileAction(xd, yd, mm_tile_actions::TILE_VOID);
+  cur_stage->setTileAction(xd + 1, yd, mm_tile_actions::TILE_VOID);
+  cur_stage->setTileAction(xd, yd + 1, mm_tile_actions::TILE_VOID);
+  cur_stage->setTileAction(xd + 1, yd + 1, mm_tile_actions::TILE_VOID);
+
+  alive = false;
+  life = 0;
+}
+
+void GutsmanRock::hit(mm_weapons::weapon_st * pWeapon)
+{
+  switch (pWeapon->weapon)
+  {
+  case mm_weapons::W_ELECMAN_GUN:
+    pWeapon->alive = false;
+    die();
+  default:
+    break;
   }
 }
 

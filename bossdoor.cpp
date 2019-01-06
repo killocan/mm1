@@ -121,7 +121,7 @@ void BossDoor::blockPassage()
         yd = ((int)y)/mm_graphs_defs::TILE_SIZE + (mm_graphs_defs::TILE_SIZE<<1);
       break;
     }
-    xd = (((int)x)-mm_graphs_defs::TILE_SIZE;
+    xd = (((int)x)-mm_graphs_defs::TILE_SIZE);
 
     cur_stage->defineCameraSector(xd, yd, true);
     cur_stage->defineCameraSector(xcamblock, ycamblock, false);

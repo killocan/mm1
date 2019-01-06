@@ -16,6 +16,8 @@ class GutsmanRock : public Character
     GutsmanRock(const Stage & stage, int x, int y);
 
     virtual void doLogic();
+    virtual void die();
+    virtual void hit(mm_weapons::weapon_st * pWeapon);
     virtual void doGravitation();
     virtual void checkOnCamera();
 

@@ -1,4 +1,6 @@
-- Arma do gutsman
+- Arma do gutsman (Criar animação de mover para o megaman com interpolacao linear, se for atingido por elecgun já cria fragmentos, ao ser lancado
+  faz uma parabola e depois ao colidir com inimigo ou mapa cria fragmentos, 4 fragmentos dois horizontais e dois diagonais, nao permitir entrar na
+  escada com gutsmanrock na mao, criar versao para o boss gustman (usar a mesma interpolacao linear para sair do topo da tela para mao do gustman)  
 - Porta chefe horizontal
 - Mover criação de partes do picket crazyrazy watcher... para dentro da classe do mesmo e tirar do stage.cpp
 - Corrida do megaman aceleracao gradual. (Ajustar corrida para comecar com 1 px depois passar para 3 quando ja correndo.)
@@ -6,6 +8,7 @@
 - Waypoints
 - Fases do cutman, bombman, electman, iceman
 - IA dos chefes
+- Não permitir entrar no menu de armas se houver magnetic na tela
 - Fases do DR WILLY
 - ajustar pontos, uso de arma e damage de tudo.
 - Add 10,000 points to score if it was a rematch (FROM ASM finlandes)
