@@ -84,5 +84,7 @@ namespace mm_tile_actions
     MOVING_FLAME_FRAGMENT,
 
     TILE_TIMER_PLATFORM_FRAGMENT,
+    GUTSMAN_GUN,
+    GUTSMAN_GUN_FRAGMENT,
   };
 }

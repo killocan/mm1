@@ -853,6 +853,7 @@ void Player::fire()
       if ((conPlayer != NULL) && (conPlayer->type == mm_spritefiles::GUTSMANROCK_SPRITES))
       {
         conPlayer->life = 0;
+        mm_weapons::createGutsmanRock(this, conPlayer->x, conPlayer->y, 0, 0, 0);
       }
     }
     break;

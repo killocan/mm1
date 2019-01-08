@@ -30,7 +30,8 @@ GutsmanRock::GutsmanRock(const Stage & stage, int x, int y) : Character(stage, m
   velx          = 0;
   overstair     = false;
 
-  setAnimSeq(GutsmanRock::STILL);
+  colorOffset = cur_stage->getOffset(mm_spritefiles::GUTSMANROCK_SPRITES);
+  setAnimSeq(colorOffset + GutsmanRock::STILL);
   h = getFrameH();
   w = getFrameW();
 
@@ -71,6 +72,9 @@ void GutsmanRock::doLogic()
       else
         player->conPlayer = this;
     }
+
+    if ((player->y > (this->y+this->h)) || ((player->y+player->h) < this->y))
+      player->conPlayer = NULL;
 
     if ((cur_stage->m_player->conPlayer == this) && (player->curWeapon == mm_weapons::W_GUTSMAN_GUN))
     {
