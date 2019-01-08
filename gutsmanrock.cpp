@@ -103,6 +103,7 @@ void GutsmanRock::die()
 
   alive = false;
   life = 0;
+  cur_stage->m_player->conPlayer = NULL;
 }
 
 void GutsmanRock::hit(mm_weapons::weapon_st * pWeapon)

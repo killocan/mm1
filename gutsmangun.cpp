@@ -18,6 +18,8 @@
 #include "globalgamestate.h"
 #include "sfx.h"
 
+#include "gutsmangunmanager.h"
+
 #include "spritefiles.h"
 
 //Gutsman Rock Gun
@@ -50,6 +52,13 @@ GutsmanGun::GutsmanGun(const Stage & stage, int x, int y) : Character(stage, mm_
   this->y += (dest_y - this->y) / 2;
 
   ticks = Clock::clockTicks;
+
+  GutmanGunManager::instance()->addRock(this);
+}
+
+void GutsmanGun::launch()
+{
+  curState = LAUNCH;
 }
 
 void GutsmanGun::doLogic()
@@ -69,6 +78,9 @@ void GutsmanGun::doLogic()
   case GutsmanGun::ATTACHED_TO_MEGAMAN:
     this->x = player->x;
     this->y = player->y - this->h + 10.0f;
+  break;
+  case GutsmanGun::LAUNCH:
+    ;
   break;
   }
 }

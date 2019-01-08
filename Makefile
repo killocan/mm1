@@ -38,7 +38,7 @@ endif
 SOURCES=main.cpp mm_math.cpp soundpack.cpp spritefiles.cpp globalgamestate.cpp text_utils.cpp animsequence.cpp energybar.cpp stage.cpp \
         stagemanager.cpp collision.cpp character.cpp player.cpp weapons.cpp weaponmenu.cpp scenesoundmanager.cpp intro.cpp \
         cutmanstage.cpp gutsmanstage.cpp icemanstage.cpp bombmanstage.cpp firemanstage.cpp elecmanstage.cpp \
-        dropitem.cpp movingflame.cpp disappearingblock.cpp magneticbeam.cpp gutsmangun.cpp \
+        dropitem.cpp movingflame.cpp disappearingblock.cpp magneticbeam.cpp gutsmangunmanager.cpp gutsmangun.cpp \
         menu.cpp blader.cpp footholder.cpp beak.cpp supercutter.cpp flyingshell.cpp killerbullet.cpp spine.cpp met.cpp picketman.cpp sniperjoe.cpp \
         peng.cpp bigeye.cpp flea.cpp octopusbattery.cpp screwbomber.cpp bombomb.cpp crazyrazy.cpp moveplatform.cpp \
         tempcharacter.cpp lifechargerlittle.cpp lifechargerbig.cpp weaponchargerlittle.cpp weaponchargerbig.cpp newlifeitem.cpp \

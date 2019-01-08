@@ -12,6 +12,7 @@
 #include "spritefiles.h"
 #include "energybar.h"
 #include "magneticbeamhandler.h"
+#include "gutsmangunmanager.h"
 #include "scenesoundmanager.h"
 #include "globals.h"
 #include "globalgamestate.h"
@@ -850,10 +851,17 @@ void Player::fire()
     break;
     case mm_weapons::W_GUTSMAN_GUN:
     {
-      if ((conPlayer != NULL) && (conPlayer->type == mm_spritefiles::GUTSMANROCK_SPRITES))
+      if ((GlobalGameState::playerShots.size() == 0) && (weapons[mm_weapons::W_GUTSMAN_GUN] > 0))
       {
-        conPlayer->life = 0;
-        mm_weapons::createGutsmanRock(this, conPlayer->x, conPlayer->y, 0, 0, 0);
+        if ((conPlayer != NULL) && (conPlayer->type == mm_spritefiles::GUTSMANROCK_SPRITES))
+        {
+          conPlayer->life = 0;
+          mm_weapons::createGutsmanRock(this, conPlayer->x, conPlayer->y, 0, 0, 0);
+        }
+        else
+        {
+          GutmanGunManager::instance()->launchRock();
+        }
       }
     }
     break;
