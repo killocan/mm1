@@ -28,7 +28,9 @@ public:
   virtual void doGravitation();
   virtual void checkOnCamera();
 
-  enum { MOVING, ATTACHED_TO_MEGAMAN, LAUNCH };
+  enum { MOVING, ATTACHED_TO_MEGAMAN, LAUNCH, FRAGMENT, DEAD };
 private:
+  bool checkCollision();
+
   unsigned long ticks;
 };

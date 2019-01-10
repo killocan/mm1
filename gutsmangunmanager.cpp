@@ -10,38 +10,46 @@
 #include "stage.h"
 #include "weapons.h"
 
-GutmanGunManager * GutmanGunManager::instance_ptr = NULL;
+GutsmanGunManager * GutsmanGunManager::instance_ptr = NULL;
 
-GutmanGunManager * GutmanGunManager::instance()
+GutsmanGunManager * GutsmanGunManager::instance()
 {
-  if (GutmanGunManager::instance_ptr == NULL)
+  if (GutsmanGunManager::instance_ptr == NULL)
   {
-    GutmanGunManager::instance_ptr = new GutmanGunManager;
+    GutsmanGunManager::instance_ptr = new GutsmanGunManager;
   }
 
-  return GutmanGunManager::instance_ptr;
+  return GutsmanGunManager::instance_ptr;
 }
 
-GutmanGunManager::GutmanGunManager()
-{
-}
-
-GutmanGunManager::~GutmanGunManager()
+GutsmanGunManager::GutsmanGunManager()
 {
   rock = NULL;
 }
 
-void GutmanGunManager::addRock(GutsmanGun * r)
+GutsmanGunManager::~GutsmanGunManager()
+{
+  rock = NULL;
+}
+
+void GutsmanGunManager::addRock(GutsmanGun * r)
 {
   rock = r;
 }
 
-void GutmanGunManager::removeRock(GutsmanGun * r)
+void GutsmanGunManager::removeRock(GutsmanGun * r)
 {
   rock = NULL;
 }
 
-void GutmanGunManager::launchRock()
+bool GutsmanGunManager::launchRock()
 {
-  if (rock != NULL) rock->launch();
+  if (rock != NULL && rock->curState == GutsmanGun::ATTACHED_TO_MEGAMAN)
+  {
+    rock->launch();
+
+    return true;
+  }
+
+  return false;
 }

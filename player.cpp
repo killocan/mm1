@@ -860,7 +860,11 @@ void Player::fire()
         }
         else
         {
-          GutmanGunManager::instance()->launchRock();
+          if (GutsmanGunManager::instance()->launchRock())
+          {
+            firing = true;
+            lastShot = Clock::clockTicks;
+          }
         }
       }
     }

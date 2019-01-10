@@ -21,6 +21,7 @@ void (*Vsync::Sync)()                       = NULL;
 unsigned long       Clock::clockTicks       = 0;
 Camera            * GlobalCamera::mm_camera = NULL;
 std::list<Character *> TemporaryCharacterList::mm_tempCharacterLst;
+std::vector<Character *> * CurrentCharacterList::mm_characterLst = NULL;
 bool GameplayGlobals::bHoldLogic            = false;
 bool GameplayGlobals::bWeaponUpdateRunning  = false;
 

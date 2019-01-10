@@ -8,6 +8,7 @@
 #include <allegro.h>
 
 #include <list>
+#include <vector>
 
 class SceneSoundManager;
 class Camera;
@@ -54,6 +55,12 @@ class TemporaryCharacterList
 {
   public:
     static std::list<Character *> mm_tempCharacterLst;
+};
+
+class CurrentCharacterList
+{
+  public:
+    static std::vector<Character *> * mm_characterLst;
 };
 
 class GameplayGlobals

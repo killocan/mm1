@@ -323,6 +323,8 @@ void StageManager::play()
 {
   stage  = new Stage(getStageFilePath(), *camera, &player);//, characters_vec);
   setupStage();
+  CurrentCharacterList::mm_characterLst = &characters_vec;
+
   stage->createEnemies(characters_vec); // Load all enemys.
 
   ssm        = CreateSoundManager();

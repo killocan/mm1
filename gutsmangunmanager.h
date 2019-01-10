@@ -11,19 +11,19 @@
 class Stage;
 class GutsmanGun;
 
-class GutmanGunManager
+class GutsmanGunManager
 {
 public:
-  static GutmanGunManager * instance();
-  ~GutmanGunManager();
+  static GutsmanGunManager * instance();
+  ~GutsmanGunManager();
 
   void addRock(GutsmanGun * b);
   void removeRock(GutsmanGun * b);
-  void launchRock();
+  bool launchRock();
 
 private:
-  GutmanGunManager();
+  GutsmanGunManager();
 
-  static GutmanGunManager * instance_ptr;
+  static GutsmanGunManager * instance_ptr;
   GutsmanGun * rock;
 };
