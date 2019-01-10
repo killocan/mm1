@@ -85,8 +85,8 @@ void GutsmanGun::calcAcceleration()
 {
   if (thrower == cur_stage->m_player)
   {
-    this->vely = -5.8f;
-    this->velx = 12.0f;
+    this->vely = -5.5f;
+    this->velx = 11.0f;
     this->isFacingRight = thrower->isFacingRight;
   }
 }
@@ -134,6 +134,7 @@ void GutsmanGun::doLogic()
     }
   break;
   case GutsmanGun::FRAGMENT:
+    mm_weapons::createGutsmanRock(this);
     curState = GutsmanGun::DEAD;
   break;
   case GutsmanGun::DEAD:

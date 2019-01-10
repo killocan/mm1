@@ -77,5 +77,6 @@ namespace mm_spritefiles
 
     "./game_data/magnet_beam_seq.dat",
     "./game_data/fireman_moving_flame_seq.dat",
+    "./game_data/gutsman_rock_gun_seq.dat",
   };
 }

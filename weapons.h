@@ -136,6 +136,6 @@ namespace mm_weapons
   void createMagnetBeam(Player *player);
   void createMagnetBeam(Character * character, int x, int y, float vx, float vy, int offset);
 
-  void createGutsmanRock(Player *player);
+  void createGutsmanRock(Character * thrower);
   void createGutsmanRock(Character * character, int x, int y, float vx, float vy, int offset);
 }

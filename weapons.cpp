@@ -355,9 +355,6 @@ static void doWeaponSpecifics(mm_weapons::weapon_st * pWeapon, Stage * stage)
     }
     break;
     case mm_weapons::W_PLATFORM_CREATOR:
-    {
-      ;
-    }
     break;
     case mm_weapons::W_CUTMAN_GUN:
     {
@@ -366,7 +363,8 @@ static void doWeaponSpecifics(mm_weapons::weapon_st * pWeapon, Stage * stage)
     break;
     case mm_weapons::W_GUTSMAN_GUN:
     {
-      ;
+      pWeapon->x += pWeapon->vx;
+      pWeapon->y += pWeapon->vy;
     }
     break;
     case mm_weapons::W_ICEMAN_GUN:
@@ -964,8 +962,40 @@ void mm_weapons::createMagnetBeam(Character * character, int x, int y, float vx,
 {
 }
 
-void mm_weapons::createGutsmanRock(Player *player)
+void mm_weapons::createGutsmanRock(Character * thrower)
 {
+  mm_weapons::weapon_st gutsman_rock_fragment[4];
+  int w, h;
+  w = thrower->cur_stage->getAnimSeq(mm_spritefiles::GUTSMAN_ROCK_FRAGMENTS_SPRITES)->getFrame(0)->w;
+  h = thrower->cur_stage->getAnimSeq(mm_spritefiles::GUTSMAN_ROCK_FRAGMENTS_SPRITES)->getFrame(0)->h;
+  float xdesl[]{ 0.0f, 32.0f, 0.0f,  32.0f };
+  float ydesl[]{ 0.0f, 0.0f,  32.0f, 32.0f };
+  float vxdesl[]{ 3.95f,  5.6f, 3.70f,  4.25f };
+  float vydesl[]{ -3.75f, 0.0f,  -3.50f, 0.0f };
+  for (int i = 0; i < 4; ++i)
+  {
+    gutsman_rock_fragment[i].can_hurt = true;
+
+    gutsman_rock_fragment[i].x = thrower->x + xdesl[i];
+    gutsman_rock_fragment[i].y = thrower->y + ydesl[i];
+
+    gutsman_rock_fragment[i].vx = vxdesl[i];
+    gutsman_rock_fragment[i].vy = vydesl[i];
+    if (thrower->isFacingRight == false)
+    {
+      gutsman_rock_fragment[i].vx *= -1.0f;
+    }
+    gutsman_rock_fragment[i].alive = true;
+
+    gutsman_rock_fragment[i].bulletSpriteShet = 
+      thrower->cur_stage->getAnimSeq(mm_spritefiles::GUTSMAN_ROCK_FRAGMENTS_SPRITES);
+    gutsman_rock_fragment[i].weapon = mm_weapons::W_GUTSMAN_GUN;
+
+    gutsman_rock_fragment[i].w = w;
+    gutsman_rock_fragment[i].h = h;
+
+    GlobalGameState::playerShots.push_back(gutsman_rock_fragment[i]);
+  }
 }
 
 void mm_weapons::createGutsmanRock(Character * character, int x, int y, float vx, float vy, int offset)
