@@ -44,7 +44,7 @@ void GutsmanGunManager::removeRock(GutsmanGun * r)
 
 bool GutsmanGunManager::launchRock()
 {
-  if (rock != NULL && rock->curState == GutsmanGun::ATTACHED_TO_MEGAMAN)
+  if (rock != NULL && rock->curState == GutsmanGun::ATTACHED_TO)
   {
     rock->launch();
 

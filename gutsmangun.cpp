@@ -28,7 +28,7 @@ GutsmanGun::GutsmanGunFragment::GutsmanGunFragment(const Stage & stage, int x, i
 {
 }
 
-GutsmanGun::GutsmanGun(const Stage & stage, int x, int y) : Character(stage, mm_spritefiles::GUTSMANROCK_SPRITES)
+GutsmanGun::GutsmanGun(const Stage & stage, int x, int y, void * param) : Character(stage, mm_spritefiles::GUTSMANROCK_SPRITES)
 {
   this->old_x = this->x = x;
   this->old_y = this->y = y;
@@ -46,11 +46,16 @@ GutsmanGun::GutsmanGun(const Stage & stage, int x, int y) : Character(stage, mm_
 
   curState = GutsmanGun::MOVING;
 
-  float dest_x = cur_stage->m_player->x;
-  float dest_y = cur_stage->m_player->y - this->h + 10.0f;
-  this->x += (dest_x - this->x) / 2;
-  this->y += (dest_y - this->y) / 2;
+  thrower = (Character *) param;
 
+  float dest_x = thrower->x;
+  float dest_y = thrower->y - this->h + 10.0f;
+
+  if (thrower == cur_stage->m_player)
+  {
+    this->x += (dest_x - this->x) / 2;
+    this->y += (dest_y - this->y) / 2;
+  }
   ticks = Clock::clockTicks;
 
   GutsmanGunManager::instance()->addRock(this);
@@ -61,23 +66,44 @@ void GutsmanGun::launch()
   curState = LAUNCH;
 }
 
+void GutsmanGun::moveToMegaman()
+{
+  if ((Clock::clockTicks - ticks) > 2)
+  {
+    ticks = Clock::clockTicks;
+    this->x = thrower->x;
+    this->y = thrower->y - this->h;
+    this->curState = GutsmanGun::ATTACHED_TO;
+  }
+}
+
+void GutsmanGun::moveToThrower()
+{
+}
+
+void GutsmanGun::calcAcceleration()
+{
+  if (thrower == cur_stage->m_player)
+  {
+    this->vely = -5.8f;
+    this->velx = 12.0f;
+    this->isFacingRight = thrower->isFacingRight;
+  }
+}
+
 void GutsmanGun::doLogic()
 {
-  Player * player = cur_stage->m_player;
   switch (curState)
   {
   case GutsmanGun::MOVING:
-    if ((Clock::clockTicks - ticks) > 2)
-    {
-      ticks = Clock::clockTicks;
-      this->x = cur_stage->m_player->x;
-      this->y = cur_stage->m_player->y - this->h;
-      this->curState = GutsmanGun::ATTACHED_TO_MEGAMAN;
-    }
+    if (thrower == cur_stage->m_player)
+      moveToMegaman();
+    else
+      moveToThrower();
   break;
-  case GutsmanGun::ATTACHED_TO_MEGAMAN:
-    this->x = player->x;
-    this->y = player->y - this->h + 10.0f;
+  case GutsmanGun::ATTACHED_TO:
+    this->x = thrower->x;
+    this->y = thrower->y - this->h + 10.0f;
   break;
   case GutsmanGun::LAUNCH:
     if (this->velx != 0.0f)
@@ -90,38 +116,21 @@ void GutsmanGun::doLogic()
       else
       {
         int tilecoordx, tilecoordy, tiletype;
-
-        if (this->isFacingRight)
+        float xoffset = (this->isFacingRight) ? (x + w + velx) : (x - velx);
+        if (collisionVer(xoffset, y, tilecoordx, tilecoordy, tiletype) == false)
         {
-          if (collisionVer((x + w) + velx, y, tilecoordx, tilecoordy, tiletype) == false)
-          {
-            x += velx;
-          }
-          else
-          {
-            Sounds::mm_sounds->play(BIGEYEJUMP);
-            curState = GutsmanGun::FRAGMENT;
-          }
+          x = (this->isFacingRight) ? (x+velx) : (x-velx);
         }
         else
         {
-          if (collisionVer(x - velx, y, tilecoordx, tilecoordy, tiletype) == false)
-          {
-            x -= velx;
-          }
-          else
-          {
-            Sounds::mm_sounds->play(BIGEYEJUMP);
-            curState = GutsmanGun::FRAGMENT;
-          }
+          Sounds::mm_sounds->play(BIGEYEJUMP);
+          curState = GutsmanGun::FRAGMENT;
         }
       }
     }
     else
     {
-      this->vely = -5.8f;
-      this->velx = 12.0f;
-      this->isFacingRight = player->isFacingRight;
+      calcAcceleration();
     }
   break;
   case GutsmanGun::FRAGMENT:
@@ -149,7 +158,7 @@ void GutsmanGun::doGravitation()
 
 void GutsmanGun::checkOnCamera()
 {
-  if (life > 0 && curState == GutsmanGun::ATTACHED_TO_MEGAMAN)
+  if (life > 0 && curState == GutsmanGun::ATTACHED_TO)
   {
     alive = true;
   }
@@ -168,7 +177,7 @@ bool GutsmanGun::checkCollision()
        it != CurrentCharacterList::mm_characterLst->end(); ++it)
   {
     curr_character = *it;
-    if (curr_character != cur_stage->m_player && curr_character != this)
+    if (curr_character != thrower && curr_character != this)
     {
       if (curr_character->alive == true)
       {

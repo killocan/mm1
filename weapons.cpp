@@ -970,6 +970,6 @@ void mm_weapons::createGutsmanRock(Player *player)
 
 void mm_weapons::createGutsmanRock(Character * character, int x, int y, float vx, float vy, int offset)
 {
-  Character * weapon = character->cur_stage->createCharacter(mm_tile_actions::GUTSMAN_GUN, x, y, 0, 0, NULL);
+  Character * weapon = character->cur_stage->createCharacter(mm_tile_actions::GUTSMAN_GUN, x, y, 0, 0, character);
   TemporaryCharacterList::mm_tempCharacterLst.push_back(weapon);
 }

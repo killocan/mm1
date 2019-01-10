@@ -19,7 +19,7 @@ public:
     GutsmanGunFragment(const Stage & stage, int x, int y);
   };
 
-  GutsmanGun(const Stage & stage, int x, int y);
+  GutsmanGun(const Stage & stage, int x, int y, void * param);
 
   void launch();
 
@@ -28,9 +28,14 @@ public:
   virtual void doGravitation();
   virtual void checkOnCamera();
 
-  enum { MOVING, ATTACHED_TO_MEGAMAN, LAUNCH, FRAGMENT, DEAD };
+  void moveToMegaman();
+  void moveToThrower();
+  void calcAcceleration();
+
+  enum { MOVING, ATTACHED_TO, LAUNCH, FRAGMENT, DEAD };
 private:
   bool checkCollision();
 
+  Character * thrower;
   unsigned long ticks;
 };
