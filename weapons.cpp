@@ -976,8 +976,8 @@ void mm_weapons::createGutsmanRock(Character * thrower)
   {
     gutsman_rock_fragment[i].can_hurt = true;
 
-    gutsman_rock_fragment[i].x = thrower->x + xdesl[i];
-    gutsman_rock_fragment[i].y = thrower->y + ydesl[i];
+    gutsman_rock_fragment[i].x = thrower->x + xdesl[i] + vxdesl[i];
+    gutsman_rock_fragment[i].y = thrower->y + ydesl[i] + vydesl[i];
 
     gutsman_rock_fragment[i].vx = vxdesl[i];
     gutsman_rock_fragment[i].vy = vydesl[i];

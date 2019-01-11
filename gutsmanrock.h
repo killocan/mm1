@@ -14,6 +14,10 @@ class GutsmanRock : public Character
 {
   public:
     GutsmanRock(const Stage & stage, int x, int y);
+    ~GutsmanRock();
+
+    virtual BITMAP * getFrame();
+    //virtual void drawCharacter(BITMAP * bmp);
 
     virtual void doLogic();
     virtual void die();
@@ -22,4 +26,6 @@ class GutsmanRock : public Character
     virtual void checkOnCamera();
 
     enum {STILL, BLINKING, ATTACHED_TO};
+  private:
+    BITMAP * sprite;
 };

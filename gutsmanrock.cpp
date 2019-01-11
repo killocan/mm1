@@ -45,7 +45,31 @@ GutsmanRock::GutsmanRock(const Stage & stage, int x, int y) : Character(stage, m
   cur_stage->setTileAction(xd+1, yd, mm_tile_actions::TILE_SOLID);
   cur_stage->setTileAction(xd,   yd+1, mm_tile_actions::TILE_SOLID);
   cur_stage->setTileAction(xd+1, yd+1, mm_tile_actions::TILE_SOLID);
+
+  sprite = create_bitmap(w,h);
 }
+
+GutsmanRock::~GutsmanRock()
+{
+  destroy_bitmap(sprite);
+  sprite = NULL;
+}
+
+BITMAP * GutsmanRock::getFrame()
+{
+  int curSpriteFrame = anim_seqs[curAnimSeq][curAnimFrame].frameNumber;
+  BITMAP * curSprTile = this->spriteSheet->getFrame(curSpriteFrame);
+  clear_to_color(sprite, 0);
+  blit(curSprTile, sprite, 0,0,0,0, curSprTile->w, curSprTile->h);
+
+  return sprite;
+}
+
+/*
+void GutsmanRock::drawCharacter(BITMAP * bmp)
+{
+}
+*/
 
 void GutsmanRock::doLogic()
 {
