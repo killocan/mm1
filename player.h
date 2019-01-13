@@ -84,4 +84,5 @@ class Player : public Character
     bool bDying;
     unsigned long dyingTimer;
     int dieStep;
+    bool holdingGutsmanRock;
 };

@@ -47,6 +47,8 @@ GutsmanRock::GutsmanRock(const Stage & stage, int x, int y) : Character(stage, m
   cur_stage->setTileAction(xd+1, yd+1, mm_tile_actions::TILE_SOLID);
 
   sprite = create_bitmap(w,h);
+
+  fprintf(stderr, "GUTSMANROCK this=[%p]\n",this);
 }
 
 GutsmanRock::~GutsmanRock()
@@ -55,50 +57,41 @@ GutsmanRock::~GutsmanRock()
   sprite = NULL;
 }
 
-BITMAP * GutsmanRock::getFrame()
+void GutsmanRock::drawCharacter(BITMAP * bmp)
 {
   int curSpriteFrame = anim_seqs[curAnimSeq][curAnimFrame].frameNumber;
   BITMAP * curSprTile = this->spriteSheet->getFrame(curSpriteFrame);
   clear_to_color(sprite, 0);
-  blit(curSprTile, sprite, 0,0,0,0, curSprTile->w, curSprTile->h);
+  masked_blit(curSprTile, sprite, 0,0,0,0, curSprTile->w, curSprTile->h);
 
-  return sprite;
+  if (isFacingRight == true)
+  {
+    draw_sprite(bmp, sprite, this->sx, this->sy);
+  }
+  else
+  {
+    draw_sprite_h_flip(bmp, sprite, this->sx, this->sy);
+  }
 }
 
-/*
-void GutsmanRock::drawCharacter(BITMAP * bmp)
-{
-}
-*/
 
 void GutsmanRock::doLogic()
 {
   Player * player = cur_stage->m_player;
   if (life > 0)
   {
-    if (this->x < player->x)
-    {
-      if (player->x - (this->x + this->w) > 4)
-      {
-        if (player->conPlayer == this)
-          player->conPlayer = NULL;
-      }
-      else
-        player->conPlayer = this;
-    }
-    else if (this->x > player->x)
-    {
-      if (this->x - (player->x + player->w) > 10)
-      {
-        if (player->conPlayer == this)
-          player->conPlayer = NULL;
-      }
-      else
-        player->conPlayer = this;
-    }
+    float tcenterx = this->x + this->w/2.0f;
+    float tcentery = this->y + this->h/2.0f;
 
-    if ((player->y > (this->y+this->h)) || ((player->y+player->h) < this->y))
-      player->conPlayer = NULL;
+    float pcenterx = player->x + player->w/2.0f;
+    float pcentery = player->y + player->h/2.0f;
+
+    float dist = sqrtf(pow((tcenterx-pcenterx), 2.0f) + pow((tcentery-pcentery), 2.0f));
+    if (dist > this->w)
+    {
+      if (player->conPlayer == this)
+        player->conPlayer = NULL;
+    }
 
     if ((cur_stage->m_player->conPlayer == this) && (player->curWeapon == mm_weapons::W_GUTSMAN_GUN))
     {

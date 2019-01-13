@@ -16,8 +16,7 @@ class GutsmanRock : public Character
     GutsmanRock(const Stage & stage, int x, int y);
     ~GutsmanRock();
 
-    virtual BITMAP * getFrame();
-    //virtual void drawCharacter(BITMAP * bmp);
+    virtual void drawCharacter(BITMAP * bmp);
 
     virtual void doLogic();
     virtual void die();

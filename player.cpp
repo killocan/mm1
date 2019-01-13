@@ -58,6 +58,7 @@ Player::Player(const Stage & stage) : Character(stage, 0), lives(2)
   this->lockjump   = false;
   this->grabstair  = false;
   this->overstair  = false;
+  this->holdingGutsmanRock = false;
 }
 
 void Player::reset()
@@ -99,6 +100,8 @@ void Player::reset()
   fireKeyPressed = false;
 
   conPlayer = NULL;
+
+  holdingGutsmanRock = false;
 }
 
 void Player::forceAnimation()
@@ -221,6 +224,13 @@ void Player::hit(Character * pCharacter)
     {
       return;
     }
+  }
+  else if (pCharacter->type == mm_spritefiles::GUTSMANROCK_SPRITES)
+  {
+    if (this->holdingGutsmanRock == false)
+      this->conPlayer = pCharacter;
+
+    return;
   }
   else if (pCharacter->type == mm_spritefiles::FIRE_V_WALL_SPRITES)
   {
@@ -856,12 +866,14 @@ void Player::fire()
         if ((conPlayer != NULL) && (conPlayer->type == mm_spritefiles::GUTSMANROCK_SPRITES))
         {
           conPlayer->life = 0;
+          this->holdingGutsmanRock = true;
           mm_weapons::createGutsmanRock(this, conPlayer->x, conPlayer->y, 0, 0, 0);
         }
         else
         {
           if (GutsmanGunManager::instance()->launchRock())
           {
+            this->holdingGutsmanRock = false;
             firing = true;
             lastShot = Clock::clockTicks;
           }
