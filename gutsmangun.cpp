@@ -110,7 +110,7 @@ void GutsmanGun::doLogic()
     {
       if (onground == true || checkCollision())
       {
-        Sounds::mm_sounds->play(BIGEYEJUMP);
+        Sounds::mm_sounds->play(SUPER_ARM);
         curState = GutsmanGun::FRAGMENT;
       }
       else
@@ -123,7 +123,7 @@ void GutsmanGun::doLogic()
         }
         else
         {
-          Sounds::mm_sounds->play(BIGEYEJUMP);
+          Sounds::mm_sounds->play(SUPER_ARM);
           curState = GutsmanGun::FRAGMENT;
         }
       }

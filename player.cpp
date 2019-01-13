@@ -699,7 +699,7 @@ void Player::normalLogic()
     }
     else if ((!key[KEY_A]) && (fireKeyPressed == true))
     {
-	  MagneticBeamHandler::instance()->newBeams();
+	    MagneticBeamHandler::instance()->newBeams();
       fireKeyPressed = false;
     }
   }

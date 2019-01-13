@@ -80,17 +80,20 @@ void GutsmanRock::doLogic()
   Player * player = cur_stage->m_player;
   if (life > 0)
   {
-    float tcenterx = this->x + this->w/2.0f;
-    float tcentery = this->y + this->h/2.0f;
-
-    float pcenterx = player->x + player->w/2.0f;
-    float pcentery = player->y + player->h/2.0f;
-
-    float dist = sqrtf(pow((tcenterx-pcenterx), 2.0f) + pow((tcentery-pcentery), 2.0f));
-    if (dist > this->w)
+    if (player->conPlayer == this)
     {
-      if (player->conPlayer == this)
+      float tcenterx = this->x + this->w / 2.0f;
+      float tcentery = this->y + this->h / 2.0f;
+
+      float pcenterx = player->x + player->getFrameW() / 2.0f;
+      float pcentery = player->y + player->h / 2.0f;
+
+      float dist = sqrtf(pow((tcenterx - pcenterx), 2.0f) + pow((tcentery - pcentery), 2.0f));
+
+      if (dist > this->w - 10)
+      {
         player->conPlayer = NULL;
+      }
     }
 
     if ((cur_stage->m_player->conPlayer == this) && (player->curWeapon == mm_weapons::W_GUTSMAN_GUN))
@@ -129,6 +132,11 @@ void GutsmanRock::hit(mm_weapons::weapon_st * pWeapon)
   {
   case mm_weapons::W_ELECMAN_GUN:
     pWeapon->alive = false;
+    
+    Sounds::mm_sounds->play(SUPER_ARM);
+    this->isFacingRight = cur_stage->m_player->isFacingRight;
+    mm_weapons::createGutsmanRock(this);
+
     die();
   default:
     break;
