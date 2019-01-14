@@ -282,7 +282,15 @@ void Player::setAnimSeq(int newAnimSeq, bool reset)
 {
   if (isHitAnimOn == false)
   {
-    Character::setAnimSeq(newAnimSeq, reset);
+    if (!this->holdingGutsmanRock)
+      Character::setAnimSeq(newAnimSeq, reset);
+    else
+    {
+      if (newAnimSeq == RUNNING) newAnimSeq = RUNNINGROCK;
+      else if (newAnimSeq == STARTINGRUN) newAnimSeq = STARTINGRUNROCK;
+
+      Character::setAnimSeq(newAnimSeq, reset);
+    }
   }
 }
 
