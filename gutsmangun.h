@@ -34,6 +34,8 @@ public:
 
   enum { MOVING, ATTACHED_TO, LAUNCH, FRAGMENT, DEAD };
 private:
+  float getXDest();
+  float getYDest();
   bool checkCollision();
 
   Character * thrower;

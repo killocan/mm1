@@ -28,6 +28,28 @@ GutsmanGun::GutsmanGunFragment::GutsmanGunFragment(const Stage & stage, int x, i
 {
 }
 
+float GutsmanGun::getXDest()
+{
+  float offsetx = thrower == cur_stage->m_player ? 0.0f : 0.0f;
+  float dest_x = thrower->x + offsetx;
+
+  return dest_x;
+}
+
+float GutsmanGun::getYDest()
+{
+  float offsety = thrower == cur_stage->m_player ? 21.0f : 0.0f;
+  float dest_y = thrower->y - this->h + offsety;
+
+  if (thrower == cur_stage->m_player)
+  {
+    if (!thrower->onground)
+      dest_y -= 10.0f;
+  }
+
+  return dest_y;
+}
+
 GutsmanGun::GutsmanGun(const Stage & stage, int x, int y, void * param) : Character(stage, mm_spritefiles::GUTSMANROCK_SPRITES)
 {
   this->old_x = this->x = x;
@@ -48,8 +70,8 @@ GutsmanGun::GutsmanGun(const Stage & stage, int x, int y, void * param) : Charac
 
   thrower = (Character *) param;
 
-  float dest_x = thrower->x;
-  float dest_y = thrower->y - this->h + 10.0f;
+  float dest_x = getXDest();
+  float dest_y = getYDest();
 
   if (thrower == cur_stage->m_player)
   {
@@ -71,8 +93,10 @@ void GutsmanGun::moveToMegaman()
   if ((Clock::clockTicks - ticks) > 2)
   {
     ticks = Clock::clockTicks;
-    this->x = thrower->x;
-    this->y = thrower->y - this->h;
+    
+    this->x = getXDest();
+    this->y = getYDest();
+
     this->curState = GutsmanGun::ATTACHED_TO;
   }
 }
@@ -102,8 +126,9 @@ void GutsmanGun::doLogic()
       moveToThrower();
   break;
   case GutsmanGun::ATTACHED_TO:
-    this->x = thrower->x;
-    this->y = thrower->y - this->h + 10.0f;
+    this->x = getXDest();
+    this->y = getYDest();
+    this->isFacingRight = !cur_stage->m_player->isFacingRight;
   break;
   case GutsmanGun::LAUNCH:
     if (this->velx != 0.0f)

@@ -282,15 +282,7 @@ void Player::setAnimSeq(int newAnimSeq, bool reset)
 {
   if (isHitAnimOn == false)
   {
-    if (!this->holdingGutsmanRock)
-      Character::setAnimSeq(newAnimSeq, reset);
-    else
-    {
-      if (newAnimSeq == RUNNING) newAnimSeq = RUNNINGROCK;
-      else if (newAnimSeq == STARTINGRUN) newAnimSeq = STARTINGRUNROCK;
-
-      Character::setAnimSeq(newAnimSeq, reset);
-    }
+    Character::setAnimSeq(newAnimSeq, reset);
   }
 }
 
@@ -972,11 +964,21 @@ void Player::drawCharacter(BITMAP * bmp)
     return;
   }
 
-  int curSpriteFrame = anim_seqs[curAnimSeq][curAnimFrame].frameNumber;
+  int tempCurAnimSeq = curAnimSeq;
+
+  if (this->holdingGutsmanRock)
+  {
+    if (tempCurAnimSeq == RUNNING) tempCurAnimSeq = RUNNINGROCK;
+    else if (tempCurAnimSeq == STARTINGRUN) tempCurAnimSeq = STARTINGRUNROCK;
+    else if (tempCurAnimSeq == STANDSTILL) tempCurAnimSeq = STANDSTILLROCK;
+    else if (tempCurAnimSeq == JUMPING) tempCurAnimSeq = JUMPINGROCK;
+  }
+
+  int curSpriteFrame = anim_seqs[tempCurAnimSeq][curAnimFrame].frameNumber;
 
   int xpos = this->sx;
 
-  switch(curAnimSeq)
+  switch(tempCurAnimSeq)
   {
     case Player::FIRINGRUNNING:
     case Player::FIRINGSTILL:
@@ -1002,7 +1004,7 @@ void Player::drawCharacter(BITMAP * bmp)
   drawing_mode(DRAW_MODE_TRANS, NULL, 0, 0);
 
   rect(bmp, xpos, this->sy, xpos + getFrameW(), this->sy + mm_player_defs::PLAYERHEIGHT, makecol(255,0,0));
-  rectfill(bmp, xrect, this->sy, xrect + this->utilXLen, this->sy + mm_player_defs::PLAYERHEIGHT, makecol(0,255,0));
+  //rectfill(bmp, xrect, this->sy, xrect + this->utilXLen, this->sy + mm_player_defs::PLAYERHEIGHT, makecol(0,255,0));
 
   drawing_mode(DRAW_MODE_SOLID, NULL, 0, 0);
 #endif

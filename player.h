@@ -63,6 +63,8 @@ class Player : public Character
           FIRINGJUMPHAND,
           STARTINGRUNROCK,
           RUNNINGROCK,
+          STANDSTILLROCK,
+          JUMPINGROCK,
          };
 
     std::map<mm_weapons::WEAPONS, int> weapons; // WEAPON, ENERGY LEVEL

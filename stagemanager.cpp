@@ -535,24 +535,7 @@ void StageManager::play()
 
         mm_weapons::drawWeapons(m_buffer);
 
-        for (it = characters_vec.begin(); it != characters_vec.end(); ++it)
-        {
-          curr_character = *it;
-
-          if (curr_character->alive == true)
-          {
-            curr_character->calcScreenCoords();
-            curr_character->drawCharacter(m_buffer);
-          }
-        }
-        for (std::list<Character *>::iterator i = TemporaryCharacterList::mm_tempCharacterLst.begin();
-             i != TemporaryCharacterList::mm_tempCharacterLst.end();
-             ++i)
-        {
-          curr_character = *i;
-          curr_character->calcScreenCoords();
-          curr_character->drawCharacter(m_buffer);
-        }
+        drawCharacters();
       }
       else if (stage->cameraSectorHasFgTiles(*camera, *player) == true)
       {
@@ -562,24 +545,7 @@ void StageManager::play()
 
         mm_weapons::drawWeapons(m_buffer);
 
-        for (it = characters_vec.begin(); it != characters_vec.end(); ++it)
-        {
-          curr_character = *it;
-
-          if (curr_character->alive == true)
-          {
-            curr_character->calcScreenCoords();//*camera);
-            curr_character->drawCharacter(m_buffer);
-          }
-        }
-        for (std::list<Character *>::iterator i = TemporaryCharacterList::mm_tempCharacterLst.begin();
-             i != TemporaryCharacterList::mm_tempCharacterLst.end();
-             ++i)
-        {
-          curr_character = *i;
-          curr_character->calcScreenCoords();//*camera);
-          curr_character->drawCharacter(m_buffer);
-        }
+        drawCharacters();
 
         stage->draw(m_buffer, true, false, false);
       }
@@ -590,24 +556,7 @@ void StageManager::play()
 
         mm_weapons::drawWeapons(m_buffer);
 
-        for (it = characters_vec.begin(); it != characters_vec.end(); ++it)
-        {
-          curr_character = *it;
-
-          if (curr_character->alive == true)
-          {
-            curr_character->calcScreenCoords();
-            curr_character->drawCharacter(m_buffer);
-          }
-        }
-        for (std::list<Character *>::iterator i = TemporaryCharacterList::mm_tempCharacterLst.begin();
-             i != TemporaryCharacterList::mm_tempCharacterLst.end();
-             ++i)
-        {
-          curr_character = *i;
-          curr_character->calcScreenCoords();
-          curr_character->drawCharacter(m_buffer);
-        }
+        drawCharacters();
       }
 
       // Restore camera x,y.
@@ -671,6 +620,31 @@ void StageManager::play()
 
   sboos->stopAll();
   delete sboos;
+}
+
+void StageManager::drawCharacters()
+{
+  Character * curr_character = NULL;
+  std::vector<Character *>::iterator it;
+
+  for (std::list<Character *>::iterator i = TemporaryCharacterList::mm_tempCharacterLst.begin();
+    i != TemporaryCharacterList::mm_tempCharacterLst.end();
+    ++i)
+  {
+    curr_character = *i;
+    curr_character->calcScreenCoords();
+    curr_character->drawCharacter(m_buffer);
+  }
+  for (it = characters_vec.begin(); it != characters_vec.end(); ++it)
+  {
+    curr_character = *it;
+
+    if (curr_character->alive == true)
+    {
+      curr_character->calcScreenCoords();
+      curr_character->drawCharacter(m_buffer);
+    }
+  }
 }
 
 void StageManager::killThemAll()

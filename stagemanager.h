@@ -28,6 +28,7 @@ class StageManager
     virtual void doStageSpecifics();
     virtual void createBoss();
     void play();
+    void drawCharacters();
 
     virtual const std::string & getStageFilePath() const;
 
