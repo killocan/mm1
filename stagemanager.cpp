@@ -170,7 +170,7 @@ void StageManager::doMegamanSpawning(BITMAP * buffer, FONT * mm_font)
       stage->draw(m_buffer, true, false, false);
     }
 
-    //Vsync::Sync();
+    Vsync::Sync();
     blit(buffer,screen,0,0,0,0,SCREEN_W,SCREEN_H);
     clear_bitmap(buffer);
   }
@@ -213,7 +213,7 @@ void StageManager::checkColissionAgainstEnemy()
           }
         }
 
-        if (player->isInvincible == false)
+        if (player->isInvincible == false || curr_character->type == mm_spritefiles::GUTSMANROCK_SPRITES)
         {
           if (Collision::pixelCollision((int)player->x,    (int)player->y,   player->getFrame(),
                                          curr_character->x, curr_character->y, curr_character->getFrame(),
@@ -321,7 +321,7 @@ static bool tempCharacterKill(const Character* value)
 
 void StageManager::play()
 {
-  stage  = new Stage(getStageFilePath(), *camera, &player);//, characters_vec);
+  stage  = new Stage(getStageFilePath(), *camera, &player);
   setupStage();
   CurrentCharacterList::mm_characterLst = &characters_vec;
 
@@ -394,7 +394,7 @@ void StageManager::play()
         while(key[KEY_P]);
       }
 
-      if (key[KEY_ENTER] && (game_pause == false) && (GlobalGameState::playerShots.size() == 0))
+      if (key[KEY_ENTER] && (game_pause == false) && (GlobalGameState::playerShots.size() == 0) && (player->holdingGutsmanRock==false))
       {
         Sounds::mm_sounds->play(PAUSE);
 
