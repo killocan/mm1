@@ -1148,11 +1148,6 @@ Character * Stage::createCharacter(int TYPE, int x, int y, int vx, int vy, void 
       cur_character = new GutsmanGun(*this, x, y, param);
     }
     break;
-    case mm_tile_actions::GUTSMAN_GUN_FRAGMENT:
-    {
-      cur_character = new GutsmanGun::GutsmanGunFragment(*this, x, y);
-    }
-    break;
   }
 
   return (cur_character);

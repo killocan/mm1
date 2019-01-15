@@ -13,12 +13,6 @@ class Stage;
 class GutsmanGun : public Character
 {
 public:
-  class GutsmanGunFragment : public Character
-  {
-  public:
-    GutsmanGunFragment(const Stage & stage, int x, int y);
-  };
-
   GutsmanGun(const Stage & stage, int x, int y, void * param);
 
   void launch();

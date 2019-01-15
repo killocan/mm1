@@ -26,6 +26,8 @@ void IceManStage::setupStage()
   stage->runtimeLoadCharacter(mm_spritefiles::TIMER_PLATFORM_SPRITES);
   stage->setOffset(mm_spritefiles::TIMER_PLATFORM_SPRITES, 0);
 
+  stage->setOffset(mm_spritefiles::GUTSMANROCK_SPRITES, 6);
+
   DisappearingBlock::DisappearingBlockFragment::DisappearingBlockSetupParam block1;
   block1.x = 24<<5;
   block1.y = 10<<5;

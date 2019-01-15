@@ -24,10 +24,6 @@
 
 //Gutsman Rock Gun
 
-GutsmanGun::GutsmanGunFragment::GutsmanGunFragment(const Stage & stage, int x, int y) : Character(stage, mm_spritefiles::GUTSMANROCK_SPRITES)
-{
-}
-
 float GutsmanGun::getXDest()
 {
   float offsetx = thrower == cur_stage->m_player ? 0.0f : 0.0f;
@@ -59,7 +55,8 @@ GutsmanGun::GutsmanGun(const Stage & stage, int x, int y, void * param) : Charac
   overstair = false;
 
   colorOffset = cur_stage->getOffset(mm_spritefiles::GUTSMANROCK_SPRITES);
-  setAnimSeq(colorOffset);
+  // set sprite to the pickup one
+  setAnimSeq(colorOffset + 1);
   h = getFrameH();
   w = getFrameW();
 

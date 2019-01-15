@@ -47,8 +47,6 @@ GutsmanRock::GutsmanRock(const Stage & stage, int x, int y) : Character(stage, m
   cur_stage->setTileAction(xd+1, yd+1, mm_tile_actions::TILE_SOLID);
 
   sprite = create_bitmap(w,h);
-
-  fprintf(stderr, "GUTSMANROCK this=[%p]\n",this);
 }
 
 GutsmanRock::~GutsmanRock()
@@ -98,11 +96,11 @@ void GutsmanRock::doLogic()
 
     if ((cur_stage->m_player->conPlayer == this) && (player->curWeapon == mm_weapons::W_GUTSMAN_GUN))
     {
-      setAnimSeq(GutsmanRock::BLINKING);
+      setAnimSeq(colorOffset + GutsmanRock::BLINKING);
     }
     else
     {
-      setAnimSeq(GutsmanRock::STILL);
+      setAnimSeq(colorOffset + GutsmanRock::STILL);
     }
   }
   else

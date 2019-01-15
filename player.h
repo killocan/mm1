@@ -69,6 +69,7 @@ class Player : public Character
 
     std::map<mm_weapons::WEAPONS, int> weapons; // WEAPON, ENERGY LEVEL
     mm_weapons::WEAPONS curWeapon;
+    bool holdingGutsmanRock;
 
   private:
     int handType();
@@ -88,5 +89,4 @@ class Player : public Character
     bool bDying;
     unsigned long dyingTimer;
     int dieStep;
-    bool holdingGutsmanRock;
 };
