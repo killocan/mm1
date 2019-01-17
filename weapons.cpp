@@ -20,7 +20,7 @@
 #include "scenesoundmanager.h"
 #include "sfx.h"
 #include "magneticbeamhandler.h"
-
+#include "gutsmangun.h"
 
 static void handleBombFragment(mm_weapons::weapon_st * pWeapon)
 {
@@ -998,8 +998,9 @@ void mm_weapons::createGutsmanRock(Character * thrower)
   }
 }
 
-void mm_weapons::createGutsmanRock(Character * character, int x, int y, float vx, float vy, int offset)
+GutsmanGun * mm_weapons::createGutsmanRock(Character * character, int x, int y, float vx, float vy, int offset)
 {
   Character * weapon = character->cur_stage->createCharacter(mm_tile_actions::GUTSMAN_GUN, x, y, 0, 0, character);
   TemporaryCharacterList::mm_tempCharacterLst.push_back(weapon);
+  return (GutsmanGun *) weapon;
 }

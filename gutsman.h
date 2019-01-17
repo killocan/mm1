@@ -7,6 +7,7 @@
 
 #include "character.h"
 
+class GutsmanGun;
 class Stage;
 
 //Gutsman
@@ -27,6 +28,8 @@ class Gutsman : public Character
     enum { DECIDING, SHOW_OFF, PRE_JUMP, JUMP, PRE_JUMP_ATTACK, JUMP_ATTACK, ATTACK, };
 
   private:
+    GutsmanGun * rock;
+    int cycleCount;
     bool bFirstTime;
     bool jumping, jumping_right;
 };

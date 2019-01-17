@@ -7,7 +7,7 @@
 #include "stage.h"
 #include "tileactions.h"
 #include "defines.h"
-
+#include "gutsmangun.h"
 #include "scenesoundmanager.h"
 #include "globals.h"
 #include "globalgamestate.h"
@@ -40,6 +40,8 @@ Gutsman::Gutsman(const Stage & stage, int x_map, int y_map, void * param) : Char
   alive = true;
 
   bFirstTime = true;
+
+  cycleCount = 0;
 }
 
 bool Gutsman::handleAnimation(bool * bAnimationEnded)
@@ -181,19 +183,29 @@ void Gutsman::doLogic()
           curState = Gutsman::ATTACK;
           setAnimSeq(Gutsman::ATTACK);
           jumping = false;
+
+          rock = mm_weapons::createGutsmanRock(this, this->x+5.0f, GlobalCamera::mm_camera->y-64.0f, 0, 0, 0);
         }
       }
     }
     break;
     case Gutsman::ATTACK:
     {
-      bool cycleDone = false;
-      Character::handleAnimation(&cycleDone);
-      if (cycleDone == true)
+      if (rock == NULL || rock->curState == GutsmanGun::ATTACHED_TO)
       {
-        fire();
-        curState = Gutsman::DECIDING;
-        setAnimSeq(Gutsman::DECIDING);
+        bool cycleDone = false;
+        if (Character::handleAnimation(&cycleDone) && cycleCount < 2)
+        {
+          ++cycleCount;
+          if (cycleCount == 2)
+            fire();
+        }
+        if (cycleDone == true)
+        {
+          cycleCount = 0;
+          curState = Gutsman::DECIDING;
+          setAnimSeq(Gutsman::DECIDING);
+        }
       }
     }
     break;
@@ -202,9 +214,11 @@ void Gutsman::doLogic()
 
 void Gutsman::fire()
 {
-  //mm_weapons::createMegaBuster(this, xpos, y+12, vx, vy, bulletOffset);
-
-  return;
+  if (rock->curState == GutsmanGun::ATTACHED_TO)
+  {
+    rock->launch();
+    rock = NULL;
+  }
 }
 
 void Gutsman::hit(mm_weapons::weapon_st * pWeapon)

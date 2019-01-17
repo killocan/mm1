@@ -12,6 +12,7 @@ class Player;
 class Camera;
 class AnimSequence;
 class Stage;
+class GutsmanGun;
 
 #define CUTTER_CURVE_PNTS 35
 
@@ -137,5 +138,5 @@ namespace mm_weapons
   void createMagnetBeam(Character * character, int x, int y, float vx, float vy, int offset);
 
   void createGutsmanRock(Character * thrower);
-  void createGutsmanRock(Character * character, int x, int y, float vx, float vy, int offset);
+  GutsmanGun * createGutsmanRock(Character * character, int x, int y, float vx, float vy, int offset);
 }

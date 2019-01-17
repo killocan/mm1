@@ -26,7 +26,7 @@
 
 float GutsmanGun::getXDest()
 {
-  float offsetx = thrower == cur_stage->m_player ? 0.0f : 0.0f;
+  float offsetx = thrower == cur_stage->m_player ? 0.0f : 5.0f;
   float dest_x = thrower->x + offsetx;
 
   return dest_x;
@@ -34,7 +34,7 @@ float GutsmanGun::getXDest()
 
 float GutsmanGun::getYDest()
 {
-  float offsety = thrower == cur_stage->m_player ? 21.0f : 0.0f;
+  float offsety = thrower == cur_stage->m_player ? 21.0f : 7.0f;
   float dest_y = thrower->y - this->h + offsety;
 
   if (thrower == cur_stage->m_player)
@@ -100,6 +100,19 @@ void GutsmanGun::moveToMegaman()
 
 void GutsmanGun::moveToThrower()
 {
+  if ((Clock::clockTicks - ticks) > 2)
+  {
+    ticks = Clock::clockTicks;
+
+    if (this->y+ 22.0f >= thrower->y - this->h + 7)
+    {
+      this->curState = GutsmanGun::ATTACHED_TO;
+    }
+    else
+    {
+      this->y += 22.0f;
+    }
+  }
 }
 
 void GutsmanGun::calcAcceleration()
@@ -108,6 +121,12 @@ void GutsmanGun::calcAcceleration()
   {
     this->vely = -5.5f;
     this->velx = 11.0f;
+    this->isFacingRight = thrower->isFacingRight;
+  }
+  else
+  {
+    this->vely = -6.0f;
+    this->velx = 12.0f;
     this->isFacingRight = thrower->isFacingRight;
   }
 }
@@ -125,7 +144,7 @@ void GutsmanGun::doLogic()
   case GutsmanGun::ATTACHED_TO:
     this->x = getXDest();
     this->y = getYDest();
-    this->isFacingRight = !cur_stage->m_player->isFacingRight;
+    this->isFacingRight = !thrower->isFacingRight;
   break;
   case GutsmanGun::LAUNCH:
     if (this->velx != 0.0f)
@@ -181,7 +200,7 @@ void GutsmanGun::doGravitation()
 
 void GutsmanGun::checkOnCamera()
 {
-  if (life > 0 && curState == GutsmanGun::ATTACHED_TO)
+  if (life > 0 && (curState == GutsmanGun::ATTACHED_TO || curState == GutsmanGun::MOVING))
   {
     alive = true;
   }

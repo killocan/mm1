@@ -1,5 +1,6 @@
 - Arma do gutsman (nao permitir entrar na escada com gutsmanrock na mao, criar versao 
-  para o boss gustman (usar a mesma interpolacao linear para sair do topo da tela para mao do gustman)  
+  para o boss gustman (usar a mesma interpolacao linear para sair do topo da tela para mao do gustman),
+  ajustar y da rock com y do gustman quando ele agacha  
 - Porta chefe horizontal
 - Mover criação de partes do picket crazyrazy watcher... para dentro da classe do mesmo e tirar do stage.cpp
 - Corrida do megaman aceleracao gradual. (Ajustar corrida para comecar com 1 px depois passar para 3 quando ja correndo.)
@@ -13,3 +14,4 @@
 - Add 10,000 points to score if it was a rematch (FROM ASM finlandes)
 - ajustar magnetic beam SE estiver atrapalhando, verificar se esta dentro de tiles e jogar para dentro 100%
   evitando que o mm fique preso.
+- remover componente y de aceleracao quando megaman atravessa porta no ar
