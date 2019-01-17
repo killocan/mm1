@@ -22,11 +22,16 @@
 #include "collision.h"
 #include "spritefiles.h"
 
+#include "gutsman.h"
+
 //Gutsman Rock Gun
 
 float GutsmanGun::getXDest()
 {
   float offsetx = thrower == cur_stage->m_player ? 0.0f : 5.0f;
+  if (thrower != cur_stage->m_player && thrower->isFacingRight)
+    offsetx *= -1.0f;
+
   float dest_x = thrower->x + offsetx;
 
   return dest_x;
@@ -42,6 +47,13 @@ float GutsmanGun::getYDest()
     if (!thrower->onground)
       dest_y -= 10.0f;
   }
+  else
+  {
+    if (thrower->curState == Gutsman::ATTACK && ((Gutsman*)thrower)->cycleCount == 1)
+    {
+      dest_y += 5.0f;
+    }
+  }
 
   return dest_y;
 }
@@ -54,9 +66,18 @@ GutsmanGun::GutsmanGun(const Stage & stage, int x, int y, void * param) : Charac
   isFacingRight = true;
   overstair = false;
 
-  colorOffset = cur_stage->getOffset(mm_spritefiles::GUTSMANROCK_SPRITES);
-  // set sprite to the pickup one
-  setAnimSeq(colorOffset + 1);
+  thrower = (Character *)param;
+
+  if (thrower == stage.m_player)
+  {
+    colorOffset = cur_stage->getOffset(mm_spritefiles::GUTSMANROCK_SPRITES);
+    // set sprite to the pickup one
+    setAnimSeq(colorOffset + 1);
+    GutsmanGunManager::instance()->addRock(this);
+  }
+  else
+    setAnimSeq(0);
+
   h = getFrameH();
   w = getFrameW();
 
@@ -64,8 +85,6 @@ GutsmanGun::GutsmanGun(const Stage & stage, int x, int y, void * param) : Charac
   life = 1;
 
   curState = GutsmanGun::MOVING;
-
-  thrower = (Character *) param;
 
   float dest_x = getXDest();
   float dest_y = getYDest();
@@ -76,8 +95,6 @@ GutsmanGun::GutsmanGun(const Stage & stage, int x, int y, void * param) : Charac
     this->y += (dest_y - this->y) / 2;
   }
   ticks = Clock::clockTicks;
-
-  GutsmanGunManager::instance()->addRock(this);
 }
 
 void GutsmanGun::launch()
@@ -175,7 +192,7 @@ void GutsmanGun::doLogic()
     }
   break;
   case GutsmanGun::FRAGMENT:
-    mm_weapons::createGutsmanRock(this);
+    mm_weapons::createGutsmanRock(this, thrower == cur_stage->m_player);
     curState = GutsmanGun::DEAD;
   break;
   case GutsmanGun::DEAD:

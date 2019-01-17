@@ -962,7 +962,7 @@ void mm_weapons::createMagnetBeam(Character * character, int x, int y, float vx,
 {
 }
 
-void mm_weapons::createGutsmanRock(Character * thrower)
+void mm_weapons::createGutsmanRock(Character * thrower, bool fromPlayer)
 {
   mm_weapons::weapon_st gutsman_rock_fragment[4];
   int w, h;
@@ -989,12 +989,18 @@ void mm_weapons::createGutsmanRock(Character * thrower)
 
     gutsman_rock_fragment[i].bulletSpriteShet = 
       thrower->cur_stage->getAnimSeq(mm_spritefiles::GUTSMAN_ROCK_FRAGMENTS_SPRITES);
+    if (!fromPlayer)
+      gutsman_rock_fragment[i].frameOffset = 1;
+
     gutsman_rock_fragment[i].weapon = mm_weapons::W_GUTSMAN_GUN;
 
     gutsman_rock_fragment[i].w = w;
     gutsman_rock_fragment[i].h = h;
 
-    GlobalGameState::playerShots.push_back(gutsman_rock_fragment[i]);
+    if (fromPlayer)
+      GlobalGameState::playerShots.push_back(gutsman_rock_fragment[i]);
+    else
+      GlobalGameState::enemyShots.push_back(gutsman_rock_fragment[i]);
   }
 }
 

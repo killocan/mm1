@@ -26,12 +26,13 @@ public:
   void moveToThrower();
   void calcAcceleration();
 
+  Character * thrower;
+
   enum { MOVING, ATTACHED_TO, LAUNCH, FRAGMENT, DEAD };
 private:
   float getXDest();
   float getYDest();
   bool checkCollision();
 
-  Character * thrower;
   unsigned long ticks;
 };

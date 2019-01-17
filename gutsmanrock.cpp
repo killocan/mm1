@@ -133,7 +133,7 @@ void GutsmanRock::hit(mm_weapons::weapon_st * pWeapon)
     
     Sounds::mm_sounds->play(SUPER_ARM);
     this->isFacingRight = cur_stage->m_player->isFacingRight;
-    mm_weapons::createGutsmanRock(this);
+    mm_weapons::createGutsmanRock(this, true);
 
     die();
   default:

@@ -577,10 +577,10 @@ void StageManager::play()
       {
         EnergyBar::drawEnerybar(m_buffer, 32, 34, player->curWeapon);
       }
-      //if (pBoss != NULL)
-      //{
-      //  EnergyBar::drawEnerybar(m_buffer, 32, 34, pBoss->curWeapon);
-      //}
+      if (NULL != NULL)
+      {
+        EnergyBar::drawEnerybar(m_buffer, 32, 34, player->curWeapon);
+      }
 
       //tvmode(m_buffer);
       //bhmode(m_buffer);

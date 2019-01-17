@@ -1,5 +1,7 @@
-- Arma do gutsman (ajustar y da rock com y do gustman quando ele agacha)
-- Porta chefe horizontal
+- megaman caindo por causa do terremoto.
+- Porta chefe horizontal (reduzir um pouco deslocamento horizontal em porta vertical)
+- Animacao do life do boss e life do boss morendo
+- Finalizar fase
 - Mover criação de partes do picket crazyrazy watcher... para dentro da classe do mesmo e tirar do stage.cpp
 - Corrida do megaman aceleracao gradual. (Ajustar corrida para comecar com 1 px depois passar para 3 quando ja correndo.)
 - mudar struct  do mapa, chao de gelo e agua, acelerecao correpondente para fase do iceman
@@ -7,7 +9,7 @@
 - Fases do cutman, bombman, electman, iceman
 - IA dos chefes
 - Não permitir entrar no menu de armas se houver magnetic na tela
-- Fases do DR WILLY
+- Fases do DR WILLY (gutsman gun muda numa fase do castelo)
 - ajustar pontos, uso de arma e damage de tudo.
 - Add 10,000 points to score if it was a rematch (FROM ASM finlandes)
 - ajustar magnetic beam SE estiver atrapalhando, verificar se esta dentro de tiles e jogar para dentro 100%

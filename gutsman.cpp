@@ -184,7 +184,9 @@ void Gutsman::doLogic()
           setAnimSeq(Gutsman::ATTACK);
           jumping = false;
 
-          rock = mm_weapons::createGutsmanRock(this, this->x+5.0f, GlobalCamera::mm_camera->y-64.0f, 0, 0, 0);
+          rock = mm_weapons::createGutsmanRock(this, this->x + (isFacingRight ? -5.0f : 5.0f),
+                                               GlobalCamera::mm_camera->y-64.0f, 
+                                               0, 0, 0);
         }
       }
     }
