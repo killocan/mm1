@@ -533,9 +533,9 @@ void StageManager::play()
       {
         stage->draw(m_buffer, false);
 
-        mm_weapons::drawWeapons(m_buffer);
-
         drawCharacters();
+
+        mm_weapons::drawWeapons(m_buffer);
       }
       else if (stage->cameraSectorHasFgTiles(*camera, *player) == true)
       {
@@ -543,9 +543,9 @@ void StageManager::play()
 
         stage->draw(m_buffer, true, false, true);
 
-        mm_weapons::drawWeapons(m_buffer);
-
         drawCharacters();
+
+        mm_weapons::drawWeapons(m_buffer);
 
         stage->draw(m_buffer, true, false, false);
       }
@@ -554,9 +554,9 @@ void StageManager::play()
         clear_bitmap(m_buffer);
         stage->draw(m_buffer, true);
 
-        mm_weapons::drawWeapons(m_buffer);
-
         drawCharacters();
+
+        mm_weapons::drawWeapons(m_buffer);
       }
 
       // Restore camera x,y.

@@ -521,88 +521,91 @@ void Player::normalLogic()
 
 
     //TODO: Should group those two(up,down) under firing = false hehehe...
-    if (key[KEY_UP] && firing==false)//!key[KEY_A])
+    if (firing==false && holdingGutsmanRock==false)
     {
-      if(collisionStair(x+utilX, y, tilecoordx, tilecoordy, tiletype, true) == true)
+      if (key[KEY_UP])
       {
-        vely = 0;
-
-        Character::handleAnimation(); // While on stairs auto animation is off
-        grabstair = true;
-
-        if (tiletype == mm_tile_actions::TILE_STAIR_BEGIN)
+        if(collisionStair(x+utilX, y, tilecoordx, tilecoordy, tiletype, true) == true)
         {
-          // if next up tile is not an stair tile.
-          if(cur_stage->tileActionUnnormalized(x+utilX, y+8) != mm_tile_actions::TILE_STAIR_BEGIN)
+          vely = 0;
+
+          Character::handleAnimation(); // While on stairs auto animation is off
+          grabstair = true;
+
+          if (tiletype == mm_tile_actions::TILE_STAIR_BEGIN)
           {
-            setAnimSeq(Player::ONSTAIR);
-            isGettingOut = true;
-            if ((( ((int)y) % mm_graphs_defs::TILE_SIZE) < 4) ||
-                (cur_stage->tileActionUnnormalized(x+utilX, y+mm_graphs_defs::TILE_SIZE) != mm_tile_actions::TILE_STAIR_BEGIN))
+            // if next up tile is not an stair tile.
+            if(cur_stage->tileActionUnnormalized(x+utilX, y+8) != mm_tile_actions::TILE_STAIR_BEGIN)
             {
-              y-= 6;
-              y-= ((int)y)%mm_graphs_defs::TILE_SIZE;
-              y = (y / mm_graphs_defs::TILE_SIZE) * mm_graphs_defs::TILE_SIZE;
+              setAnimSeq(Player::ONSTAIR);
+              isGettingOut = true;
+              if ((( ((int)y) % mm_graphs_defs::TILE_SIZE) < 4) ||
+                  (cur_stage->tileActionUnnormalized(x+utilX, y+mm_graphs_defs::TILE_SIZE) != mm_tile_actions::TILE_STAIR_BEGIN))
+              {
+                y-= 6;
+                y-= ((int)y)%mm_graphs_defs::TILE_SIZE;
+                y = (y / mm_graphs_defs::TILE_SIZE) * mm_graphs_defs::TILE_SIZE;
+                isGettingOut = false;
+                onground  = true;
+                grabstair = false;
+                vely = 8;
+                setAnimSeq(Player::STANDSTILL);
+              }
+            }
+            else
+            {
               isGettingOut = false;
-              onground  = true;
-              grabstair = false;
-              vely = 8;
-              setAnimSeq(Player::STANDSTILL);
+            }
+          }
+
+          x    = (tilecoordx * mm_graphs_defs::TILE_SIZE+1) - utilX;
+          y   -= 2;
+          isFacingDown  = true;
+        }
+      }
+      else if (key[KEY_DOWN])
+      {
+        // If player is colliding with something and it's a stair tile OR if player
+        // is on the last stair step tile(with nothing bellow) then keep holding on it.
+        if((collisionHor(x+utilX+(isFacingRight?8:0), y+vely+h, tilecoordx, tilecoordy, true, tiletype) &&
+          (tiletype == mm_tile_actions::TILE_STAIR || tiletype == mm_tile_actions::TILE_STAIR_BEGIN) &&
+          (( (int)(x+utilX+(isFacingRight?8:0)) % mm_graphs_defs::TILE_SIZE) < (mm_graphs_defs::TILE_SIZE/2))) ||
+          (overstair == true && tiletype == 0))
+        {
+          vely = 0;
+
+          Character::handleAnimation(); // While on stairs auto animation is off
+          grabstair    = true;
+          isGettingOut = false;
+
+          if (tiletype == mm_tile_actions::TILE_STAIR_BEGIN)
+          {
+            y+=16;
+            if (isGettingIn == false)
+            {
+              isGettingIn  = true;
+              setAnimSeq(Player::ENTERINGSTAIR);
             }
           }
           else
           {
-            isGettingOut = false;
+            if (isGettingIn == false) setAnimSeq(Player::UPDOWNSTAIR);
           }
+
+          isFacingDown = true;
+          collisionStair(x+utilX, y, tilecoordx, tilecoordy, tiletype, true);
+          x = (tilecoordx * mm_graphs_defs::TILE_SIZE+1) - utilX;
+          y += 2;
         }
-
-        x    = (tilecoordx * mm_graphs_defs::TILE_SIZE+1) - utilX;
-        y   -= 2;
-        isFacingDown  = true;
-      }
-    }
-    else if (key[KEY_DOWN] && firing==false)
-    {
-      // If player is colliding with something and it's a stair tile OR if player 
-      // is on the last stair step tile(with nothing bellow) then keep holding on it.
-      if((collisionHor(x+utilX+(isFacingRight?8:0), y+vely+h, tilecoordx, tilecoordy, true, tiletype) &&
-        (tiletype == mm_tile_actions::TILE_STAIR || tiletype == mm_tile_actions::TILE_STAIR_BEGIN) &&
-        (( (int)(x+utilX+(isFacingRight?8:0)) % mm_graphs_defs::TILE_SIZE) < (mm_graphs_defs::TILE_SIZE/2))) ||
-        (overstair == true && tiletype == 0))
-      {
-        vely = 0;
-
-        Character::handleAnimation(); // While on stairs auto animation is off
-        grabstair    = true;
-        isGettingOut = false;
-
-        if (tiletype == mm_tile_actions::TILE_STAIR_BEGIN)
+        else if (grabstair == true)
         {
-          y+=16;
-          if (isGettingIn == false)
-          {
-            isGettingIn  = true;
-            setAnimSeq(Player::ENTERINGSTAIR);
-          }
+          grabstair = false;
         }
-        else
-        {
-          if (isGettingIn == false) setAnimSeq(Player::UPDOWNSTAIR);
-        }
-
-        isFacingDown = true;
-        collisionStair(x+utilX, y, tilecoordx, tilecoordy, tiletype, true);
-        x = (tilecoordx * mm_graphs_defs::TILE_SIZE+1) - utilX;
-        y += 2;
-      }
-      else if (grabstair == true)
-      {
-        grabstair = false;
       }
     }
 
     static bool spacePressed = false;
-    if (key[KEY_SPACE])// && (!key[KEY_UP] && !key[KEY_DOWN]))
+    if (key[KEY_SPACE])
     {
       isGettingOut = isGettingIn = false;
 
@@ -999,7 +1002,7 @@ void Player::drawCharacter(BITMAP * bmp)
   }
 
 #ifdef DEBUG
-  int xrect = (xpos + this->utilX);
+  //int xrect = (xpos + this->utilX);
 
   drawing_mode(DRAW_MODE_TRANS, NULL, 0, 0);
 
