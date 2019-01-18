@@ -34,6 +34,7 @@ class Player : public Character
     virtual void firingOnJump();
     virtual void changeWeapon();
     virtual void setAnimSeq(int newAnimSeq, bool reset = true);
+    void getStunned();
     
     void reset();
     void forceAnimation();
@@ -65,11 +66,13 @@ class Player : public Character
           RUNNINGROCK,
           STANDSTILLROCK,
           JUMPINGROCK,
+          STUNNED,
          };
 
     std::map<mm_weapons::WEAPONS, int> weapons; // WEAPON, ENERGY LEVEL
     mm_weapons::WEAPONS curWeapon;
     bool holdingGutsmanRock;
+    bool isStunned;
 
   private:
     int handType();

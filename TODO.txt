@@ -1,5 +1,5 @@
 - megaman caindo por causa do terremoto.
-- Porta chefe horizontal (reduzir um pouco deslocamento horizontal em porta vertical)
+- Porta chefe horizontal
 - Animacao do life do boss e life do boss morendo
 - Finalizar fase
 - Mover criação de partes do picket crazyrazy watcher... para dentro da classe do mesmo e tirar do stage.cpp

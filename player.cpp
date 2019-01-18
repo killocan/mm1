@@ -59,6 +59,7 @@ Player::Player(const Stage & stage) : Character(stage, 0), lives(2)
   this->grabstair  = false;
   this->overstair  = false;
   this->holdingGutsmanRock = false;
+  this->isStunned = false;
 }
 
 void Player::reset()
@@ -102,6 +103,7 @@ void Player::reset()
   conPlayer = NULL;
 
   holdingGutsmanRock = false;
+  isStunned = false;
 }
 
 void Player::forceAnimation()
@@ -273,6 +275,12 @@ void Player::hit(Character * pCharacter)
   TemporaryCharacterList::mm_tempCharacterLst.push_back(cur_stage->createCharacter(mm_tile_actions::HIT_EXPLOSION_CHAR, this->x, this->y));
 }
 
+void Player::getStunned()
+{
+  isStunned = true;
+  setAnimSeq(Player::STUNNED);
+}
+
 void Player::checkOnCamera()
 {
   return;
@@ -325,6 +333,34 @@ void Player::normalLogic()
   {
     dyingTimer = Clock::clockTicks;
     bDying = true;
+    return;
+  }
+
+  if (isStunned == true)
+  {
+    float step;
+    float offset;
+    if (isFacingRight)
+    {
+       step = -2.0f;
+       offset = (x+utilX)+step;
+    }
+    else
+    {
+       step = 2.0f;
+       offset = (x+utilX)+step+utilXLen;
+    }
+
+    int tilecoordx, tilecoordy, tiletype;
+    bool collide = collisionVer(offset, y, tilecoordx, tilecoordy, tiletype);
+
+    if (collide == false)
+      this->x += step;
+
+    bool bAnimEnded = false;
+    Character::handleAnimation(&bAnimEnded);
+    isStunned = !bAnimEnded;
+
     return;
   }
 

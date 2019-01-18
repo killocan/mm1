@@ -763,7 +763,10 @@ void StageManager::doStageSpecifics()
           if (autoMovePlayerCount < (mm_graphs_defs::TILES_X*2))
           {
             //TODO: remove when Characters use float for x,y vx,vy
-            if ((float)autoMovePlayerCount < (float)(mm_graphs_defs::TILES_X*1.55f)) player->goRight();
+            if ((float)autoMovePlayerCount < (float)(mm_graphs_defs::TILES_X*1.55f))
+            {
+              player->goRight();
+            }
 
             if ((Clock::clockTicks - doorTiming) > 2)
             {
