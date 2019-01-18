@@ -513,6 +513,9 @@ void StageManager::play()
 
       if (GlobalGameState::earthquake == true)
       {
+        if (player->onground)
+          player->getStunned();
+
         static int eq_x=-4, eq_y=4;
         static int quake_values[4] = {-5,-3,3,5};
 
@@ -522,7 +525,11 @@ void StageManager::play()
         while (eq_y == old_eq) eq_y = quake_values[rand()%4];
 
         --GlobalGameState::earthquakecount;
-        if (GlobalGameState::earthquakecount <= 0) GlobalGameState::earthquake = false;
+        if (GlobalGameState::earthquakecount <= 0)
+        {
+          player->isStunned = false;
+          GlobalGameState::earthquake = false;
+        }
 
         GlobalCamera::mm_camera->x += eq_x<<1;
         GlobalCamera::mm_camera->y += eq_y<<1;
