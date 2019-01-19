@@ -45,7 +45,11 @@ BossDoor::BossDoor(const Stage & stage, int x, int y, void * param) : Character(
   this->old_x = this->x;
   this->old_y = this->y;
 
-  sprite = create_bitmap(w * config.size,h * config.totalSize);
+  if (config.orientation == 0)
+    sprite = create_bitmap(w * config.size,h * config.totalSize);
+  else
+    sprite = create_bitmap(w * config.totalSize, h * config.size);
+
   h = sprite->h;
   w = sprite->w;
 
@@ -83,6 +87,29 @@ void BossDoor::closeDoor()
   curState = BossDoor::CLOSING;
   doorOpenDelay = Clock::clockTicks;
   Sounds::mm_sounds->play(DOOR);
+  block();
+}
+
+void BossDoor::block()
+{
+  if (config.orientation == 0)
+  {
+    int xd = ((int)x) / mm_graphs_defs::TILE_SIZE;
+    int yd = ((int)y) / mm_graphs_defs::TILE_SIZE;
+    for (int i = 0; i < config.totalSize; ++i, yd++)
+    {
+      cur_stage->setTileAction(xd, yd, mm_tile_actions::TILE_SOLID);
+    }
+  }
+  else
+  {
+    int xd = ((int)x) / mm_graphs_defs::TILE_SIZE;
+    int yd = ((int)y) / mm_graphs_defs::TILE_SIZE;
+    for (int i = 0; i < config.totalSize; ++i, xd++)
+    {
+      cur_stage->setTileAction(xd, yd, mm_tile_actions::TILE_SOLID);
+    }
+  }
 }
 
 void BossDoor::blockPassage()
@@ -93,7 +120,7 @@ void BossDoor::blockPassage()
     int yd = ((int)y)/mm_graphs_defs::TILE_SIZE;
     for (int i = 0; i < config.totalSize; ++i, yd++)
     {
-      cur_stage->setTileAction(xd,yd,mm_tile_actions::TILE_SOLID);
+      cur_stage->setTileAction(xd, yd, mm_tile_actions::TILE_SOLID);
     }
 
     yd = ((int)y)/mm_graphs_defs::TILE_SIZE;
@@ -105,13 +132,9 @@ void BossDoor::blockPassage()
   }
   else
   {
-    int xd = ((int)(x+w))/mm_graphs_defs::TILE_SIZE;
-    int yd = ((int)y)/mm_graphs_defs::TILE_SIZE;
-    for (int i = 0; i < config.totalSize; ++i, xd++)
-    {
-      cur_stage->setTileAction(xd,yd,mm_tile_actions::TILE_SOLID);
-    }
+    block();
 
+    /*
     switch (config.blockedSide)
     {
       case 0:
@@ -125,7 +148,7 @@ void BossDoor::blockPassage()
 
     cur_stage->defineCameraSector(xd, yd, true);
     cur_stage->defineCameraSector(xcamblock, ycamblock, false);
-
+    */
     hasBeenUsed = true;
   }
 }
@@ -145,12 +168,18 @@ void BossDoor::drawCharacter(BITMAP * bmp)
     else                         { y=curSprTile->h*j; x = 0;}
     for (int i = 0; i < curDoorLevel; ++i)
     {
-      blit(curSprTile, sprite, 0, 0,
-           x, y,
-           curSprTile->w, curSprTile->h);
-
-      if (config.orientation == 0) y+=curSprTile->h;
-      else                         x+=curSprTile->w;
+      if (config.orientation == 0)
+      {
+        blit(curSprTile, sprite, 0, 0,
+          x, y,
+          curSprTile->w, curSprTile->h);
+        y += curSprTile->h;
+      }
+      else
+      {
+        rotate_sprite(sprite, curSprTile, x, y, itofix(64));
+        x += curSprTile->w;
+      }
     }
   }
 

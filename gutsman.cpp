@@ -61,7 +61,7 @@ void Gutsman::touchGround()
   {
     Sounds::mm_sounds->play(EARTHQUAKE);
     GlobalGameState::earthquake = true;
-    GlobalGameState::earthquakecount = 200;
+    GlobalGameState::earthquakecount = 300;
   }
 }
 

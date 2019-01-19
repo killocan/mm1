@@ -32,7 +32,6 @@ void GutsManStage::setupStage()
   stage->setOffset(mm_spritefiles::FOOTHOLDER_SPRITES, 0);
 
   bossWarningTiles.push_back(8);
-
   bossWarningColors[0x8c1800] = 0xffffff;
   bossWarningColors[0xffffff] = 0x8c1800;
 

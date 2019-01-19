@@ -39,6 +39,7 @@ class BossDoor : public Character
     void closeDoor();
     // only for vertical orientation.
     void blockPassage();
+    void block();
 
     bool hasBeenUsed;
 

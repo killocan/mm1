@@ -305,7 +305,7 @@ static void tvmode(BITMAP * bmp)
 
 static bool tempCharacterDone(const Character* value)
 {
-  if (value->alive == false)
+  if (value == NULL || value->alive == false)
   {
     delete value;
     return true;
@@ -437,6 +437,8 @@ void StageManager::play()
                ++i)
           {
             curr_character = *i;
+            if (curr_character == NULL) continue;
+
             curr_character->checkOnCamera();
             curr_character->doGravitation();
             curr_character->doLogic();
@@ -639,8 +641,11 @@ void StageManager::drawCharacters()
     ++i)
   {
     curr_character = *i;
-    curr_character->calcScreenCoords();
-    curr_character->drawCharacter(m_buffer);
+    if (curr_character != NULL)
+    {
+      curr_character->calcScreenCoords();
+      curr_character->drawCharacter(m_buffer);
+    }
   }
   for (it = characters_vec.begin(); it != characters_vec.end(); ++it)
   {
@@ -720,13 +725,14 @@ void StageManager::doStageSpecifics()
   {
     case SEARCHING_BOSS_DOOR:
     {
-      if (stage->checkForBoss(camera->x, camera->y) == true)
+      if (stage->checkForBoss(camera->x, camera->y) == true && stage->horz_scroll==false)
       {
         cur_stage_state = StageManager::BOSS_WARNING;
 
         handlingDoor = true;
 
         initBossFight = true;
+        killThemAll();
 
         Sounds::mm_sounds->stopAll();
         ssm->stopAll();
@@ -801,7 +807,8 @@ void StageManager::doStageSpecifics()
     break;
     case INITING_BOSS_FIGHT:
     {
-      door = dynamic_cast<BossDoor*> (special_chars_vec[2]);
+      int lastItem = special_chars_vec.size()-1;
+      door = dynamic_cast<BossDoor*> (special_chars_vec[lastItem]);
       if (door->curState == BossDoor::OPENED)
       {
         door->closeDoor();

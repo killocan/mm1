@@ -11,6 +11,11 @@ class ElecManStage : public StageManager
 {
   public:
     ElecManStage();
+
+    virtual void setupStage();
+    virtual void createBoss();
+    virtual void doStageSpecifics();
+
   protected:
     SceneSoundManager * CreateSoundManager();
 };

@@ -73,13 +73,13 @@ class Player : public Character
     mm_weapons::WEAPONS curWeapon;
     bool holdingGutsmanRock;
     bool isStunned;
+    bool isGettingOut;
 
   private:
     int handType();
     virtual bool canJumpAgain();
 
     // Stair related stuff.
-    bool isGettingOut;
     bool isGettingIn;
     // Hit animation
     bool isHitAnimOn;
