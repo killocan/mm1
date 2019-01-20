@@ -13,6 +13,7 @@ class BombManStage : public StageManager
     BombManStage();
 
     virtual void setupStage();
+    virtual void doStageSpecifics();
 
   protected:
     SceneSoundManager * CreateSoundManager();

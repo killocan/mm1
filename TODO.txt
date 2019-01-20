@@ -1,5 +1,3 @@
-- megaman caindo por causa do terremoto.
-- Porta chefe horizontal
 - Animacao do life do boss e life do boss morendo
 - Finalizar fase
 - Mover criação de partes do picket crazyrazy watcher... para dentro da classe do mesmo e tirar do stage.cpp
@@ -15,3 +13,6 @@
 - ajustar magnetic beam SE estiver atrapalhando, verificar se esta dentro de tiles e jogar para dentro 100%
   evitando que o mm fique preso.
 - remover componente y de aceleracao quando megaman atravessa porta no ar
+- nao deixar pegar input se animationoff estiver ligado (ver)
+- mover codigo de up e down do mm para metodos
+- ver se vale a pena remover todos hit e jogar para um so em character e so usar o array de dano.

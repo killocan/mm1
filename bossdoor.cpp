@@ -84,6 +84,10 @@ void BossDoor::openDoor()
 
 void BossDoor::closeDoor()
 {
+  if (config.blockedSide == 1)
+    if (!cur_stage->m_player->onground)
+      return;
+  
   curState = BossDoor::CLOSING;
   doorOpenDelay = Clock::clockTicks;
   Sounds::mm_sounds->play(DOOR);

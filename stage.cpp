@@ -1120,7 +1120,7 @@ Character * Stage::createCharacter(int TYPE, int x, int y, int vx, int vy, void 
     break;
     case mm_tile_actions::ELECMAN:
     {
-      ///cur_character = new Elecman(*this, x, y, param);
+      //cur_character = new Elecman(*this, x, y, param);
     }
     break;
     case mm_tile_actions::MOVING_FLAME:
