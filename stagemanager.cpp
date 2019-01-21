@@ -772,10 +772,11 @@ void StageManager::doStageSpecifics()
     {
       if (door != NULL && door->curState == BossDoor::WAITING)
       {
-          stopAnimations = false;
+          //stopAnimations = false;
           if (autoMovePlayerCount < (mm_graphs_defs::TILES_X*2))
           {
-            //TODO: remove when Characters use float for x,y vx,vy
+            player->forceAnimation();
+
             if ((float)autoMovePlayerCount < (float)(mm_graphs_defs::TILES_X*1.55f))
             {
               player->goRight();
@@ -790,6 +791,7 @@ void StageManager::doStageSpecifics()
           }
           else
           {
+            stopAnimations = false;
             cur_stage_state = StageManager::SEARCHING_BOSS_DOOR;
             handlingDoor = false;
             autoMovePlayerCount = 0;

@@ -1,5 +1,6 @@
 - Animacao do life do boss e life do boss morendo
-- Finalizar fase
+- Finalizar fases
+- adiantar tempo de aparecer do watcher
 - Mover criação de partes do picket crazyrazy watcher... para dentro da classe do mesmo e tirar do stage.cpp
 - Corrida do megaman aceleracao gradual. (Ajustar corrida para comecar com 1 px depois passar para 3 quando ja correndo.)
 - mudar struct  do mapa, chao de gelo e agua, acelerecao correpondente para fase do iceman
