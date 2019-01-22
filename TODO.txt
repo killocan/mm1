@@ -9,6 +9,7 @@
 - IA dos chefes
 - Não permitir entrar no menu de armas se houver magnetic na tela
 - Fases do DR WILLY (gutsman gun muda numa fase do castelo)
+- Teletransportar (FASE WILLY)
 - ajustar pontos, uso de arma e damage de tudo.
 - Add 10,000 points to score if it was a rematch (FROM ASM finlandes)
 - ajustar magnetic beam SE estiver atrapalhando, verificar se esta dentro de tiles e jogar para dentro 100%
@@ -17,3 +18,4 @@
 - nao deixar pegar input se animationoff estiver ligado (ver)
 - mover codigo de up e down do mm para metodos
 - ver se vale a pena remover todos hit e jogar para um so em character e so usar o array de dano.
+- animacao de teletransporte quando sai do menu de escolha de armas
