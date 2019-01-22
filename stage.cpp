@@ -561,8 +561,6 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
 
 #ifdef DEBUG
   int tile_action = 0;
-
-  drawing_mode(DRAW_MODE_TRANS, NULL, 0, 0);
 #endif
 
   if (hasFg == false)
@@ -693,10 +691,6 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
       }
     }
   }
-
-#ifdef DEBUG
-  drawing_mode(DRAW_MODE_SOLID, NULL, 0, 0);
-#endif
 }
 
 bool Stage::checkForBoss(int x, int y)

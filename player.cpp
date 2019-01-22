@@ -1023,7 +1023,7 @@ void Player::drawCharacter(BITMAP * bmp)
     case Player::FIRINGSTILL:
     case Player::FIRINGSTILLHAND:
     {
-      xpos += isFacingRight ? 10 : -10;
+      xpos += isFacingRight ? 9 : -9;
     }
     break;
   }
@@ -1039,13 +1039,8 @@ void Player::drawCharacter(BITMAP * bmp)
 
 #ifdef DEBUG
   //int xrect = (xpos + this->utilX);
-
-  drawing_mode(DRAW_MODE_TRANS, NULL, 0, 0);
-
-  rect(bmp, xpos, this->sy, xpos + getFrameW(), this->sy + mm_player_defs::PLAYERHEIGHT, makecol(255,0,0));
+  rect(bmp, this->sx, this->sy, this->sx + getFrameW(), this->sy + mm_player_defs::PLAYERHEIGHT, makecol(255,0,0));
   //rectfill(bmp, xrect, this->sy, xrect + this->utilXLen, this->sy + mm_player_defs::PLAYERHEIGHT, makecol(0,255,0));
-
-  drawing_mode(DRAW_MODE_SOLID, NULL, 0, 0);
 #endif
 }
 

@@ -12,13 +12,14 @@
 #include "globals.h"
 #include "globalgamestate.h"
 #include "sfx.h"
-
+#include "energybar.h"
 #include "spritefiles.h"
 
 //Gutsman
 
 Gutsman::Gutsman(const Stage & stage, int x_map, int y_map, void * param) : Character(stage, mm_spritefiles::GUTSMAN_SPRITES)
 {
+  EnergyBar::m_boss = this;
   this->x = x_map;
   this->y = y_map;
 
