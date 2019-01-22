@@ -101,7 +101,7 @@ Character::~Character()
 
 void Character::goRight()
 {
-  x+=1.8f;
+  x+=1.9f;
 }
 
 void Character::doLogic()

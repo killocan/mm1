@@ -1,4 +1,5 @@
 - Animacao do life do boss e life do boss morendo
+- mover o (handlingDoor = false;) para dentro de fight que deve esperar o chefe se apresentar e o life dele encher...
 - Finalizar fases
 - adiantar tempo de aparecer do watcher
 - Mover criação de partes do picket crazyrazy watcher... para dentro da classe do mesmo e tirar do stage.cpp

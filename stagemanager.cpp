@@ -356,6 +356,8 @@ void StageManager::play()
   bool game_over = false;
   while(game_over == false)
   {
+    EnergyBar::m_boss = NULL;
+
     GlobalGameState::playerShots.clear();
     GlobalGameState::enemyShots.clear();
 
@@ -485,7 +487,7 @@ void StageManager::play()
 
         if (GameplayGlobals::bWeaponUpdateRunning == true)
         {
-          EnergyBar::updateEnergyBar(player->curWeapon, 0);
+          EnergyBar::updateEnergyBar(player->curWeapon, 0, EnergyBar::m_boss);
         }
 
         ++Clock::clockTicks;
@@ -586,17 +588,17 @@ void StageManager::play()
       {
         EnergyBar::drawEnerybar(m_buffer, 32, 34, player->curWeapon);
       }
-      if (NULL != NULL)
+      if (EnergyBar::m_boss != NULL)
       {
-        EnergyBar::drawEnerybar(m_buffer, 32, 34, player->curWeapon);
+        EnergyBar::drawEnerybar(m_buffer, 78, 34, player->curWeapon, true);
       }
 
       //tvmode(m_buffer);
       //bhmode(m_buffer);
 #ifdef DEBUG
-      textprintf_ex(m_buffer, font, 1, 10, makecol(255,255,255), 0, "X:[%f] Y:[%f] VX:[%f] VY:[%f]",
+      textprintf_right_ex(m_buffer, font, SCREEN_W, 10, makecol(255,255,255), 0, "X:[%f] Y:[%f] VX:[%f] VY:[%f]",
                     player->x, player->y, player->velx, player->vely);
-      textprintf_ex(m_buffer, font, 1, 20, makecol(255,255,255), 0, "camera.x:[%d] camera.y:[%d]",
+      textprintf_right_ex(m_buffer, font, SCREEN_W, 20, makecol(255,255,255), 0, "camera.x:[%d] camera.y:[%d]",
                     camera->x, camera->y);
 
       int yd = ((int)player->y)/mm_graphs_defs::TILE_SIZE;
@@ -605,14 +607,14 @@ void StageManager::play()
       int xdesl =  xd / mm_graphs_defs::TILES_X;
       int sector = ydesl*(stage->max_x / mm_graphs_defs::TILES_X) + xdesl;
 
-      textprintf_ex(m_buffer, font, 1, 30, makecol(255,255,255), 0, "SECTOR = [%d]", sector);
+      textprintf_right_ex(m_buffer, font, SCREEN_W, 30, makecol(255,255,255), 0, "SECTOR = [%d]", sector);
 
-      textprintf_ex(m_buffer, font, 1, 40, makecol(255,255,255), 0, "SX:[%d] SY:[%d]",
+      textprintf_right_ex(m_buffer, font, SCREEN_W, 40, makecol(255,255,255), 0, "SX:[%d] SY:[%d]",
                     player->sx, player->sy);
 #endif
 
 #ifdef FPS_IN_GAME
-      textprintf_ex(m_buffer, font, 1, 1, makecol(255,255,255), 0, "FPS:[%d]", sm_fps);
+      textprintf_right_ex(m_buffer, font, SCREEN_W, 1, makecol(255,255,255), 0, "FPS:[%d]", sm_fps);
 #endif
       Vsync::Sync();
       blit(m_buffer,screen,0,0,0,0,SCREEN_W,SCREEN_H);
@@ -821,6 +823,8 @@ void StageManager::doStageSpecifics()
 
         door->hasBeenUsed = true;
         createBoss();
+        EnergyBar::updateEnergyBar(mm_weapons::W_MEGA_BUSTER, 28, true);
+
         door = NULL;
         cur_stage_state = FIGHT; //Set FightingBoss to true
       }
