@@ -25,8 +25,8 @@ void EnergyBar::drawEnerybar(BITMAP * buffer, int x, int y, mm_weapons::WEAPONS 
   color1=color2=0;
   static int mm_weapon_color1[] = {0xFCE4A0, 0x0080C0, 0x808080, 0xE06000, 0x0060C0, 0x00C000, 0xE04000, 0x808080};
   static int mm_weapon_color2[] = {0XFFFFFF, 0x00FFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xE0C000, 0xE0E080};
-  static int boss_weapon_color1[] = { 0XE40058, 0XE40058, 0XE40058, 0XE40058, 0XE40058, 0XE40058, 0XE40058, 0XE40058 };
-  static int boss_weapon_color2[] = { 0XFC9838, 0XFC9838, 0XFC9838, 0XFC9838, 0XFC9838, 0XFC9838, 0XFC9838, 0XFC9838 };
+  static int boss_weapon_color1[] = { 0XE40058, 0XE40058, 0X3CBCFC, 0XE40058, 0XE40058, 0XE40058, 0XE40058, 0XE40058, 0XE40058, 0XE40058 };
+  static int boss_weapon_color2[] = { 0XFC9838, 0XFCFCFC, 0XFCFCFC, 0XFC9838, 0XFCFCFC, 0XFC9838, 0XFC9838, 0XFC9838, 0XFC9838, 0XFC9838 };
 
   int index = m_boss != NULL ? m_boss->type - mm_spritefiles::GUTSMAN_SPRITES : -1;
   color1 = (boss == false) ? mm_weapon_color1[weapon] : boss_weapon_color1[index];
