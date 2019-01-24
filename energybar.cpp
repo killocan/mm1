@@ -50,8 +50,8 @@ void EnergyBar::updateEnergyBar(mm_weapons::WEAPONS weapon, int units, bool boss
 {
   if (GameplayGlobals::bWeaponUpdateRunning == false)
   {
-    if ( (!boss && ((weapon == mm_weapons::W_MEGA_BUSTER) && (m_player->life == 28)) ||
-         ((weapon != mm_weapons::W_MEGA_BUSTER) && (m_player->weapons[weapon] == 28))) ||
+    if ( (!boss && (((weapon == mm_weapons::W_MEGA_BUSTER) && (m_player->life == 28)) ||
+         ((weapon != mm_weapons::W_MEGA_BUSTER) && (m_player->weapons[weapon] == 28)))) ||
          (boss && m_boss->life == 28))
     {
       EnergyBar::iUnits = 0;
