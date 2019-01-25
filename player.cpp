@@ -342,12 +342,12 @@ void Player::normalLogic()
     float offset;
     if (isFacingRight)
     {
-       step = -2.0f;
+       step = -.9f;
        offset = (x+utilX)+step;
     }
     else
     {
-       step = 2.0f;
+       step = .9f;
        offset = (x+utilX)+step+utilXLen;
     }
 

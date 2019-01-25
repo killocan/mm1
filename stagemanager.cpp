@@ -797,6 +797,7 @@ void StageManager::doStageSpecifics()
             cur_stage_state = StageManager::SEARCHING_BOSS_DOOR;
             handlingDoor = false;
             autoMovePlayerCount = 0;
+            player->vely = 1.0f;
             door->collideWithPlayer = false;
             door->blockPassage();
           }

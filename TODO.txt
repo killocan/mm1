@@ -1,9 +1,10 @@
 - Animacao do life do boss e life do boss morendo (falta cores dos mestres da fase do willy)
 - Gutsman (joga pedra perto do megaman, o recuo do mm devido ao tremor é de poucos pixeis com leve movimento cima baixo, pedra no megaman é a mesma do gutsman na arena do gustman)
+- Gutsman (joga pedra perto do megaman, o recuo do mm devido ao tremor é de poucos pixeis (menos de um por frame) com leve movimento cima baixo)
 - mover o (handlingDoor = false;) para dentro de fight que deve esperar o chefe se apresentar e o life dele encher...
 - porta tratar gravidade quando megaman ficar em lugar que ele caia (na propria classe da fase?)
 - Finalizar fases
-- adiantar tempo de aparecer do watcher
+- adiantar tempo de aparecer do watcher e os elicopteros na fase do cutman
 - Mover criação de partes do picket crazyrazy watcher... para dentro da classe do mesmo e tirar do stage.cpp
 - Corrida do megaman aceleracao gradual. (Ajustar corrida para comecar com 1 px depois passar para 3 quando ja correndo.)
 - mudar struct  do mapa, chao de gelo e agua, acelerecao correpondente para fase do iceman
@@ -11,6 +12,7 @@
 - Fases do cutman, bombman, electman, iceman
 - IA dos chefes
 - Não permitir entrar no menu de armas se houver magnetic na tela
+- Animacao do life do boss e life do boss morendo (falta cores dos mestres da fase do willy)
 - Fases do DR WILLY (gutsman gun muda numa fase do castelo)
 - Teletransportar (FASE WILLY)
 - ajustar pontos, uso de arma e damage de tudo.
