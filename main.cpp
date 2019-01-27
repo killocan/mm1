@@ -118,7 +118,7 @@ int main()
   END_OF_FUNCTION(GlobalGameState::update_game_logic_tick);
   LOCK_VARIABLE(GlobalGameState::game_logic_tick);
   LOCK_FUNCTION(GlobalGameState::update_game_logic_tick);
-  install_int_ex(GlobalGameState::update_game_logic_tick, BPS_TO_TIMER(60));
+  install_int_ex(GlobalGameState::update_game_logic_tick, BPS_TO_TIMER(Clock::ticks));
 
   Buffer::buffer = create_bitmap(mm_graphs_defs::UTIL_W, mm_graphs_defs::UTIL_H);
   Font::mm_font  = load_font("game_data/font.pcx", NULL, NULL);

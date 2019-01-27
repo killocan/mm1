@@ -69,6 +69,7 @@ END_OF_FUNCTION(screenscroll_timer);
 
 Stage::Stage(std::string stage_path, Camera & camera, Player ** player)//, std::vector<Character *> & characters_vec)
 {
+  stageNumber  = 0;
   cur_waypoint = 0;
   horz_scroll  = false;
   has_fg_tiles = false;

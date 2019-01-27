@@ -323,6 +323,7 @@ void StageManager::play()
 {
   stage  = new Stage(getStageFilePath(), *camera, &player);
   setupStage();
+  stage->stageNumber = stage_number;
   CurrentCharacterList::mm_characterLst = &characters_vec;
 
   stage->createEnemies(characters_vec); // Load all enemys.

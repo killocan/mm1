@@ -5,6 +5,7 @@
 
 #include "mm_math.h"
 #include "defines.h"
+#include "globals.h"
 #include <allegro.h>
 #include <cstdio>
 
@@ -50,4 +51,11 @@ double MM_Math::REG_TO_RAD(double n)
 double MM_Math::RAD_TO_REG(double n)
 {
   return (n * 180 / M_PI);
+}
+
+float MM_Math::DistanceToSteps(float distance, float seconds)
+{
+  unsigned long ticks = Clock::seconds_to_ticks(seconds);
+  float steps = distance / ticks;
+  return steps;
 }

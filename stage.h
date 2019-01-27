@@ -61,6 +61,7 @@ class Stage
     bool horz_scroll;
 
     Player * m_player;
+    int stageNumber;
 
     bool hasMovingPlatform;
     std::vector<int> platformTiles;

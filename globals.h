@@ -41,8 +41,18 @@ class Vsync
 class Clock
 {
   public:
-    // Gets incremented 60times a sec.
+    inline static unsigned long seconds_to_ticks(float seconds)
+    {
+      return seconds * ticks;
+    }
+    inline static float ticks_to_seconds(unsigned long tick)
+    {
+      return tick / ticks;
+    }
+
+    // Gets incremented Ticks times a sec.
     static unsigned long clockTicks;
+    static const unsigned long ticks = 60L;
 };
 
 class GlobalCamera

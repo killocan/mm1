@@ -12,7 +12,7 @@
 #include "stage.h"
 #include "tileactions.h"
 #include "defines.h"
-
+#include "mm_math.h"
 #include "scenesoundmanager.h"
 #include "globals.h"
 #include "globalgamestate.h"
@@ -71,8 +71,12 @@ GutsmanGun::GutsmanGun(const Stage & stage, int x, int y, void * param) : Charac
   if (thrower == stage.m_player)
   {
     colorOffset = cur_stage->getOffset(mm_spritefiles::GUTSMANROCK_SPRITES);
+
     // set sprite to the pickup one
-    setAnimSeq(colorOffset + 1);
+    if (cur_stage->stageNumber != 1)
+      ++colorOffset;
+
+    setAnimSeq(colorOffset);
     GutsmanGunManager::instance()->addRock(this);
   }
   else
@@ -142,8 +146,14 @@ void GutsmanGun::calcAcceleration()
   }
   else
   {
-    this->vely = -6.0f;
-    this->velx = 12.0f;
+    this->vely = 0.0f;
+
+    float dist = fabs(cur_stage->m_player->x - this->x);
+    if (cur_stage->m_player->x < this->x)
+      dist += cur_stage->m_player->utilXLen;
+
+    this->velx = MM_Math::DistanceToSteps(dist, .22f);
+    
     this->isFacingRight = thrower->isFacingRight;
   }
 }
@@ -236,7 +246,7 @@ bool GutsmanGun::checkCollision()
        it != CurrentCharacterList::mm_characterLst->end(); ++it)
   {
     curr_character = *it;
-    if (curr_character != thrower && curr_character != this)
+    if (curr_character != thrower && curr_character != this && curr_character != cur_stage->m_player)
     {
       if (curr_character->alive == true)
       {
