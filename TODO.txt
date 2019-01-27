@@ -1,4 +1,3 @@
-- Gutsman (joga pedra perto do megaman, o recuo do mm devido ao tremor é de poucos pixeis (menos de um por frame) com leve movimento cima baixo)
 - mover o (handlingDoor = false;) para dentro de fight que deve esperar o chefe se apresentar e o life dele encher...
 - porta tratar gravidade quando megaman ficar em lugar que ele caia (na propria classe da fase?)
 - Finalizar fases

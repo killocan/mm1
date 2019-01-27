@@ -59,3 +59,9 @@ float MM_Math::DistanceToSteps(float distance, float seconds)
   float steps = distance / ticks;
   return steps;
 }
+
+float MM_Math::dropTime(int height)
+{
+  float t = sqrt((2.0f * height) / mm_player_defs::GRAVITATION);
+  return t;
+}

@@ -43,6 +43,8 @@ Gutsman::Gutsman(const Stage & stage, int x_map, int y_map, void * param) : Char
   bFirstTime = true;
 
   cycleCount = 0;
+
+  GutsmanGun::firstOne = true;
 }
 
 bool Gutsman::handleAnimation(bool * bAnimationEnded)
@@ -62,7 +64,7 @@ void Gutsman::touchGround()
   {
     Sounds::mm_sounds->play(EARTHQUAKE);
     GlobalGameState::earthquake = true;
-    GlobalGameState::earthquakecount = 300;
+    GlobalGameState::earthquakecount = 350;
   }
 }
 

@@ -34,6 +34,9 @@ volatile int sm_fps       = 0;
 volatile int sm_fps_count = 0;
 static void sm_check_fps()
 {
+  GlobalGameState::game_logic_lps = GlobalGameState::game_logic_lps_count;
+  GlobalGameState::game_logic_lps_count = 0;
+
   sm_fps = sm_fps_count;
   sm_fps_count = 0;
 }
@@ -408,6 +411,7 @@ void StageManager::play()
       if (GlobalGameState::game_logic_tick == 1)
       {
         GlobalGameState::game_logic_tick = 0;
+        ++GlobalGameState::game_logic_lps_count;
 
         if ((game_pause == false) && (GameplayGlobals::bHoldLogic == false))
         {
@@ -615,7 +619,8 @@ void StageManager::play()
 #endif
 
 #ifdef FPS_IN_GAME
-      textprintf_right_ex(m_buffer, font, SCREEN_W, 1, makecol(255,255,255), 0, "FPS:[%d]", sm_fps);
+      textprintf_right_ex(m_buffer, font, SCREEN_W, 1, makecol(255,255,255), 0, "FPS:[%d] LPS[%d]", 
+                          sm_fps, GlobalGameState::game_logic_lps);
 #endif
       Vsync::Sync();
       blit(m_buffer,screen,0,0,0,0,SCREEN_W,SCREEN_H);

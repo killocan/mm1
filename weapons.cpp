@@ -970,8 +970,8 @@ void mm_weapons::createGutsmanRock(Character * thrower, bool fromPlayer)
   h = thrower->cur_stage->getAnimSeq(mm_spritefiles::GUTSMAN_ROCK_FRAGMENTS_SPRITES)->getFrame(0)->h;
   float xdesl[]{ 0.0f, 32.0f, 0.0f,  32.0f };
   float ydesl[]{ 0.0f, 0.0f,  32.0f, 32.0f };
-  float vxdesl[]{ 5.05f,  6.7f, 4.80f,  5.35f };
-  float vydesl[]{ -5.85f, 0.0f,  -4.60f, 0.0f };
+  float vxdesl[]{ 5.15f,  6.8f, 4.90f,  5.45f };
+  float vydesl[]{ -5.95f, 0.0f,  -4.70f, 0.0f };
   for (int i = 0; i < 4; ++i)
   {
     gutsman_rock_fragment[i].can_hurt = true;

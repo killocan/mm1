@@ -45,14 +45,14 @@ class Clock
     {
       return seconds * ticks;
     }
-    inline static float ticks_to_seconds(unsigned long tick)
+    inline static float ticks_to_seconds(float tick)
     {
       return tick / ticks;
     }
 
     // Gets incremented Ticks times a sec.
     static unsigned long clockTicks;
-    static const unsigned long ticks = 60L;
+    static const unsigned long ticks = 60;
 };
 
 class GlobalCamera

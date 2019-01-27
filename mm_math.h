@@ -18,4 +18,6 @@ class MM_Math
     static double RAD_TO_REG(double n);
     // Returns how many steps per tick to take to smoothly travel distance in seconds taking the clock tick
     static float DistanceToSteps(float distance, float seconds);
+    // Return time to reach floor when dropped from some height
+    static float dropTime(int height);
 };

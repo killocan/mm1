@@ -18,7 +18,8 @@ bool GlobalGameState::enemyDefeated[6]        = {true, true, true, true, true, t
 int  GlobalGameState::enemyClearPoints[6]     = {50000, 80000, 90000, 30000, 50000, 100000};
 
 volatile int GlobalGameState::game_logic_tick = 0;
-
+volatile int GlobalGameState::game_logic_lps  = 0;
+volatile int GlobalGameState::game_logic_lps_count = 0;
 void GlobalGameState::update_game_logic_tick()
 {
   game_logic_tick = 1;

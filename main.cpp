@@ -106,6 +106,7 @@ void calibrate_refresh_rate()
 
 int main()
 {
+  srand(time(NULL));
   allegro_init();
 
   install_keyboard();
@@ -117,6 +118,8 @@ int main()
 
   END_OF_FUNCTION(GlobalGameState::update_game_logic_tick);
   LOCK_VARIABLE(GlobalGameState::game_logic_tick);
+  LOCK_VARIABLE(GlobalGameState::game_logic_lps);
+  LOCK_VARIABLE(GlobalGameState::game_logic_lps_count);
   LOCK_FUNCTION(GlobalGameState::update_game_logic_tick);
   install_int_ex(GlobalGameState::update_game_logic_tick, BPS_TO_TIMER(Clock::ticks));
 

@@ -58,6 +58,8 @@ float GutsmanGun::getYDest()
   return dest_y;
 }
 
+bool GutsmanGun::firstOne = false;
+float GutsmanGun::firstX = 0.0f;
 GutsmanGun::GutsmanGun(const Stage & stage, int x, int y, void * param) : Character(stage, mm_spritefiles::GUTSMANROCK_SPRITES)
 {
   this->old_x = this->x = x;
@@ -80,8 +82,14 @@ GutsmanGun::GutsmanGun(const Stage & stage, int x, int y, void * param) : Charac
     GutsmanGunManager::instance()->addRock(this);
   }
   else
+  {
+    if (firstOne)
+    {
+      firstOne = false;
+      firstX = this->x;
+    }
     setAnimSeq(0);
-
+  }
   h = getFrameH();
   w = getFrameW();
 
@@ -125,7 +133,7 @@ void GutsmanGun::moveToThrower()
   {
     ticks = Clock::clockTicks;
 
-    if (this->y+ 22.0f >= thrower->y - this->h + 7)
+    if (this->y + 22.0f >= thrower->y - this->h + 7)
     {
       this->curState = GutsmanGun::ATTACHED_TO;
     }
@@ -148,11 +156,20 @@ void GutsmanGun::calcAcceleration()
   {
     this->vely = 0.0f;
 
-    float dist = fabs(cur_stage->m_player->x - this->x);
-    if (cur_stage->m_player->x < this->x)
-      dist += cur_stage->m_player->utilXLen;
+    int height = cur_stage->calculateHeight(firstX, 32.0f, this->y + this->h);
+    float time = MM_Math::dropTime(height);
 
-    this->velx = MM_Math::DistanceToSteps(dist, .22f);
+    float px = cur_stage->m_player->x;
+    if (cur_stage->m_player->x < this->x)
+      px += cur_stage->m_player->w + this->w/2.0f;
+    else
+      px -= this->w + 5.0f;
+
+    float dist = fabs(px - this->x);
+    dist += cur_stage->m_player->utilXLen;
+    // how much to move every tick to travel the distance in the time given.
+    // time variable is in ticks convert it to seconds.
+    this->velx = MM_Math::DistanceToSteps(dist, Clock::ticks_to_seconds(time));
     
     this->isFacingRight = thrower->isFacingRight;
   }
