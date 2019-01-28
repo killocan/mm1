@@ -1,13 +1,13 @@
-- mover o (handlingDoor = false;) para dentro de fight que deve esperar o chefe se apresentar e o life dele encher...
-- porta tratar gravidade quando megaman ficar em lugar que ele caia (na propria classe da fase?)
-- Finalizar fases
+? mover o (handlingDoor = false;) para dentro de fight que deve esperar o chefe se apresentar e o life dele encher...
 - adiantar tempo de aparecer do watcher e os elicopteros na fase do cutman
+- Morrer em buracos.
+- Finalizar fases
+- porta tratar gravidade quando megaman ficar em lugar que ele caia (na propria classe da fase?)
 - Mover criação de partes do picket crazyrazy watcher... para dentro da classe do mesmo e tirar do stage.cpp
 - Corrida do megaman aceleracao gradual. (Ajustar corrida para comecar com 1 px depois passar para 3 quando ja correndo.)
 - mudar struct  do mapa, chao de gelo e agua, acelerecao correpondente para fase do iceman
 - Waypoints
-- Fases do cutman, bombman, electman, iceman
-- IA dos chefes
+- Fases do cutman, bombman, electman, iceman - IA dos chefes
 - Não permitir entrar no menu de armas se houver magnetic na tela
 - Animacao do life do boss e life do boss morendo (falta cores dos mestres da fase do willy)
 - Fases do DR WILLY (gutsman gun muda numa fase do castelo)
@@ -21,3 +21,20 @@
 - mover codigo de up e down do mm para metodos
 - ver se vale a pena remover todos hit e jogar para um so em character e so usar o array de dano.
 - animacao de teletransporte quando sai do menu de escolha de armas
+
+STAGE CLEAR
+; What happens in regular stages.
+;1. Play item sound                                                  
+;2. Play stage clear music                                           
+;3. Load levelend gfx
+;4. Remove all objects except Megaman
+;5. Delay 383 frames
+;6. Hide energy bars
+;7. Draw first patch of text
+;8. Halt Megaman
+;9. Calculate score, 1000 points per frame
+;10. Delay 64 frames
+;11. Draw second patch of text
+;12. Calculate bonus pearls, one per frame (3000 points each)
+;13. Delay 383 frames
+;14. Reboot game without clearing game status

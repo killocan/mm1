@@ -25,7 +25,7 @@ class Gutsman : public Character
 
     virtual void hit(mm_weapons::weapon_st * pWeapon);
 
-    enum { DECIDING, SHOW_OFF, PRE_JUMP, JUMP, PRE_JUMP_ATTACK, JUMP_ATTACK, ATTACK, };
+    enum { SHOW_OFF, DECIDING, PRE_JUMP, JUMP, PRE_JUMP_ATTACK, JUMP_ATTACK, ATTACK, };
     int cycleCount;
 
   private:
