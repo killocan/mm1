@@ -1,5 +1,3 @@
-? mover o (handlingDoor = false;) para dentro de fight que deve esperar o chefe se apresentar e o life dele encher...
-- adiantar tempo de aparecer do watcher e os elicopteros na fase do cutman
 - Morrer em buracos.
 - Finalizar fases
 - porta tratar gravidade quando megaman ficar em lugar que ele caia (na propria classe da fase?)

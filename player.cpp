@@ -345,12 +345,12 @@ void Player::normalLogic()
     float offset;
     if (isFacingRight)
     {
-       step = -.9f;
+       step = -.5f;
        offset = (x+utilX)+step;
     }
     else
     {
-       step = .9f;
+       step = .5f;
        offset = (x+utilX)+step+utilXLen;
     }
 
@@ -358,7 +358,10 @@ void Player::normalLogic()
     bool collide = collisionVer(offset, y, tilecoordx, tilecoordy, tiletype);
 
     if (collide == false)
+    {
       this->x += step;
+    }
+    this->y += rand() % 2 ? 0 : 2;
 
     bool bAnimEnded = false;
     Character::handleAnimation(&bAnimEnded);
@@ -692,6 +695,7 @@ void Player::normalLogic()
         }
 
         vely     = -8;
+        onground = false;
         lockjump = true; 
       }
     }

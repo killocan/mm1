@@ -513,7 +513,7 @@ void StageManager::play()
         --GlobalGameState::earthquakecount;
         if (GlobalGameState::earthquakecount <= 0)
         {
-          player->isStunned = false;
+          //player->isStunned = false;
           GlobalGameState::earthquake = false;
         }
 
@@ -778,7 +778,16 @@ void StageManager::doStageSpecifics()
             cur_stage_state = StageManager::SEARCHING_BOSS_DOOR;
             handlingDoor = false;
             autoMovePlayerCount = 0;
+
+            // Put on a method called "endireitarmegaman" hahaha
             player->vely = 1.0f;
+            player->blinkCount = 28;
+            player->bDraw = true;
+            player->bHide = false;
+            player->isHitAnimOn = false;
+            player->isInvincible = false;
+            player->isFacingRight = true;
+
             door->collideWithPlayer = false;
             door->blockPassage();
           }

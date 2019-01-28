@@ -64,7 +64,7 @@ void Gutsman::touchGround()
   {
     Sounds::mm_sounds->play(EARTHQUAKE);
     GlobalGameState::earthquake = true;
-    GlobalGameState::earthquakecount = 420;
+    GlobalGameState::earthquakecount = 360;
   }
 }
 
@@ -133,16 +133,18 @@ void Gutsman::doLogic()
       {
         int tilecoordx, tilecoordy, tiletype;
 
+        // 10 offset avoid gutsman to stand too close of the wall and mess with the rock
+        // cause it colide with the wall from the start.
         if (jumping_right == true)
         {
-          if (collisionVer((x + utilX) + velx + utilXLen, y, tilecoordx, tilecoordy, tiletype) == false)
+          if (collisionVer((x + utilX) + velx + utilXLen + 10.0f, y, tilecoordx, tilecoordy, tiletype) == false)
           {
             x += velx;
           }
         }
         else
         {
-          if (collisionVer((x + utilX) - velx, y, tilecoordx, tilecoordy, tiletype) == false)
+          if (collisionVer((x + utilX) - velx - 10.0f, y, tilecoordx, tilecoordy, tiletype) == false)
           {
             x -= velx;
           }

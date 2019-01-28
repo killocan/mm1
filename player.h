@@ -74,8 +74,6 @@ class Player : public Character
     bool holdingGutsmanRock;
     bool isStunned;
     bool isGettingOut;
-
-  private:
     int handType();
     virtual bool canJumpAgain();
 

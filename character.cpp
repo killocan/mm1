@@ -156,7 +156,7 @@ void Character::doGravitation()
   if (grabstair == false && cur_stage->horz_scroll == false)
   {
     // Goind UP
-    if(vely < 0.0f)
+    if(vely <= 0.0f)
     {
       onground = false;
 
