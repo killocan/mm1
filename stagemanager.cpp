@@ -801,8 +801,6 @@ void StageManager::doStageSpecifics()
       }
       else if (door->curState == BossDoor::WAITING)
       {
-        handlingDoor = false;
-
         door->hasBeenUsed = true;
         createBoss();
         EnergyBar::updateEnergyBar(mm_weapons::W_MEGA_BUSTER, 28, true);
@@ -818,6 +816,11 @@ void StageManager::doStageSpecifics()
     break;
     case FIGHT:
     {
+      if (EnergyBar::m_boss != NULL)
+      {
+        if (EnergyBar::m_boss->curState != 0 && handlingDoor)
+          handlingDoor = false;
+      }
     }
     break;
   }

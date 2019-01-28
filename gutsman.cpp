@@ -74,6 +74,17 @@ void Gutsman::doLogic()
 
   switch(curState)
   {
+    case Gutsman::SHOW_OFF:
+    {
+      bool cycleDone = false;
+      Character::handleAnimation(&cycleDone);
+      if (cycleDone == true)
+      {
+        curState = Gutsman::DECIDING;
+        setAnimSeq(Gutsman::DECIDING);
+      }
+    }
+    break;
     case Gutsman::DECIDING:
     {
       int decision = rand() % 2;
@@ -91,17 +102,6 @@ void Gutsman::doLogic()
           setAnimSeq(Gutsman::PRE_JUMP_ATTACK);
         }
         break;
-      }
-    }
-    break;
-    case Gutsman::SHOW_OFF:
-    {
-      bool cycleDone = false;
-      Character::handleAnimation(&cycleDone);
-      if (cycleDone == true)
-      {
-        curState = Gutsman::DECIDING;
-        setAnimSeq(Gutsman::DECIDING);
       }
     }
     break;
