@@ -69,6 +69,7 @@ END_OF_FUNCTION(screenscroll_timer);
 
 Stage::Stage(std::string stage_path, Camera & camera, Player ** player)//, std::vector<Character *> & characters_vec)
 {
+  stageNumber  = 0;
   cur_waypoint = 0;
   horz_scroll  = false;
   has_fg_tiles = false;
@@ -426,6 +427,22 @@ BITMAP * Stage::getTile(unsigned int index)
   return NULL;
 }
 
+int Stage::calculateHeight(float x, float w, float y)
+{
+  int tilecoordx, tilecoordy;
+
+  int i = 0;
+  for (;;++i)
+  {
+    if (genericColHor(x, w, y, tilecoordx, tilecoordy, true) == false)
+      y += 1.0f;
+    else
+      break;
+  }
+
+  return i;
+}
+
 void Stage::createEnemies(std::vector<Character *> & characters_vec)
 {
   for (int y = 0; y < max_y; ++y)
@@ -482,7 +499,6 @@ bool Stage::genericColHor(int x, int w, int y, int &tilecoordx, int &tilecoordy,
     }
     else
     {
-
       if((tiletype == mm_tile_actions::TILE_SOLID) ||
          (tiletype == mm_tile_actions::TILE_STAIR_BEGIN))
         return true;

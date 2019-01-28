@@ -27,19 +27,6 @@
 
 #include "collision.h"
 
-#define FPS_IN_GAME
-
-#ifdef FPS_IN_GAME
-volatile int sm_fps       = 0;
-volatile int sm_fps_count = 0;
-static void sm_check_fps()
-{
-  sm_fps = sm_fps_count;
-  sm_fps_count = 0;
-}
-END_OF_STATIC_FUNCTION(sm_check_fps);
-#endif
-
 StageManager::StageManager()
 {
   camera = new Camera;
@@ -61,13 +48,6 @@ StageManager::StageManager()
   handlingDoor   = false;
   stopAnimations = false;
   initBossFight  = false;
-
-#ifdef FPS_IN_GAME
-  LOCK_VARIABLE(sm_fps);
-  LOCK_VARIABLE(sm_fps_count);
-  LOCK_FUNCTION(sm_check_fps);
-  install_int_ex(sm_check_fps, BPS_TO_TIMER(1));
-#endif
 }
 
 StageManager::~StageManager()
@@ -323,6 +303,7 @@ void StageManager::play()
 {
   stage  = new Stage(getStageFilePath(), *camera, &player);
   setupStage();
+  stage->stageNumber = stage_number;
   CurrentCharacterList::mm_characterLst = &characters_vec;
 
   stage->createEnemies(characters_vec); // Load all enemys.
@@ -407,6 +388,7 @@ void StageManager::play()
       if (GlobalGameState::game_logic_tick == 1)
       {
         GlobalGameState::game_logic_tick = 0;
+        ++GlobalGameState::game_logic_lps_count;
 
         if ((game_pause == false) && (GameplayGlobals::bHoldLogic == false))
         {
@@ -613,14 +595,13 @@ void StageManager::play()
                     player->sx, player->sy);
 #endif
 
-#ifdef FPS_IN_GAME
-      textprintf_right_ex(m_buffer, font, SCREEN_W, 1, makecol(255,255,255), 0, "FPS:[%d]", sm_fps);
-#endif
+      textprintf_right_ex(m_buffer, font, SCREEN_W, 1, makecol(255,255,255), 0, "FPS:[%d] LPS[%d]", 
+                          GlobalGameState::sm_fps, GlobalGameState::game_logic_lps);
+
       Vsync::Sync();
       blit(m_buffer,screen,0,0,0,0,SCREEN_W,SCREEN_H);
-#ifdef FPS_IN_GAME
-      ++sm_fps_count;
-#endif
+
+      ++GlobalGameState::sm_fps_count;
     }
   }
 

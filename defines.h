@@ -19,7 +19,7 @@ namespace mm_player_defs
   const int PLAYERHEIGHT = 64;
   const int PLAYERWIDTH  = 42;
   const int HALFPLAYERWIDTH = PLAYERWIDTH>>1;
-  const int GRAVITATION  = 1;
+  const float GRAVITATION = 1.0f;
   const int VELMOVING    = 3;
   const int VELJUMP      = 15;
 }

@@ -12,7 +12,7 @@
 #include "stage.h"
 #include "tileactions.h"
 #include "defines.h"
-
+#include "mm_math.h"
 #include "scenesoundmanager.h"
 #include "globals.h"
 #include "globalgamestate.h"
@@ -58,6 +58,8 @@ float GutsmanGun::getYDest()
   return dest_y;
 }
 
+bool GutsmanGun::firstOne = false;
+float GutsmanGun::firstX = 0.0f;
 GutsmanGun::GutsmanGun(const Stage & stage, int x, int y, void * param) : Character(stage, mm_spritefiles::GUTSMANROCK_SPRITES)
 {
   this->old_x = this->x = x;
@@ -71,13 +73,23 @@ GutsmanGun::GutsmanGun(const Stage & stage, int x, int y, void * param) : Charac
   if (thrower == stage.m_player)
   {
     colorOffset = cur_stage->getOffset(mm_spritefiles::GUTSMANROCK_SPRITES);
+
     // set sprite to the pickup one
-    setAnimSeq(colorOffset + 1);
+    if (cur_stage->stageNumber != 1)
+      ++colorOffset;
+
+    setAnimSeq(colorOffset);
     GutsmanGunManager::instance()->addRock(this);
   }
   else
+  {
+    if (firstOne)
+    {
+      firstOne = false;
+      firstX = this->x;
+    }
     setAnimSeq(0);
-
+  }
   h = getFrameH();
   w = getFrameW();
 
@@ -121,7 +133,7 @@ void GutsmanGun::moveToThrower()
   {
     ticks = Clock::clockTicks;
 
-    if (this->y+ 22.0f >= thrower->y - this->h + 7)
+    if (this->y + 22.0f >= thrower->y - this->h + 7)
     {
       this->curState = GutsmanGun::ATTACHED_TO;
     }
@@ -142,8 +154,23 @@ void GutsmanGun::calcAcceleration()
   }
   else
   {
-    this->vely = -6.0f;
-    this->velx = 12.0f;
+    this->vely = 0.0f;
+
+    int height = cur_stage->calculateHeight(firstX, 32.0f, this->y + this->h);
+    float time = MM_Math::dropTime(height);
+
+    float px = cur_stage->m_player->x;
+    if (cur_stage->m_player->x < this->x)
+      px += cur_stage->m_player->w + this->w/2.0f;
+    else
+      px -= this->w + 5.0f;
+
+    float dist = fabs(px - this->x);
+    dist += cur_stage->m_player->utilXLen;
+    // how much to move every tick to travel the distance in the time given.
+    // time variable is in ticks convert it to seconds.
+    this->velx = MM_Math::DistanceToSteps(dist, Clock::ticks_to_seconds(time));
+    
     this->isFacingRight = thrower->isFacingRight;
   }
 }
@@ -236,7 +263,7 @@ bool GutsmanGun::checkCollision()
        it != CurrentCharacterList::mm_characterLst->end(); ++it)
   {
     curr_character = *it;
-    if (curr_character != thrower && curr_character != this)
+    if (curr_character != thrower && curr_character != this && curr_character != cur_stage->m_player)
     {
       if (curr_character->alive == true)
       {

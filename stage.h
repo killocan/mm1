@@ -41,6 +41,8 @@ class Stage
     BITMAP * getTileSet();
     BITMAP * getTile(unsigned int index);
 
+    // Return the height of the ray cast from y to the nearest floor tile.
+    int calculateHeight(float x, float w, float y);
 
     // For any entity that wants to check collision agains the map.
     bool genericColHor(int x, int w, int y, int &tilecoordx, int &tilecoordy, bool going_down);
@@ -61,6 +63,7 @@ class Stage
     bool horz_scroll;
 
     Player * m_player;
+    int stageNumber;
 
     bool hasMovingPlatform;
     std::vector<int> platformTiles;

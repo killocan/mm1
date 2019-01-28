@@ -277,8 +277,11 @@ void Player::hit(Character * pCharacter)
 
 void Player::getStunned()
 {
-  isStunned = true;
-  setAnimSeq(Player::STUNNED);
+  if (!isStunned)
+  {
+    isStunned = true;
+    setAnimSeq(Player::STUNNED);
+  }
 }
 
 void Player::checkOnCamera()

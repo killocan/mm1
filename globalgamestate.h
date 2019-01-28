@@ -24,5 +24,11 @@ class GlobalGameState
     static int  enemyClearPoints[6];
 
     static volatile int game_logic_tick;
+    static volatile int game_logic_lps;
+    static volatile int game_logic_lps_count;
     static void update_game_logic_tick();
+
+    static volatile int sm_fps;
+    static volatile int sm_fps_count;
+    static void sm_check_fps();
 };

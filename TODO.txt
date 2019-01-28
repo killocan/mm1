@@ -1,6 +1,4 @@
 - Animacao do life do boss e life do boss morendo (falta cores dos mestres da fase do willy)
-- Gutsman (joga pedra perto do megaman, o recuo do mm devido ao tremor é de poucos pixeis com leve movimento cima baixo, pedra no megaman é a mesma do gutsman na arena do gustman)
-- Gutsman (joga pedra perto do megaman, o recuo do mm devido ao tremor é de poucos pixeis (menos de um por frame) com leve movimento cima baixo)
 - mover o (handlingDoor = false;) para dentro de fight que deve esperar o chefe se apresentar e o life dele encher...
 - porta tratar gravidade quando megaman ficar em lugar que ele caia (na propria classe da fase?)
 - Finalizar fases

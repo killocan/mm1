@@ -28,6 +28,9 @@ public:
 
   Character * thrower;
 
+  static bool firstOne;
+  static float firstX;
+
   enum { MOVING, ATTACHED_TO, LAUNCH, FRAGMENT, DEAD };
 private:
   float getXDest();
