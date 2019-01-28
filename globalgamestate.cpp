@@ -24,3 +24,14 @@ void GlobalGameState::update_game_logic_tick()
 {
   game_logic_tick = 1;
 }
+
+volatile int GlobalGameState::sm_fps = 0;
+volatile int GlobalGameState::sm_fps_count = 0;
+void GlobalGameState::sm_check_fps()
+{
+  GlobalGameState::game_logic_lps = GlobalGameState::game_logic_lps_count;
+  GlobalGameState::game_logic_lps_count = 0;
+
+  sm_fps = sm_fps_count;
+  sm_fps_count = 0;
+}

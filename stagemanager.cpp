@@ -27,22 +27,6 @@
 
 #include "collision.h"
 
-#define FPS_IN_GAME
-
-#ifdef FPS_IN_GAME
-volatile int sm_fps       = 0;
-volatile int sm_fps_count = 0;
-static void sm_check_fps()
-{
-  GlobalGameState::game_logic_lps = GlobalGameState::game_logic_lps_count;
-  GlobalGameState::game_logic_lps_count = 0;
-
-  sm_fps = sm_fps_count;
-  sm_fps_count = 0;
-}
-END_OF_STATIC_FUNCTION(sm_check_fps);
-#endif
-
 StageManager::StageManager()
 {
   camera = new Camera;
@@ -64,13 +48,6 @@ StageManager::StageManager()
   handlingDoor   = false;
   stopAnimations = false;
   initBossFight  = false;
-
-#ifdef FPS_IN_GAME
-  LOCK_VARIABLE(sm_fps);
-  LOCK_VARIABLE(sm_fps_count);
-  LOCK_FUNCTION(sm_check_fps);
-  install_int_ex(sm_check_fps, BPS_TO_TIMER(1));
-#endif
 }
 
 StageManager::~StageManager()
@@ -618,15 +595,13 @@ void StageManager::play()
                     player->sx, player->sy);
 #endif
 
-#ifdef FPS_IN_GAME
       textprintf_right_ex(m_buffer, font, SCREEN_W, 1, makecol(255,255,255), 0, "FPS:[%d] LPS[%d]", 
-                          sm_fps, GlobalGameState::game_logic_lps);
-#endif
+                          GlobalGameState::sm_fps, GlobalGameState::game_logic_lps);
+
       Vsync::Sync();
       blit(m_buffer,screen,0,0,0,0,SCREEN_W,SCREEN_H);
-#ifdef FPS_IN_GAME
-      ++sm_fps_count;
-#endif
+
+      ++GlobalGameState::sm_fps_count;
     }
   }
 
