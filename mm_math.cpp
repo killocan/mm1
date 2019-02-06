@@ -31,7 +31,7 @@ void MM_Math::CalculateVector2D(int p1x, int p1y, int p2x, int p2y, double & vel
   double v0      = onecos * sqrt( (0.5 * 1 * pow(dist,2.0)) / (dist * tan(angle) + y0) );
   double mag     = v0;
 
-  if (!isnan(mag))
+  if (!std::isnan(mag))
   {
     vely = mag * sin(angle);
     velx = mag * cos(angle);
