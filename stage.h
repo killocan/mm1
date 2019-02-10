@@ -34,6 +34,7 @@ class Stage
 
     void draw(BITMAP * bmp, bool hasFg, bool bg_only=true, bool bg=true);
     void scrollForbid(Camera & camera);
+	bool cameraForbiden(int x, int y);
     bool doCamera(Camera & camera);
     bool cameraSectorHasFgTiles(Camera & camera, Player & player);
 

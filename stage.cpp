@@ -784,6 +784,21 @@ void Stage::scrollForbid(Camera & camera)
   }
 }
 
+bool Stage::cameraForbiden(int x, int y)
+{
+  const int xline = (this->max_x / mm_graphs_defs::TILES_X);
+
+  y /= mm_graphs_defs::TILE_SIZE;
+  x /= mm_graphs_defs::TILE_SIZE;
+
+  int yDesl = y / mm_graphs_defs::TILES_Y;
+  int xDesl = x / mm_graphs_defs::TILES_X;
+
+  int sector = yDesl * xline + xDesl;
+
+  return sectors[sector].scroll_forbid;
+}
+
 bool Stage::doCamera(Camera & camera)
 {
   static int dir = 0;
@@ -827,6 +842,15 @@ bool Stage::doCamera(Camera & camera)
   else if (update_scroll == 1)
   {
     update_scroll = 0;
+
+	// Dont follow megaman (going into a death hole)
+	if (dir == 1 && cameraForbiden(m_player->x, m_player->y + m_player->h))
+	{
+      scrollDelay = 7;
+	  horz_scroll = false;
+	  scroll_count = (mm_graphs_defs::TILES_Y * 2);
+	}
+
     if (scrollDelay == 7)
     {
 #ifdef DEBUG

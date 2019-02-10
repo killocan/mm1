@@ -1,4 +1,4 @@
-- Morrer em buracos.
+- Morrer em buracos e no geral hauwhau.
 - Finalizar fases
 - porta tratar gravidade quando megaman ficar em lugar que ele caia (na propria classe da fase?)
 - Mover criação de partes do picket crazyrazy watcher... para dentro da classe do mesmo e tirar do stage.cpp
@@ -19,6 +19,7 @@
 - mover codigo de up e down do mm para metodos
 - ver se vale a pena remover todos hit e jogar para um so em character e so usar o array de dano.
 - animacao de teletransporte quando sai do menu de escolha de armas
+- Cai da escada se colisao com o teto for muito perto da escada (fireman por exemplo)
 
 STAGE CLEAR
 ; What happens in regular stages.

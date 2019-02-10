@@ -590,7 +590,7 @@ void Player::normalLogic()
                 isGettingOut = false;
                 onground  = true;
                 grabstair = false;
-                vely = 8;
+                vely = 8.0f;
                 setAnimSeq(Player::STANDSTILL);
               }
             }
@@ -649,9 +649,24 @@ void Player::normalLogic()
     static bool spacePressed = false;
     if (key[KEY_SPACE])
     {
+      if (grabstair == true)
+	    {
+		    if (!key[KEY_UP] && !key[KEY_DOWN])
+		    {
+		      grabstair = false;
+		      lockjump = true;
+		      spacePressed = true;
+          lockJumpAccel = true;
+          if (onground == true) spacePressed = false;
+
+		      goto letgo;
+		    }
+      }
+
       isGettingOut = isGettingIn = false;
 
       spacePressed = true;
+
       static int jumpHigh = 0;
       //Cur: 56 Shold be: 65??
       if (isFacingDown == false && lockJumpAccel == false && (jumpHigh-y < 65))
@@ -668,19 +683,21 @@ void Player::normalLogic()
             setAnimSeq(Player::FIRINGJUMPHAND);
         }
 
-        vely=-8;
+        vely = -8.0f;
       }
       else
       {
         if (lockjump == true) {lockJumpAccel = true;}
       }
-
+	  /*
       if (grabstair == true)
       {
         if (!key[KEY_UP] && !key[KEY_DOWN])
           grabstair = false;
       }
-      else if (lockjump == false)
+      else
+	  */
+      if (!grabstair && lockjump == false)
       {
         jumpHigh = y;
 
@@ -694,7 +711,7 @@ void Player::normalLogic()
             setAnimSeq(Player::FIRINGJUMPHAND);
         }
 
-        vely     = -8;
+        vely     = -8.0f;
         onground = false;
         lockjump = true; 
       }
@@ -707,6 +724,7 @@ void Player::normalLogic()
         if (onground == true) spacePressed = false;
       }
     }
+  letgo:
 
     //static bool fireKeyPressed = false;
     if (key[KEY_A] &&
@@ -745,7 +763,7 @@ void Player::normalLogic()
     }
     else if ((!key[KEY_A]) && (fireKeyPressed == true))
     {
-	    MagneticBeamHandler::instance()->newBeams();
+	  MagneticBeamHandler::instance()->newBeams();
       fireKeyPressed = false;
     }
   }
