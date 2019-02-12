@@ -41,13 +41,15 @@ StageManager::StageManager()
   game_pause  = false;
   weapon_menu = false;
 
+  // Reset global timer so we dont warp any time soon
   Clock::clockTicks = 0;
-
-  //bgTileWarning0 = bgTileWarning1 = 0;
 
   handlingDoor   = false;
   stopAnimations = false;
   initBossFight  = false;
+
+  dyingTime = 0L;
+  dyingSequece = false;
 }
 
 StageManager::~StageManager()
@@ -475,16 +477,21 @@ void StageManager::play()
         ++Clock::clockTicks;
       }
 
-      if (player->alive == false)
+      if (player->alive == false && dyingSequece == false)
       {
-        //if (ssm->isPlaying() == true)
-        //{
         ssm->stopAll();
-        //}
 
-        if (TemporaryCharacterList::mm_tempCharacterLst.size() == 0)
+        dyingTime = Clock::clockTicks;
+        dyingSequece = true;
+      }
+
+      if (dyingSequece)
+      {
+        if (Clock::clockTicks - dyingTime > 260)
         {
           playing = false;
+          dyingSequece = false;
+          // clean all tempchars that are not doors. Reset everyone states?
         }
       }
 

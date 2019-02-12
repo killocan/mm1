@@ -57,7 +57,7 @@ class StageManager
 
   private:
     void doMegamanSpawning(BITMAP * buffer, FONT * mm_font);
-    void handlePlayer();
+    //void handlePlayer();
     //void doDraw();
     void checkColissionAgainstEnemy();
     void checkColissionPlayerEnemyBullets();
@@ -77,4 +77,7 @@ class StageManager
     bool stopAnimations;
     bool initBossFight;
     unsigned long doorTiming;
+
+    unsigned long dyingTime;
+    bool dyingSequece;
 };
