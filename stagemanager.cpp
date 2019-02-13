@@ -230,7 +230,7 @@ void StageManager::checkColissionPlayerEnemyBullets()
   }
 }
 
-#ifdef DEBUG_SRC_MODES
+#ifdef DEBUG
 static void bhmode(BITMAP * bmp)
 {
   // Black and White MODE
@@ -285,6 +285,7 @@ static void tvmode(BITMAP * bmp)
 }
 #endif
 
+// Remove character if its dead.
 static bool tempCharacterDone(const Character* value)
 {
   if (value == NULL || value->alive == false)
@@ -295,6 +296,8 @@ static bool tempCharacterDone(const Character* value)
 
   return false;
 }
+
+// Kill everyone
 static bool tempCharacterKill(const Character* value)
 {
   delete value;
@@ -491,13 +494,14 @@ void StageManager::play()
         {
           playing = false;
           dyingSequece = false;
+          player->lives--;
           // clean all tempchars that are not doors. Reset everyone states?
         }
       }
 
-      if (player->lives == 0)
+      if (player->lives < 0)
       {
-        game_over = false;
+        game_over = true;
       }
 
       // Save camera for gutsman earth quake
@@ -582,9 +586,9 @@ void StageManager::play()
         EnergyBar::drawEnerybar(m_buffer, 78, 34, player->curWeapon, true);
       }
 
-      //tvmode(m_buffer);
-      //bhmode(m_buffer);
 #ifdef DEBUG
+      if (key[KEY_T]) tvmode(m_buffer);
+      if (key[KEY_B]) bhmode(m_buffer);
       textprintf_right_ex(m_buffer, font, SCREEN_W, 10, makecol(255,255,255), 0, "X:[%f] Y:[%f] VX:[%f] VY:[%f]",
                     player->x, player->y, player->velx, player->vely);
       textprintf_right_ex(m_buffer, font, SCREEN_W, 20, makecol(255,255,255), 0, "camera.x:[%d] camera.y:[%d]",
@@ -626,22 +630,22 @@ void StageManager::drawCharacters()
   Character * curr_character = NULL;
   std::vector<Character *>::iterator it;
 
-  for (std::list<Character *>::iterator i = TemporaryCharacterList::mm_tempCharacterLst.begin();
-    i != TemporaryCharacterList::mm_tempCharacterLst.end();
-    ++i)
-  {
-    curr_character = *i;
-    if (curr_character != NULL)
-    {
-      curr_character->calcScreenCoords();
-      curr_character->drawCharacter(m_buffer);
-    }
-  }
   for (it = characters_vec.begin(); it != characters_vec.end(); ++it)
   {
     curr_character = *it;
 
     if (curr_character->alive == true)
+    {
+      curr_character->calcScreenCoords();
+      curr_character->drawCharacter(m_buffer);
+    }
+  }
+  for (std::list<Character *>::iterator i = TemporaryCharacterList::mm_tempCharacterLst.begin();
+    i != TemporaryCharacterList::mm_tempCharacterLst.end();
+    ++i)
+  {
+    curr_character = *i;
+    if (curr_character != NULL && curr_character->alive)
     {
       curr_character->calcScreenCoords();
       curr_character->drawCharacter(m_buffer);

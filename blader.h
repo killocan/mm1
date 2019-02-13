@@ -31,7 +31,7 @@ class Blader : public Character
   private:
     int CTRL_POINTS[8];
 
-    static const int CURVE_PNTS = 50;
+    static const int CURVE_PNTS = 40;
     int curveX[Blader::CURVE_PNTS];
     int curveY[Blader::CURVE_PNTS];
     int curPoint;

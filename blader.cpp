@@ -91,7 +91,7 @@ void Blader::doLogic()
       }
 
       int dist = abs(px-x);
-      if (dist < mm_graphs_defs::TILE_SIZE*3)
+      if (dist < 100)
       {
         curState = Blader::CALC_DIVING;
       }
