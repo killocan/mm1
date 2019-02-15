@@ -257,6 +257,9 @@ CrazyRazy::CrazyRazy(const Stage & stage, int x, int y) : Character(stage, mm_sp
   velx = 3.0f;
   isFacingRight = false;
 
+  stage.runtimeLoadCharacter(mm_spritefiles::CRAZYRAZY_LOWER_SPRITES);
+  stage.runtimeLoadCharacter(mm_spritefiles::CRAZYRAZY_UPPER_SPRITES);
+
   curState = CrazyRazy::MOVING;
   setAnimSeq(CrazyRazy::MOVING);
   h = getFrameH();

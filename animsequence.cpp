@@ -216,7 +216,7 @@ void AnimSequence::changeSprite(mm_weapons::WEAPONS weapon)
 {
   int x,y;
   int color1, color2;
-  bool default_weapom = false;
+  bool default_weapon = false;
 
   color1=color2=0;
 
@@ -225,7 +225,7 @@ void AnimSequence::changeSprite(mm_weapons::WEAPONS weapon)
   {
     case mm_weapons::W_MEGA_BUSTER:
     case mm_weapons::W_PLATFORM_CREATOR:
-      default_weapom = true;
+      default_weapon = true;
     break;
     case mm_weapons::W_CUTMAN_GUN:
       color1 = 0x808080;
@@ -255,7 +255,7 @@ void AnimSequence::changeSprite(mm_weapons::WEAPONS weapon)
     break;
   }
 
-  if (default_weapom == false)
+  if (default_weapon == false)
   {
     int color = 0;
     for (y = 0; y < seqBmpCopy->h; y++)

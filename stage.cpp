@@ -327,8 +327,9 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
   preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (mm_spritefiles::EXPLOSIONLITTLE_SPRITES,  new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::EXPLOSIONLITTLE_SPRITES])));
   preLoadedSprites.insert(std::pair<int, AnimSequence *>
-    (mm_spritefiles::MEGAMANEXPLOSION_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::MEGAMANEXPLOSION_SPRITES])));
+    (mm_spritefiles::MEGAMANEXPLOSION_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::MEGAMANEXPLOSION_SPRITES], true)));
 
+  /*
   if (hasPicketMan == true)
   {
 #ifdef DEBUG
@@ -357,6 +358,7 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
     preLoadedSprites.insert(std::pair<int, AnimSequence *>
       (mm_spritefiles::SPARKLE_ENM_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::SPARKLE_ENM_SPRITES])));
   }
+  */
 
 #ifdef DEBUG
     fprintf(stderr,"Preload: [Bonus Point]\n");
@@ -415,8 +417,11 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
 
 void Stage::runtimeLoadCharacter(mm_spritefiles::SPRT_TYPE characterSprite)
 {
-  preLoadedSprites.insert(std::pair<int, AnimSequence *>
-    (characterSprite, new AnimSequence(mm_spritefiles::sprite_files[characterSprite])));
+  if (preLoadedSprites.count(characterSprite)==0)
+  {
+    preLoadedSprites.insert(std::pair<int, AnimSequence *>
+      (characterSprite, new AnimSequence(mm_spritefiles::sprite_files[characterSprite])));
+  }
 }
 
 BITMAP * Stage::getTile(unsigned int index)

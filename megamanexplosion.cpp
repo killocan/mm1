@@ -24,11 +24,8 @@
 
 MegamanExplosion::MegamanExplosion(const Stage & stage, int x, int y, void * param) : Character(stage, mm_spritefiles::MEGAMANEXPLOSION_SPRITES)
 {
-  // Coords already in world coord format
   this->x = x;
   this->y = y;
-
-
 
   setAnimSeq(MegamanExplosion::EXPLODING);
   curState = MegamanExplosion::EXPLODING;
@@ -37,6 +34,8 @@ MegamanExplosion::MegamanExplosion(const Stage & stage, int x, int y, void * par
 
   alive = true;
   bOneCicle = (param != NULL) ? (*((bool *)param)) : false;
+
+  spriteSheet->changeSprite(stage.m_player->curWeapon);
 }
 
 void MegamanExplosion::doLogic()
@@ -75,11 +74,6 @@ void MegamanExplosion::doGravitation()
 {
   return;
 }
-
-//bool MegamanExplosion::handleAnimation(bool * bAnimationEnded)
-//{
-//  return Character::handleAnimation(bAnimationEnded);
-//}
 
 void MegamanExplosion::checkOnCamera()
 {

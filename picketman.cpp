@@ -70,6 +70,8 @@ PicketMan::PicketMan(const Stage & stage, int x, int y) : Character(stage, mm_sp
   isFacingRight = false;
   colorOffset   = 0;
 
+  stage.runtimeLoadCharacter(mm_spritefiles::PICKETMANHAMMER_SPRITES);
+
   setAnimSeq(colorOffset + PicketMan::APPEARING);
   h = getFrameH();
   w = getFrameW();

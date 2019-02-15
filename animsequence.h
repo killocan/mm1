@@ -11,10 +11,12 @@
 #include "weapons.h"
 
 class Player;
+class MegamanExplosion;
 
 class AnimSequence
 {
   friend class Player;
+  friend class MegamanExplosion;
 
   public:
     struct FrameInfoSt
