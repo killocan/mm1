@@ -24,7 +24,8 @@ class StageManager
     StageManager();
     virtual ~StageManager();
 
-    virtual void setupStage();
+    // Hardstart means load everything, when false just load create characters again.
+    virtual void setupStage(bool hardStart);
     virtual void doStageSpecifics();
     virtual void createBoss();
     void play();

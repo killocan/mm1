@@ -13,7 +13,7 @@ class GutsManStage : public StageManager
     GutsManStage();
     ~GutsManStage();
 
-    virtual void setupStage();
+    virtual void setupStage(bool hardStart);
     virtual void doStageSpecifics();
     virtual void createBoss();
 

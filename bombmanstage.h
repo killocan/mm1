@@ -12,7 +12,7 @@ class BombManStage : public StageManager
   public:
     BombManStage();
 
-    virtual void setupStage();
+    virtual void setupStage(bool hardStart);
     virtual void doStageSpecifics();
 
   protected:

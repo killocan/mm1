@@ -17,12 +17,23 @@ FireManStage::FireManStage() : lastCycleTime(0)
   STAGE_PATH = "./fireman_stage";
 }
 
-void FireManStage::setupStage()
+void FireManStage::setupStage(bool hardStart)
 {
-  stage->runtimeLoadCharacter(mm_spritefiles::KILLERBULLET_SPRITES);
-  stage->runtimeLoadCharacter(mm_spritefiles::MOVING_FLAME_SPRITES);
+  if (hardStart)
+  {
+    stage->runtimeLoadCharacter(mm_spritefiles::KILLERBULLET_SPRITES);
+    stage->runtimeLoadCharacter(mm_spritefiles::MOVING_FLAME_SPRITES);
 
-  stage->setOffset(mm_spritefiles::SCREWBOMBER_SPRITES, 8); // set which sprite color to use.
+    stage->setOffset(mm_spritefiles::SCREWBOMBER_SPRITES, 8); // set which sprite color to use.
+
+    bossWarningTiles.push_back(8);
+    bossWarningTiles.push_back(18);
+
+    bossWarningColors[0x006000] = 0xbababa;
+    bossWarningColors[0x00a040] = 0xefefef;
+    bossWarningColors[0xbababa] = 0x006000;
+    bossWarningColors[0xefefef] = 0x00a040;
+  }
 
   BossDoor::BossDoorSetupParam door1;
   door1.size = 2;
@@ -67,14 +78,6 @@ void FireManStage::setupStage()
                                                     110*32, 16*32, 0,0, (void*)1);
   characters_vec.push_back(pMovingFlame0);
   characters_vec.push_back(pMovingFlame1);
-
-  bossWarningTiles.push_back(8);
-  bossWarningTiles.push_back(18);
-
-  bossWarningColors[0x006000] = 0xbababa;
-  bossWarningColors[0x00a040] = 0xefefef;
-  bossWarningColors[0xbababa] = 0x006000;
-  bossWarningColors[0xefefef] = 0x00a040;
 }
 
 void FireManStage::doStageSpecifics()

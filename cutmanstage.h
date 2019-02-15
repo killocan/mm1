@@ -12,7 +12,7 @@ class CutManStage : public StageManager
   public:
     CutManStage();
 
-    virtual void setupStage();
+    virtual void setupStage(bool hardStart);
 
   protected:
     SceneSoundManager * CreateSoundManager();

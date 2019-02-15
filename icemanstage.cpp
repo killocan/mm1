@@ -21,12 +21,15 @@ IceManStage::IceManStage()
   STAGE_PATH = "./iceman_stage";
 }
 
-void IceManStage::setupStage()
+void IceManStage::setupStage(bool hardStart)
 {
-  stage->runtimeLoadCharacter(mm_spritefiles::TIMER_PLATFORM_SPRITES);
-  stage->setOffset(mm_spritefiles::TIMER_PLATFORM_SPRITES, 0);
+  if (hardStart)
+  {
+    stage->runtimeLoadCharacter(mm_spritefiles::TIMER_PLATFORM_SPRITES);
+    stage->setOffset(mm_spritefiles::TIMER_PLATFORM_SPRITES, 0);
 
-  stage->setOffset(mm_spritefiles::GUTSMANROCK_SPRITES, 6);
+    stage->setOffset(mm_spritefiles::GUTSMANROCK_SPRITES, 6);
+  }
 
   DisappearingBlock::DisappearingBlockFragment::DisappearingBlockSetupParam block1;
   block1.x = 24<<5;

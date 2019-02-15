@@ -16,13 +16,16 @@ ElecManStage::ElecManStage()
   STAGE_PATH = "./elecman_stage";
 }
 
-void ElecManStage::setupStage()
+void ElecManStage::setupStage(bool hardStart)
 {
-  stage->runtimeLoadCharacter(mm_spritefiles::ELECMAN_SPRITES);
+  if (hardStart)
+  {
+    stage->runtimeLoadCharacter(mm_spritefiles::ELECMAN_SPRITES);
 
-  bossWarningTiles.push_back(20);
-  bossWarningColors[0x445000] = 0xffffff;
-  bossWarningColors[0xffffff] = 0x445000;
+    bossWarningTiles.push_back(20);
+    bossWarningColors[0x445000] = 0xffffff;
+    bossWarningColors[0xffffff] = 0x445000;
+  }
 
   BossDoor::BossDoorSetupParam door;
   door.size = 2;

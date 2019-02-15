@@ -12,7 +12,7 @@ class FireManStage : public StageManager
   public:
     FireManStage();
 
-    virtual void setupStage();
+    virtual void setupStage(bool hardStart);
     virtual void doStageSpecifics();
 
   protected:

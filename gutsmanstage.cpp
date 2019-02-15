@@ -23,22 +23,25 @@ GutsManStage::~GutsManStage()
   Sounds::mm_sounds->stopSample(PLATFORM_MOVE);
 }
 
-void GutsManStage::setupStage()
+void GutsManStage::setupStage(bool hardStart)
 {
-  stage->runtimeLoadCharacter(mm_spritefiles::GUTSMAN_SPRITES);
+  if (hardStart)
+  {
+    stage->runtimeLoadCharacter(mm_spritefiles::GUTSMAN_SPRITES);
 
-  stage->setOffset(mm_spritefiles::BIGEYE_SPRITES, 0); // set which sprite color to use.
-  stage->setOffset(mm_spritefiles::FLEA_SPRITES,   0); // set which sprite color to use.
-  stage->setOffset(mm_spritefiles::FOOTHOLDER_SPRITES, 0);
+    stage->setOffset(mm_spritefiles::BIGEYE_SPRITES, 0); // set which sprite color to use.
+    stage->setOffset(mm_spritefiles::FLEA_SPRITES, 0); // set which sprite color to use.
+    stage->setOffset(mm_spritefiles::FOOTHOLDER_SPRITES, 0);
 
-  bossWarningTiles.push_back(8);
-  bossWarningColors[0x8c1800] = 0xffffff;
-  bossWarningColors[0xffffff] = 0x8c1800;
+    bossWarningTiles.push_back(8);
+    bossWarningColors[0x8c1800] = 0xffffff;
+    bossWarningColors[0xffffff] = 0x8c1800;
 
-  stage->hasMovingPlatform = true;
-  stage->platformTiles.push_back(21); // normal moviment
-  stage->platformTiles.push_back(20); // bounce back
-  stage->platformTiles.push_back(22); // hole
+    stage->hasMovingPlatform = true;
+    stage->platformTiles.push_back(21); // normal moviment
+    stage->platformTiles.push_back(20); // bounce back
+    stage->platformTiles.push_back(22); // hole
+  }
 
   BossDoor::BossDoorSetupParam door1;
   door1.size = 2;

@@ -1,6 +1,5 @@
 - Morrer em buracos e no geral hauwhau.
-  * Matar tudo que eh temp char e chamar setup stage de novo (passando flag para avisar que eh soft reset e nao hard load da primeira vez)
-  * Blader e outros que são offscreen tem q revisar para caso de segundo play do stage sem ter acontecido gameover.
+  * Explosao do megaman deve usar a mesma paleta que a arma atual.
   * Tela de gameover (classe)
 - Finalizar fases
 - porta tratar gravidade quando megaman ficar em lugar que ele caia (na propria classe da fase?)

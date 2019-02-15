@@ -307,7 +307,7 @@ static bool tempCharacterKill(const Character* value)
 void StageManager::play()
 {
   stage  = new Stage(getStageFilePath(), *camera, &player);
-  setupStage();
+  setupStage(true);
   stage->stageNumber = stage_number;
   CurrentCharacterList::mm_characterLst = &characters_vec;
 
@@ -490,18 +490,17 @@ void StageManager::play()
 
       if (dyingSequece)
       {
-        if (Clock::clockTicks - dyingTime > 260)
+        if (Clock::clockTicks - dyingTime > 220)
         {
           playing = false;
           dyingSequece = false;
           player->lives--;
-          // clean all tempchars that are not doors. Reset everyone states?
-        }
-      }
 
-      if (player->lives < 0)
-      {
-        game_over = true;
+          if (player->lives < 0)
+          {
+            game_over = true;
+          }
+        }
       }
 
       // Save camera for gutsman earth quake
@@ -614,8 +613,18 @@ void StageManager::play()
 
       ++GlobalGameState::sm_fps_count;
     }
+
+    // Recreate temp chars and doors.
+    weaponMenu->selected = 7;
+    player->curWeapon = mm_weapons::W_MEGA_BUSTER;
+    player->changeWeapon();
+    stage->horz_scroll = false;
+    TemporaryCharacterList::mm_tempCharacterLst.remove_if(tempCharacterKill);
+    special_chars_vec.clear();
+    setupStage(false);
   }
 
+  // Just in case?!
   TemporaryCharacterList::mm_tempCharacterLst.remove_if(tempCharacterKill);
 
   ssm->stopAll();
@@ -853,7 +862,7 @@ void StageManager::createBoss()
   ;
 }
 
-void StageManager::setupStage()
+void StageManager::setupStage(bool hardStart)
 {
   return;
 }

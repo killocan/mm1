@@ -18,6 +18,7 @@ class WeaponMenu
 
     bool inputAndDraw(BITMAP *buffer);
 
+    int selected;
   private:
     const static int W = 192;
     const static int H = 320;
@@ -48,8 +49,6 @@ class WeaponMenu
 
     unsigned long lastTilePokeTime;
     unsigned long blinkerTime;
-
-    int selected;
 
     void draw_enerybars(BITMAP * buffer, int x, int y, mm_weapons::WEAPONS weapon);
 };

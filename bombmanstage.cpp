@@ -16,14 +16,17 @@ BombManStage::BombManStage()
   STAGE_PATH = "./bombman_stage";
 }
 
-void BombManStage::setupStage()
+void BombManStage::setupStage(bool hardStart)
 {
-  stage->setOffset(mm_spritefiles::BOMBOMB_SPRITES, 0); // set which sprite color to use.
+  if (hardStart)
+  {
+    stage->setOffset(mm_spritefiles::BOMBOMB_SPRITES, 0); // set which sprite color to use.
 
-  bossWarningTiles.push_back(16);
-  bossWarningTiles.push_back(17);
-  bossWarningColors[0x00bd00] = 0xffffff;
-  bossWarningColors[0xffffff] = 0x00bd00;
+    bossWarningTiles.push_back(16);
+    bossWarningTiles.push_back(17);
+    bossWarningColors[0x00bd00] = 0xffffff;
+    bossWarningColors[0xffffff] = 0x00bd00;
+  }
 
   BossDoor::BossDoorSetupParam door1;
   door1.size = 2;

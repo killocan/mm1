@@ -14,12 +14,15 @@ CutManStage::CutManStage()
   STAGE_PATH = "./cutman_stage";
 }
 
-void CutManStage::setupStage()
+void CutManStage::setupStage(bool hardStart)
 {
-  stage->setOffset(mm_spritefiles::BLADER_SPRITES,         1); // set which sprite color to use.
-  stage->setOffset(mm_spritefiles::BEAK_SPRITES,           4); // set which sprite color to use.
-  stage->setOffset(mm_spritefiles::SPINE_SPRITES,          0); // set which sprite color to use.
-  stage->setOffset(mm_spritefiles::OCTOPUSBATTERY_SPRITES, 0); // set which sprite color to use. NOTE: default
+  if (hardStart)
+  {
+    stage->setOffset(mm_spritefiles::BLADER_SPRITES, 1); // set which sprite color to use.
+    stage->setOffset(mm_spritefiles::BEAK_SPRITES, 4); // set which sprite color to use.
+    stage->setOffset(mm_spritefiles::SPINE_SPRITES, 0); // set which sprite color to use.
+    stage->setOffset(mm_spritefiles::OCTOPUSBATTERY_SPRITES, 0); // set which sprite color to use. NOTE: default
+  }
 }
 
 SceneSoundManager * CutManStage::CreateSoundManager()
