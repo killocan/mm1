@@ -42,7 +42,7 @@ SOURCES=main.cpp mm_math.cpp soundpack.cpp spritefiles.cpp globalgamestate.cpp t
         menu.cpp blader.cpp footholder.cpp beak.cpp supercutter.cpp flyingshell.cpp killerbullet.cpp spine.cpp met.cpp picketman.cpp sniperjoe.cpp \
         peng.cpp bigeye.cpp flea.cpp octopusbattery.cpp screwbomber.cpp bombomb.cpp crazyrazy.cpp moveplatform.cpp \
         tempcharacter.cpp lifechargerlittle.cpp lifechargerbig.cpp weaponchargerlittle.cpp weaponchargerbig.cpp newlifeitem.cpp \
-        bonuspoint.cpp fireman.cpp gutsman.cpp gutsmanrock.cpp magneticbeamhandler.cpp \
+        bonuspoint.cpp fireman.cpp gutsman.cpp gutsmanrock.cpp magneticbeamhandler.cpp gameovermenu.cpp \
         hitexplosion.cpp explosionlittle.cpp sparkle.cpp lightningwall.cpp firepillar.cpp firebolt.cpp megamanexplosion.cpp \
         sparkleenm.cpp watcher.cpp tacklefire.cpp bossdoor.cpp
 

@@ -18,7 +18,7 @@
 #include "weapons.h"
 #include "weaponmenu.h"
 #include "energybar.h"
-
+#include "gameovermenu.h"
 #include "tileactions.h"
 #include "defines.h"
 
@@ -614,14 +614,20 @@ void StageManager::play()
       ++GlobalGameState::sm_fps_count;
     }
 
-    // Recreate temp chars and doors.
-    weaponMenu->selected = 7;
-    player->curWeapon = mm_weapons::W_MEGA_BUSTER;
-    player->changeWeapon();
-    stage->horz_scroll = false;
-    TemporaryCharacterList::mm_tempCharacterLst.remove_if(tempCharacterKill);
-    special_chars_vec.clear();
-    setupStage(false);
+    if (game_over)
+      game_over = GameoverMenu::choice(m_buffer);
+
+    if (game_over == false)
+    {
+      // Recreate temp chars and doors.
+      weaponMenu->selected = 7;
+      player->curWeapon = mm_weapons::W_MEGA_BUSTER;
+      player->changeWeapon();
+      stage->horz_scroll = false;
+      TemporaryCharacterList::mm_tempCharacterLst.remove_if(tempCharacterKill);
+      special_chars_vec.clear();
+      setupStage(false);
+    }
   }
 
   // Just in case?!
