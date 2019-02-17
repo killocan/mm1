@@ -21,7 +21,8 @@ namespace mm_soundpack
         STAGEW2_BG_MUSIC,
         STAGEW3_BG_MUSIC,
         STAGEW4_BG_MUSIC,
-        EPILOGUE_BG_MUSIC};
+        EPILOGUE_BG_MUSIC,
+        GAMEOVER_MUSIC};
 
   extern const char * sounds[];
 }

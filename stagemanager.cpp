@@ -494,9 +494,9 @@ void StageManager::play()
         {
           playing = false;
           dyingSequece = false;
-          player->lives--;
+          GlobalGameState::lives--;
 
-          if (player->lives < 0)
+          if (GlobalGameState::lives < 0)
           {
             game_over = true;
           }
@@ -615,7 +615,13 @@ void StageManager::play()
     }
 
     if (game_over)
+    {
       game_over = GameoverMenu::choice(m_buffer);
+      if (!game_over)
+      {
+        GlobalGameState::lives = 2;
+      }
+    }
 
     if (game_over == false)
     {

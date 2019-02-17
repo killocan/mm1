@@ -10,6 +10,7 @@
 
 #include "scenesoundmanager.h"
 #include "sfx.h"
+#include "soundpack.h"
 
 #include "globals.h"
 #include "globalgamestate.h"
@@ -21,43 +22,42 @@ bool GameoverMenu::choice(BITMAP *buffer)
   
   bool gameover = false;
 
-  bool isKeyDown = false, isKeyUp = false;
+  bool isKeyUp = false;
+
+  SceneSoundManager gameover_music(mm_soundpack::sounds[mm_soundpack::GAMEOVER_MUSIC]);
+  gameover_music.play(0, false);
 
   while (!key[KEY_ENTER])
   {
-    if (key[KEY_UP] && isKeyUp == false)
+    if (key[KEY_P] && isKeyUp == false)
     {
-      Sounds::mm_sounds->play(MENU_ARROW);
-
       gameover = !gameover;
 
       isKeyUp = true;
     }
-    else if (isKeyUp == true && (!key[KEY_UP]))
+    else if (isKeyUp == true && (!key[KEY_P]))
     {
       isKeyUp = false;
     }
 
-    if (key[KEY_DOWN] && isKeyDown == false)
-    {
-      Sounds::mm_sounds->play(MENU_ARROW);
-
-      gameover = !gameover;
-
-      isKeyDown = true;
-    }
-    else if (isKeyDown == true && (!key[KEY_DOWN]))
-    {
-      isKeyDown = false;
-    }
-
     clear_to_color(buffer, bgcolor);
-    draw_text_shadow(buffer, Font::mm_font, 260, 250, white, "CONTINUE");
-    draw_text_shadow(buffer, Font::mm_font, 260, 270, white, "GAMEOVER");
+    textout_centre_ex(buffer, Font::mm_font, "GAME OVER", SCREEN_W/2, 145, white, -1);
+
+    textprintf_centre_ex(buffer, Font::mm_font, SCREEN_W / 2, 170, white, -1, "%07d", GlobalGameState::bonus_points);
+
+    char seta[2];
+    seta[0] = '9' + 5;
+    seta[1] = 0;
+    int ypos[] = { 293, 323 };
+    draw_text_shadow(buffer, Font::mm_font, SCREEN_W / 2 - 105, ypos[gameover], white, seta);
+
+    textout_ex(buffer, Font::mm_font, "CONTINUE", SCREEN_W / 2 - 80, 290, white, -1);
+    textout_ex(buffer, Font::mm_font, "STAGE SELECT", SCREEN_W / 2 - 80, 320, white, -1);
 
     Vsync::Sync();
     blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
   }
+  while (key[KEY_ENTER]);
 
-  return false;
+  return gameover;
 }

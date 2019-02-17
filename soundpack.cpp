@@ -24,5 +24,6 @@ namespace mm_soundpack
     "./sounds/MM1.WilyStages3-4.mp3",
     "./sounds/MM1.WilyStages3-4.mp3",
     "./sounds/MM1.Ending.mp3",
+    "./sounds/MM1.GameOver.mp3",
   };
 }

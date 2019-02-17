@@ -45,6 +45,7 @@ Gutsman::Gutsman(const Stage & stage, int x_map, int y_map, void * param) : Char
   cycleCount = 0;
 
   GutsmanGun::firstOne = true;
+  canCollideBullet = true;
 }
 
 bool Gutsman::handleAnimation(bool * bAnimationEnded)
@@ -242,11 +243,13 @@ void Gutsman::hit(mm_weapons::weapon_st * pWeapon)
       life--;
     break;
   }
+  pWeapon->alive = false;
 
   if (life == 0)
   {
     die();
-    alive = false;
+    life = 28;
+    //alive = false;
   }
 
   return;

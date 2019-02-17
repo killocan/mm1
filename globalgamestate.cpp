@@ -13,6 +13,9 @@ bool GlobalGameState::hasPlatformGun          = true;
 bool GlobalGameState::earthquake              = false;
 int  GlobalGameState::earthquakecount         = 0;
 
+int GlobalGameState::bonus_points             = 0;
+int GlobalGameState::lives                    = 2;
+
 bool GlobalGameState::allEnemysDefeated       = false;
 bool GlobalGameState::enemyDefeated[6]        = {true, true, true, true, true, true};
 int  GlobalGameState::enemyClearPoints[6]     = {50000, 80000, 90000, 30000, 50000, 100000};

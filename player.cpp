@@ -18,8 +18,7 @@
 #include "globalgamestate.h"
 #include "sfx.h"
 
-//Player::Player() : Character("game_data/megaman_seq.dat"), lives(2)
-Player::Player(const Stage & stage) : Character(stage, 0), lives(2)
+Player::Player(const Stage & stage) : Character(stage, 0)
 {
   lockJumpAccel = false;
   curWeapon     = mm_weapons::W_MEGA_BUSTER;
@@ -165,7 +164,7 @@ void Player::hit(Character * pCharacter)
     break;
     case mm_spritefiles::NEW_LIFE_SPRITES:
     {
-      ++lives;
+      ++GlobalGameState::lives;
       pCharacter->die();
       Sounds::mm_sounds->play(NEW_LIFE);
       return;
@@ -173,7 +172,8 @@ void Player::hit(Character * pCharacter)
     break;
     case mm_spritefiles::BONUS_POINT_SPRITES:
     {
-      //TODO: Increase bonus points.
+      GlobalGameState::bonus_points += 100;
+
       pCharacter->die();
       Sounds::mm_sounds->play(BONUS_POINT);
       return;
@@ -271,6 +271,8 @@ void Player::hit(Character * pCharacter)
   // Face hit.
   isFacingRight = (hitDir < 0);
 
+  this->life -= 2;
+
   // Add hit explosion character.
   TemporaryCharacterList::mm_tempCharacterLst.push_back(cur_stage->createCharacter(mm_tile_actions::HIT_EXPLOSION_CHAR, this->x, this->y));
 }
@@ -332,7 +334,7 @@ void Player::normalLogic()
 {
   if (bDying == true) return;
 
-  if (touchSpike == true)
+  if (touchSpike == true || this->life <= 0)
   {
     dyingTimer = Clock::clockTicks;
     bDying = true;

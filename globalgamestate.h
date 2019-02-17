@@ -19,6 +19,9 @@ class GlobalGameState
     static bool earthquake;
     static int  earthquakecount;
 
+    static int bonus_points;
+    static int lives;
+
     static bool allEnemysDefeated;
     static bool enemyDefeated[6];
     static int  enemyClearPoints[6];

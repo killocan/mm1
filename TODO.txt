@@ -1,6 +1,6 @@
-- Morrer em buracos e no geral hauwhau.
-  * Tela de gameover (classe)
 - Finalizar fases
+- IA do gutsman
+- Codigo para passar de fase.
 - ajustar magnetic beam SE estiver atrapalhando, verificar se esta dentro de tiles e jogar para dentro 100%
   evitando que o mm fique preso.
 - porta tratar gravidade quando megaman ficar em lugar que ele caia (na propria classe da fase?)
@@ -13,6 +13,7 @@
 - Fases do DR WILLY (gutsman gun muda numa fase do castelo)
 - Teletransportar (FASE WILLY)
 - ajustar pontos, uso de arma e damage de tudo.
+- Ajustar quanto de life cada char tira do megaman.
 - Add 10,000 points to score if it was a rematch (FROM ASM finlandes)
 - nao deixar pegar input se animationoff estiver ligado (ver)
 - mover codigo de up e down do mm para metodos

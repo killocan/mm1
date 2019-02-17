@@ -307,7 +307,7 @@ bool WeaponMenu::inputAndDraw(BITMAP *buffer)
     }
 
     static char buf[20];
-    sprintf(buf, "= %02d", m_player->lives);
+    sprintf(buf, "= %02d", GlobalGameState::lives);
     draw_text_shadow(buffer, Font::mm_font, 340, 318, white, buf);
 
     draw_sprite(buffer, menuLife, 308, 312);

@@ -39,11 +39,8 @@ class Player : public Character
     void reset();
     void forceAnimation();
 
-    int lives;
-
     bool lockJumpAccel;
-
-	bool fireKeyPressed;
+	  bool fireKeyPressed;
 
     enum {
           SPAWNING, 
