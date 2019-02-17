@@ -269,7 +269,7 @@ Watcher::Watcher(const Stage & stage, int x, int y)
 
   curState = Watcher::CONTROLLING;
 
-  stage.runtimeLoadCharacter(mm_spritefiles::SPARKLE_ENM_SPRITES);
+  cur_stage->runtimeLoadCharacter(mm_spritefiles::SPARKLE_ENM_SPRITES);
 
   internalSprite = create_bitmap(10,10);
 #ifdef DEBUG

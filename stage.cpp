@@ -329,37 +329,6 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
   preLoadedSprites.insert(std::pair<int, AnimSequence *>
     (mm_spritefiles::MEGAMANEXPLOSION_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::MEGAMANEXPLOSION_SPRITES], true)));
 
-  /*
-  if (hasPicketMan == true)
-  {
-#ifdef DEBUG
-    fprintf(stderr,"Preload: [PicketMan Hammer]\n");
-#endif
-    preLoadedSprites.insert(std::pair<int, AnimSequence *>
-      (mm_spritefiles::PICKETMANHAMMER_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::PICKETMANHAMMER_SPRITES])));
-  }
-
-  if (hasCrazyRazy == true)
-  {
-#ifdef DEBUG
-    fprintf(stderr,"Preload: [CrazyRazy Upper and Lower parts]\n");
-#endif
-    preLoadedSprites.insert(std::pair<int, AnimSequence *>
-      (mm_spritefiles::CRAZYRAZY_LOWER_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::CRAZYRAZY_LOWER_SPRITES])));
-    preLoadedSprites.insert(std::pair<int, AnimSequence *>
-      (mm_spritefiles::CRAZYRAZY_UPPER_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::CRAZYRAZY_UPPER_SPRITES])));
-  }
-
-  if (hasWatcher == true)
-  {
-#ifdef DEBUG
-    fprintf(stderr,"Preload: [Watcher gun]\n");
-#endif
-    preLoadedSprites.insert(std::pair<int, AnimSequence *>
-      (mm_spritefiles::SPARKLE_ENM_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::SPARKLE_ENM_SPRITES])));
-  }
-  */
-
 #ifdef DEBUG
     fprintf(stderr,"Preload: [Bonus Point]\n");
 #endif
