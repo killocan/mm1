@@ -155,8 +155,6 @@ void FootHolder::doLogic()
 #ifdef DEBUG
 void FootHolder::drawCharacter(BITMAP * bmp)
 {
-  drawing_mode(DRAW_MODE_TRANS, NULL, 0, 0);
-
   int xmin = this->old_x - 160.0f;
   int xmax = xmin + 180;
   int ymin = this->old_y;
@@ -182,7 +180,6 @@ void FootHolder::drawCharacter(BITMAP * bmp)
              (ymin - GlobalCamera::mm_camera->y),
              ((ymax) - GlobalCamera::mm_camera->y),
              makecol(0,0,0));
-  drawing_mode(DRAW_MODE_SOLID, NULL, 0, 0);
 
   int curSpriteFrame = anim_seqs[curAnimSeq][curAnimFrame].frameNumber;
 
