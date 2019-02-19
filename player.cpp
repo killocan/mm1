@@ -188,11 +188,15 @@ void Player::hit(Character * pCharacter)
       pCharacter->type == mm_spritefiles::TIMER_PLATFORM_SPRITES ||
 	  pCharacter->type == mm_spritefiles::WEAPONS_MAGNETIC)
   {
-	float diff = 15.0f;
-	if (pCharacter->type == mm_spritefiles::WEAPONS_MAGNETIC)
-		diff = 13.0f;
+	  float diff = 15.0f;
+    if (pCharacter->type == mm_spritefiles::WEAPONS_MAGNETIC)
+      diff = pCharacter->h*2.0f;
 
     bool bOverPlatform = (y < pCharacter->y && vely > 0.0f) && abs((this->y+mm_player_defs::PLAYERHEIGHT) - pCharacter->y) < diff;
+    if (pCharacter->type == mm_spritefiles::WEAPONS_MAGNETIC)
+      if (this->x + this->utilX + this->utilXLen < pCharacter->x)
+        bOverPlatform = false;
+
     if (pCharacter->type == mm_spritefiles::TIMER_PLATFORM_SPRITES)
     {
       if (this->y+10.0f > pCharacter->y)

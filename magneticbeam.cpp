@@ -75,17 +75,17 @@ void MagneticBeam::doLogic()
 
   if (commited && ((Clock::clockTicks - lifetime) > 220))
   {
-	this->alive = false;
+	  this->alive = false;
   }
 
   if (cur_stage->m_player->fireKeyPressed && !commited)
   {
-	calculateXY();
+	  calculateXY();
   }
   else if (commited == false)
   {
     MagneticBeamHandler::instance()->commit();
-	if (!cur_stage->m_player->fireKeyPressed) MagneticBeamHandler::instance()->newBeams();
+	  if (!cur_stage->m_player->fireKeyPressed) MagneticBeamHandler::instance()->newBeams();
   }
 
   int ta1 = cur_stage->tileActionUnnormalized(int(x) + 1.0f, int(y) + 1.0f);
