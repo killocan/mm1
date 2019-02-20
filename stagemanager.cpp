@@ -384,10 +384,13 @@ void StageManager::play()
 
       if (key[KEY_ENTER] && (game_pause == false) && (GlobalGameState::playerShots.size() == 0) && (player->holdingGutsmanRock==false))
       {
-        Sounds::mm_sounds->play(PAUSE);
+        if (findMagneticbeam() == false)
+        {
+          Sounds::mm_sounds->play(PAUSE);
 
-        game_pause = true;
-        weapon_menu = true;
+          game_pause = true;
+          weapon_menu = true;
+        }
       }
 
       if (GlobalGameState::game_logic_tick == 1)
@@ -644,6 +647,24 @@ void StageManager::play()
 
   sboos->stopAll();
   delete sboos;
+}
+
+bool StageManager::findMagneticbeam()
+{
+  Character * curr_character = NULL;
+
+  for (std::list<Character *>::iterator i = TemporaryCharacterList::mm_tempCharacterLst.begin();
+    i != TemporaryCharacterList::mm_tempCharacterLst.end();
+    ++i)
+  {
+    curr_character = *i;
+    if (curr_character != NULL && curr_character->alive && curr_character->type == mm_spritefiles::WEAPONS_MAGNETIC)
+    {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 void StageManager::drawCharacters()

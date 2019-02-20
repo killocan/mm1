@@ -92,7 +92,9 @@ void MagneticBeam::doLogic()
   int ta2 = cur_stage->tileActionUnnormalized(int(x) + int(w) - 1.0f, int(y) + 1.0f);
   if (!commited && (ta1 == mm_tile_actions::TILE_SOLID || ta2 == mm_tile_actions::TILE_SOLID))
   {
-	  MagneticBeamHandler::instance()->commit();
+    int xpos = int(this->x) & 0x1F;
+    alive = xpos < 0X10;
+	  MagneticBeamHandler::instance()->commit(!alive, 0x20 - xpos);
   }
 }
 

@@ -30,7 +30,7 @@ class StageManager
     virtual void createBoss();
     void play();
     void drawCharacters();
-
+    bool findMagneticbeam();
     virtual const std::string & getStageFilePath() const;
 
   protected:

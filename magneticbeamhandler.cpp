@@ -64,11 +64,16 @@ void MagneticBeamHandler::removeBeam(MagneticBeam * b)
   }
 }
 
-void MagneticBeamHandler::commit()
+void MagneticBeamHandler::commit(bool correctOffset, int x)
 {
   std::vector<MagneticBeam *>::iterator i;
   for (i = beams.begin(); i != beams.end(); ++i)
   {
+    if (correctOffset)
+    {
+      (*i)->x += x;
+    }
+
     (*i)->commit();
   }
   

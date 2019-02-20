@@ -8,7 +8,6 @@
 - mudar struct  do mapa, chao de gelo e agua, acelerecao correpondente para fase do iceman
 - Waypoints
 - Fases do cutman, bombman, electman, iceman - IA dos chefes
-- Não permitir entrar no menu de armas se houver magnetic na tela
 - Animacao do life do boss e life do boss morendo (falta cores dos mestres da fase do willy)
 - Fases do DR WILLY (gutsman gun muda numa fase do castelo)
 - Teletransportar (FASE WILLY)

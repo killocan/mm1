@@ -21,7 +21,7 @@ public:
 
   int addBeam(MagneticBeam * b);
   void removeBeam(MagneticBeam * b);
-  void commit();
+  void commit(bool correctOffset = false, int x = 0);
   bool canCreateAgain();
   int beamsCount();
   void newBeams();
