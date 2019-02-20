@@ -66,6 +66,8 @@ void MagneticBeamHandler::removeBeam(MagneticBeam * b)
 
 void MagneticBeamHandler::commit(bool correctOffset, int x)
 {
+  if (beams.size() <= 1) correctOffset = false;
+
   std::vector<MagneticBeam *>::iterator i;
   for (i = beams.begin(); i != beams.end(); ++i)
   {
