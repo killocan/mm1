@@ -52,7 +52,7 @@ class StageManager
     std::vector<int> bossWarningTiles;
     std::map<unsigned, unsigned> bossWarningColors;
 
-    enum STAGE_STATES {SEARCHING_BOSS_DOOR, HANDLING_DOOR, BOSS_WARNING, INITING_BOSS_FIGHT, FIGHT};
+    enum STAGE_STATES {SEARCHING_BOSS_DOOR, HANDLING_DOOR, BOSS_WARNING, INITING_BOSS_FIGHT, FIGHT, BOSS_DEAD};
     STAGE_STATES cur_stage_state;
     unsigned int stage_number;
 

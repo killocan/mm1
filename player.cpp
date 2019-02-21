@@ -17,6 +17,7 @@
 #include "globals.h"
 #include "globalgamestate.h"
 #include "sfx.h"
+#include "mm_math.h"
 
 Player::Player(const Stage & stage) : Character(stage, 0)
 {
@@ -186,7 +187,7 @@ void Player::hit(Character * pCharacter)
   if (pCharacter->type == mm_spritefiles::MOVING_PLATFORM_SPRITES ||
       pCharacter->type == mm_spritefiles::FOOTHOLDER_SPRITES ||
       pCharacter->type == mm_spritefiles::TIMER_PLATFORM_SPRITES ||
-	  pCharacter->type == mm_spritefiles::WEAPONS_MAGNETIC)
+	    pCharacter->type == mm_spritefiles::WEAPONS_MAGNETIC)
   {
 	  float diff = 15.0f;
     if (pCharacter->type == mm_spritefiles::WEAPONS_MAGNETIC)
@@ -775,12 +776,11 @@ void Player::normalLogic()
   }
 }
 
-struct pt {int x; int y;};
 void Player::die()
 {
   if (Clock::clockTicks-7 > dyingTimer)
   {
-    static pt explosionPts[] = {{mm_player_defs::PLAYERWIDTH>>1,mm_player_defs::PLAYERHEIGHT>>1},
+    MM_Math::pt explosionPts[] = {{mm_player_defs::PLAYERWIDTH>>1,mm_player_defs::PLAYERHEIGHT>>1},
                                 {0,0},
                                 {mm_player_defs::PLAYERWIDTH,0}};
     dyingTimer = Clock::clockTicks;

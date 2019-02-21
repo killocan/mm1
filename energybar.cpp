@@ -13,7 +13,7 @@
 
 Player * EnergyBar::m_player = NULL;
 Character * EnergyBar::m_boss = NULL;
-int      EnergyBar::iUnits   = 0;
+int EnergyBar::iUnits = 0;
 unsigned long EnergyBar::iTimer = 0UL;
 
 void EnergyBar::drawEnerybar(BITMAP * buffer, int x, int y, mm_weapons::WEAPONS weapon, bool boss)

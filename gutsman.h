@@ -18,9 +18,9 @@ class Gutsman : public Character
 
     virtual void doLogic();
     virtual void touchGround();
-
+    virtual void die();
     virtual void fire();
-
+    virtual void drawCharacter(BITMAP * bmp);
     virtual bool handleAnimation(bool * bAnimationEnded = NULL);
 
     virtual void hit(mm_weapons::weapon_st * pWeapon);
@@ -32,4 +32,13 @@ class Gutsman : public Character
     GutsmanGun * rock;
     bool bFirstTime;
     bool jumping, jumping_right;
+
+    bool bDying;
+    unsigned long dyingTimer;
+    int dieStep;
+
+    bool isHitAnimOn;
+    bool bDraw;
+    unsigned long blinkBegin;
+    int blinkCount;
 };

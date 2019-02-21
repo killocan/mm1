@@ -1,6 +1,7 @@
-- Finalizar fases
-- IA do gutsman
 - Codigo para passar de fase.
+- verificar pq o met nao abre o capacete as vezes.
+- Remover corrida do megaman se entrar na sala do mestre segurando corrida.
+- Finalizar fases
 - ajustar magnetic beam SE estiver atrapalhando, verificar se esta dentro de tiles e jogar para dentro 100%
   evitando que o mm fique preso.
 - porta tratar gravidade quando megaman ficar em lugar que ele caia (na propria classe da fase?)

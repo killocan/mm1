@@ -11,6 +11,8 @@
 class MM_Math
 {
   public:
+    struct pt { int x; int y; };
+
     // picketman hammer vector calculation
     static void CalculateVector2D(int p1x, int p1y, int p2x, int p2y, double & velx, double & vely);
     // Radian to Degress and back

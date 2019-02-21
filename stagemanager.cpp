@@ -883,6 +883,20 @@ void StageManager::doStageSpecifics()
         if (EnergyBar::m_boss->curState != 0 && handlingDoor)
           handlingDoor = false;
       }
+      if (EnergyBar::m_boss == NULL)
+      {
+        Sounds::mm_sounds->play(BOMBOMB_HIT);
+
+        sboos->stopAll();
+        //drop orb.
+
+        cur_stage_state = BOSS_DEAD;
+      }
+    }
+    break;
+    case BOSS_DEAD:
+    {
+      ;
     }
     break;
   }

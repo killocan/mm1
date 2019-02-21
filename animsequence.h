@@ -29,6 +29,7 @@ class AnimSequence
     ~AnimSequence();
 
     BITMAP * getFrame(int frame_idx);
+    unsigned frameNumber();
     int * getUtilXInfo();
     int getFrameHeight(int frameNumber);
 

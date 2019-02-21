@@ -1061,7 +1061,9 @@ Character * Stage::createCharacter(int TYPE, int x, int y, int vx, int vy, void 
     break;
     case mm_tile_actions::EXPLOSION_LITTLE_CHAR:
     {
-      cur_character = new ExplosionLittle(*this, x, y);
+      cur_character = new ExplosionLittle(*this, x, y, param);
+      cur_character->velx = vx;
+      cur_character->vely = vy;
     }
     break;
     case mm_tile_actions::MEGAMAN_EXPLOSION_CHAR:

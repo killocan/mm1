@@ -207,6 +207,11 @@ BITMAP * AnimSequence::getFrame(int frame_idx)
   return seqFrames[frame_idx];
 }
 
+unsigned AnimSequence::frameNumber()
+{
+  return seqFrames.size();
+}
+
 std::vector<std::vector<AnimSequence::FrameInfoSt> > AnimSequence::getAnimSeq()
 {
   return anim_seqs;

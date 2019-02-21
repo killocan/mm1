@@ -13,7 +13,7 @@ class Stage;
 class ExplosionLittle : public Character
 {
   public:
-    ExplosionLittle(const Stage & stage, int x, int y);
+    ExplosionLittle(const Stage & stage, int x, int y, void * param);
 
     virtual void doLogic();
 
@@ -25,8 +25,9 @@ class ExplosionLittle : public Character
     // Manage its own death
     virtual void checkOnCamera();
 
-    enum {EXPLODING};
+    enum {EXPLODING, BOSS_DIE};
 
   private:
+    bool bOneCicle; // if true after one animation cicle it dies.
     //Stage * cur_stage; // current stage.
 };
