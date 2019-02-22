@@ -46,7 +46,7 @@
 #include "bossdoor.h"
 #include "sparkleenm.h"
 #include "watcher.h"
-
+#include "stageorb.h"
 #include "hitexplosion.h"
 #include "explosionlittle.h"
 #include "megamanexplosion.h"
@@ -67,7 +67,7 @@ static void screenscroll_timer()
 }
 END_OF_FUNCTION(screenscroll_timer);
 
-Stage::Stage(std::string stage_path, Camera & camera, Player ** player)//, std::vector<Character *> & characters_vec)
+Stage::Stage(std::string stage_path, Camera & camera, Player ** player)
 {
   stageNumber  = 0;
   cur_waypoint = 0;
@@ -217,10 +217,6 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
 
   fclose(fp);
 
-  bool hasPicketMan = false;
-  bool hasCrazyRazy = false;
-  bool hasWatcher   = false;
-
   for (int y = 0; y < max_y; ++y)
   {
     for (int x = 0; x < max_x; ++x)
@@ -269,13 +265,6 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
         unsigned char tile_action = map[y][x].action;
         if ((tile_action > mm_tile_actions::TILE_DEATH) && (tile_action < mm_tile_actions::TILE_TIMER))
         {
-          if (tile_action == mm_tile_actions::TILE_ENEMY_PICKETMAN)
-            hasPicketMan = true;
-          else if (tile_action == mm_tile_actions::TILE_ENEMY_CRAZYRAZY)
-            hasCrazyRazy = true;
-          else if (tile_action == mm_tile_actions::TILE_ENEMY_WATCHER)
-            hasWatcher = true;
-
           if (preLoadedSprites.find(tile_action) == preLoadedSprites.end())
           {
 #ifdef DEBUG
@@ -1161,6 +1150,11 @@ Character * Stage::createCharacter(int TYPE, int x, int y, int vx, int vy, void 
     case mm_tile_actions::GUTSMAN_GUN:
     {
       cur_character = new GutsmanGun(*this, x, y, param);
+    }
+    break;
+    case mm_tile_actions::STAGE_ORB:
+    {
+      cur_character = new StageOrb(*this, x, y);
     }
     break;
   }

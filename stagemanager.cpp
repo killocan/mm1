@@ -840,6 +840,7 @@ void StageManager::doStageSpecifics()
             player->isHitAnimOn = false;
             player->isInvincible = false;
             player->isFacingRight = true;
+            player->setAnimSeq(Player::STANDSTILL);
 
             door->collideWithPlayer = false;
             door->blockPassage();
@@ -888,7 +889,8 @@ void StageManager::doStageSpecifics()
         Sounds::mm_sounds->play(BOMBOMB_HIT);
 
         sboos->stopAll();
-        //drop orb.
+
+        stage->createCharacter(mm_tile_actions::STAGE_ORB, camera->x + (mm_graphs_defs::UTIL_W / 2) - 16, camera->y, 0,0);
 
         cur_stage_state = BOSS_DEAD;
       }

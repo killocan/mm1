@@ -86,5 +86,6 @@ namespace mm_tile_actions
     TILE_TIMER_PLATFORM_FRAGMENT,
     GUTSMAN_GUN,
     GUTSMAN_GUN_FRAGMENT,
+    STAGE_ORB,
   };
 }

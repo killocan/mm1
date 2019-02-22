@@ -77,6 +77,7 @@ namespace mm_spritefiles
     MAGNET_BEAM_SPRITES,
     MOVING_FLAME_SPRITES,
     GUTSMAN_ROCK_FRAGMENTS_SPRITES,
+    STAGE_ORB_SPRITES,
   };
 
   extern const char * sprite_files[];
