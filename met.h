@@ -28,7 +28,7 @@ class Met : public Character
     virtual void hit(mm_weapons::weapon_st * pWeapon);
     virtual void respawn();
 
-    enum {CLOSED, FIRING, CLOSING};
+    enum {CLOSED, FIRING, CLOSING, WAITING};
   private:
     // Adjust y coord to keep it right above the floor.
     void adjustToFloor();

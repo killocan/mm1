@@ -79,8 +79,8 @@ void Met::doLogic()
     {
       isFacingRight = x < px;
 
-      cycleDone = Character::handleAnimation();
-      if (cycleDone == true)
+      //cycleDone = Character::handleAnimation();
+      //if (cycleDone == true)
       {
         int dist = abs(px-x);
         if (dist < 192)
@@ -111,8 +111,22 @@ void Met::doLogic()
       cycleDone = Character::handleAnimation();
       if (cycleDone == true)
       {
-        curState = Met::CLOSED;
         setAnimSeq(Met::CLOSED);
+        curState = Met::WAITING;
+      }
+    }
+    break;
+    case Met::WAITING:
+    {
+      cycleDone = Character::handleAnimation();
+      if (cycleDone == true)
+      {
+        if (rand()%10 > 3)
+          curState = Met::CLOSED;
+        else
+        {
+          setAnimSeq(Met::CLOSED);
+        }
       }
     }
     break;
@@ -154,7 +168,7 @@ void Met::adjustToFloor()
 
 void Met::hit(mm_weapons::weapon_st * pWeapon)
 {
-  if (curState == Met::CLOSED)
+  if (curState == Met::CLOSED || curState == Met::WAITING)
   {
     Sounds::mm_sounds->play(HIT_SHIELD);
     if (pWeapon->weapon == mm_weapons::W_MEGA_BUSTER) pWeapon->alive = false;
@@ -162,7 +176,7 @@ void Met::hit(mm_weapons::weapon_st * pWeapon)
   }
   else
   {
-    Sounds::mm_sounds->play(HIT_ENEMY);  
+    Sounds::mm_sounds->play(HIT_ENEMY);
   }
 
   switch(pWeapon->weapon)
