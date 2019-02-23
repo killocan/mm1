@@ -4,11 +4,11 @@
 */
 
 #include "stageorb.h"
-
+#include "stage.h"
 #include "spritefiles.h"
 
 StageOrb::StageOrb(const Stage & stage, int x, int y)
-  : TempCharacter(stage, mm_spritefiles::STAGE_ORB_SPRITES)
+  : Character(stage, mm_spritefiles::STAGE_ORB_SPRITES)
 {
   this->x = x;
   this->y = y;
@@ -16,13 +16,18 @@ StageOrb::StageOrb(const Stage & stage, int x, int y)
   this->old_x = this->x;
   this->old_y = this->y;
 
+  colorOffset = cur_stage->getOffset(mm_spritefiles::STAGE_ORB_SPRITES);
+  setAnimSeq(colorOffset + StageOrb::STILL);
+  
   curState = StageOrb::STILL;
-  setAnimSeq(StageOrb::STILL);
+
   h = getFrameH();
   w = getFrameW();
+
+  alive = true;
 }
 
-void StageOrb::die()
+void StageOrb::doLogic()
 {
-  alive = false;
+  Character::handleAnimation();
 }

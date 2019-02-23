@@ -890,8 +890,9 @@ void StageManager::doStageSpecifics()
 
         sboos->stopAll();
 
-        stage->createCharacter(mm_tile_actions::STAGE_ORB, camera->x + (mm_graphs_defs::UTIL_W / 2) - 16, camera->y, 0,0);
-
+        TemporaryCharacterList::mm_tempCharacterLst.push_back(stage->createCharacter(mm_tile_actions::STAGE_ORB, 
+                                                                                     camera->x + (mm_graphs_defs::UTIL_W / 2) - 16,
+                                                                                     camera->y+16, 0,0));
         cur_stage_state = BOSS_DEAD;
       }
     }

@@ -28,8 +28,6 @@ Flea::Flea(const Stage & stage, int x, int y) : Character(stage, mm_spritefiles:
   this->old_x = this->x;
   this->old_y = this->y;
 
-
-
   vely          = 1;
   overstair     = false;
   isFacingRight = true;

@@ -5,16 +5,16 @@
 
 #pragma once
 
-#include "tempcharacter.h"
+#include "character.h"
 
 class Stage;
 
 //StageOrb
-class StageOrb : public TempCharacter
+class StageOrb : public Character
 {
   public:
     StageOrb(const Stage & stage, int x, int y);
-    virtual void die();
+    virtual void doLogic();
 
     enum {STILL};
 };

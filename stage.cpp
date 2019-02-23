@@ -325,6 +325,12 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
     (mm_spritefiles::BONUS_POINT_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::BONUS_POINT_SPRITES])));
 
 #ifdef DEBUG
+  fprintf(stderr, "Preload: [Stage ORB]\n");
+#endif
+  preLoadedSprites.insert(std::pair<int, AnimSequence *>
+    (mm_spritefiles::STAGE_ORB_SPRITES, new AnimSequence(mm_spritefiles::sprite_files[mm_spritefiles::STAGE_ORB_SPRITES])));
+
+#ifdef DEBUG
   fprintf(stderr,"Preload: [BossDoor]\n");
 #endif
   preLoadedSprites.insert(std::pair<int, AnimSequence *>

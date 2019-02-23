@@ -1,2 +1,4 @@
 ./game_data/stage_orb_seq.bmp
-0,0
+0,5|1,5
+0,5|2,5
+0,5|3,5
