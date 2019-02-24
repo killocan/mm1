@@ -142,6 +142,7 @@ void Player::hit(Character * pCharacter)
   {
     case mm_spritefiles::STAGE_ORB_SPRITES:
     {
+      Sounds::mm_sounds->play(BONUS_POINT);
       cur_stage->finished = true;
       pCharacter->alive = false;
       return;
