@@ -28,4 +28,6 @@ class SceneSoundManager
 
     bool curDataOk;
     bool bIsPlaying;
+
+    int voice;
 };

@@ -644,8 +644,6 @@ void StageManager::play()
     }
   }
 
-  StageEndScreen::play(stage_number, m_buffer);
-
   // Just in case?!
   TemporaryCharacterList::mm_tempCharacterLst.remove_if(tempCharacterKill);
 
@@ -921,10 +919,21 @@ void StageManager::doStageSpecifics()
     {
       if (stage->finished)
       {
-        playing = false;
-        game_over = true;
         handlingDoor = true;
         stopAnimations = true;
+        cur_stage_state = END_STAGE;
+        stageEndScreen = new StageEndScreen();
+      }
+    }
+    break;
+    case END_STAGE:
+    {
+      if (stageEndScreen->play(stage_number, m_buffer))
+      {
+        playing = false;
+        game_over = true;
+
+        delete stageEndScreen;
       }
     }
     break;

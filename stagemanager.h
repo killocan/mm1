@@ -17,6 +17,7 @@ class Camera;
 class Character;
 class Player;
 class WeaponMenu;
+class StageEndScreen;
 
 class StageManager
 {
@@ -38,6 +39,7 @@ class StageManager
     virtual SceneSoundManager * CreateSoundManager();
     SceneSoundManager * ssm;
     SceneSoundManager * sboos;
+    StageEndScreen * stageEndScreen;
 
     std::string STAGE_PATH;
     std::vector<Character *> characters_vec;
@@ -52,7 +54,7 @@ class StageManager
     std::vector<int> bossWarningTiles;
     std::map<unsigned, unsigned> bossWarningColors;
 
-    enum STAGE_STATES {SEARCHING_BOSS_DOOR, HANDLING_DOOR, BOSS_WARNING, INITING_BOSS_FIGHT, FIGHT, BOSS_DEAD};
+    enum STAGE_STATES {SEARCHING_BOSS_DOOR, HANDLING_DOOR, BOSS_WARNING, INITING_BOSS_FIGHT, FIGHT, BOSS_DEAD, END_STAGE};
     STAGE_STATES cur_stage_state;
     unsigned int stage_number;
     bool game_over;

@@ -1,5 +1,6 @@
-- Codigo para passar de fase.
+- Codigo para passar de fase. (jogar para dentro da maquina de estados a tela de terminar fase)
 - acertar explosao do mm e dos chefes
+- Criar porta tipo 1 e 2, a 2 só libera controle depois do boss show.
 - Finalizar fases
 - ajustar magnetic beam SE estiver atrapalhando, verificar se esta dentro de tiles e jogar para dentro 100%
   evitando que o mm fique preso.

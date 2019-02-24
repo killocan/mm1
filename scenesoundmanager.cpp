@@ -7,7 +7,7 @@
 #include <cstdio>
 
 SceneSoundManager::SceneSoundManager(const std::string & fileName, int loop_ini, int track_end)
-  : data(NULL), music(NULL), curDataOk(false), bIsPlaying(false)
+  : data(NULL), music(NULL), curDataOk(false), bIsPlaying(false), voice(-1)
 {
   if (fileName.find(".dat") != std::string::npos)
   {
@@ -97,7 +97,7 @@ void SceneSoundManager::play(int soundId, bool loop)
     }
     else if (music != NULL && soundId == 0)
     {
-      play_sample(music, VOLUME, 128, 1000, (int)loop);
+      voice = play_sample(music, VOLUME, 128, 1000, (int)loop);
     }
 
     bIsPlaying = true;
@@ -106,10 +106,8 @@ void SceneSoundManager::play(int soundId, bool loop)
 
 bool SceneSoundManager::isPlaying()
 {
-  //if (mp3_data)
-  //{
-  //  return (almp3_is_playing_mp3(mp3_handle) == TRUE);
-  //}
+  if (voice != -1)
+    return voice_get_position(voice) != -1;
 
   return bIsPlaying;
 }
