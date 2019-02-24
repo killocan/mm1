@@ -16,9 +16,6 @@ class ExplosionLittle : public Character
     ExplosionLittle(const Stage & stage, int x, int y, void * param);
 
     virtual void doLogic();
-
-    //virtual bool handleAnimation(bool * bAnimationEnded);
-
     // Do nothing
     virtual void doGravitation();
 
@@ -29,5 +26,4 @@ class ExplosionLittle : public Character
 
   private:
     bool bOneCicle; // if true after one animation cicle it dies.
-    //Stage * cur_stage; // current stage.
 };

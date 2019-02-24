@@ -87,6 +87,8 @@ Stage::Stage(std::string stage_path, Camera & camera, Player ** player)
   install_int(screenscroll_timer, 40);
 
   MagneticBeamHandler::instance()->setup(this);
+
+  finished = false;
 }
 
 Stage::~Stage()

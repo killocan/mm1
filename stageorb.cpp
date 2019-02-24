@@ -25,6 +25,7 @@ StageOrb::StageOrb(const Stage & stage, int x, int y)
   w = getFrameW();
 
   alive = true;
+  canCollidePlayer = true;
 }
 
 void StageOrb::doLogic()

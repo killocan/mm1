@@ -14,7 +14,7 @@
 #include "stage.h"
 #include "camera.h"
 #include "player.h"
-
+#include "stageendscreen.h"
 #include "weapons.h"
 #include "weaponmenu.h"
 #include "energybar.h"
@@ -50,6 +50,10 @@ StageManager::StageManager()
 
   dyingTime = 0L;
   dyingSequece = false;
+
+  GlobalGameState::earthquake = false;
+  game_over = false;
+  playing   = false;
 }
 
 StageManager::~StageManager()
@@ -338,8 +342,7 @@ void StageManager::play()
   Character * curr_character = NULL;
   std::vector<Character *>::iterator it;
 
-  bool playing   = true;
-  bool game_over = false;
+  playing = true;
   while(game_over == false)
   {
     EnergyBar::m_boss = NULL;
@@ -384,7 +387,7 @@ void StageManager::play()
 
       if (key[KEY_ENTER] && (game_pause == false) && (GlobalGameState::playerShots.size() == 0) && (player->holdingGutsmanRock==false))
       {
-        if (findMagneticbeam() == false)
+        if (findMagneticbeam() == false && stage->finished == false)
         {
           Sounds::mm_sounds->play(PAUSE);
 
@@ -619,7 +622,9 @@ void StageManager::play()
 
     if (game_over)
     {
-      game_over = GameoverMenu::choice(m_buffer);
+      if (!stage->finished)
+        game_over = GameoverMenu::choice(m_buffer);
+
       if (!game_over)
       {
         GlobalGameState::lives = 2;
@@ -638,6 +643,8 @@ void StageManager::play()
       setupStage(false);
     }
   }
+
+  StageEndScreen::play(stage_number, m_buffer);
 
   // Just in case?!
   TemporaryCharacterList::mm_tempCharacterLst.remove_if(tempCharacterKill);
@@ -808,54 +815,65 @@ void StageManager::doStageSpecifics()
     {
       if (door != NULL && door->curState == BossDoor::WAITING)
       {
-          //stopAnimations = false;
-          if (autoMovePlayerCount < (mm_graphs_defs::TILES_X*2))
+        //stopAnimations = false;
+        if (autoMovePlayerCount < (mm_graphs_defs::TILES_X*2))
+        {
+          player->forceAnimation();
+
+          if ((float)autoMovePlayerCount < (float)(mm_graphs_defs::TILES_X*1.55f))
           {
-            player->forceAnimation();
-
-            if ((float)autoMovePlayerCount < (float)(mm_graphs_defs::TILES_X*1.55f))
-            {
-              player->goRight();
-            }
-
-            if ((Clock::clockTicks - doorTiming) > 2)
-            {
-              doorTiming = Clock::clockTicks;
-              autoMovePlayerCount++;
-              camera->x += mm_graphs_defs::TILE_SIZE/2;
-            }
+            player->goRight();
           }
-          else
+
+          if ((Clock::clockTicks - doorTiming) > 2)
           {
-            stopAnimations = false;
-            cur_stage_state = StageManager::SEARCHING_BOSS_DOOR;
-            handlingDoor = false;
-            autoMovePlayerCount = 0;
-
-            // Put on a method called "endireitarmegaman" hahaha
-            player->vely = 1.0f;
-            player->blinkCount = 28;
-            player->bDraw = true;
-            player->bHide = false;
-            player->isHitAnimOn = false;
-            player->isInvincible = false;
-            player->isFacingRight = true;
-            player->setAnimSeq(Player::STANDSTILL);
-
-            door->collideWithPlayer = false;
-            door->blockPassage();
+            doorTiming = Clock::clockTicks;
+            autoMovePlayerCount++;
+            camera->x += mm_graphs_defs::TILE_SIZE/2;
           }
+        }
+        else
+        {
+          stopAnimations = false;
+          cur_stage_state = StageManager::SEARCHING_BOSS_DOOR;
+          handlingDoor = false;
+          autoMovePlayerCount = 0;
+
+          // Put on a method called "endireitarmegaman" hahaha
+          player->vely = 1.0f;
+          player->blinkCount = 28;
+          player->bDraw = true;
+          player->bHide = false;
+          player->isHitAnimOn = false;
+          player->isInvincible = false;
+          player->isFacingRight = true;
+
+          door->collideWithPlayer = false;
+          door->blockPassage();
+        }
       }
     }
     break;
     case BOSS_WARNING:
     {
-      if(bossWarning() < 0)
+      if (bossWarning() < 0 && player->onground)
+      {
         cur_stage_state = StageManager::INITING_BOSS_FIGHT;
+      }
+      else
+      {
+        if (player->onground == false)
+        {
+          player->lockmoves = true;
+          player->doGravitation();
+        }
+      }
     }
     break;
     case INITING_BOSS_FIGHT:
     {
+      player->setAnimSeq(Player::STANDSTILL);
+
       int lastItem = special_chars_vec.size()-1;
       door = dynamic_cast<BossDoor*> (special_chars_vec[lastItem]);
       if (door->curState == BossDoor::OPENED)
@@ -864,7 +882,7 @@ void StageManager::doStageSpecifics()
       }
       else if (door->curState == BossDoor::WAITING)
       {
-        door->hasBeenUsed = true;
+        player->lockmoves = false;
         createBoss();
         EnergyBar::updateEnergyBar(mm_weapons::W_MEGA_BUSTER, 28, true);
 
@@ -882,7 +900,9 @@ void StageManager::doStageSpecifics()
       if (EnergyBar::m_boss != NULL)
       {
         if (EnergyBar::m_boss->curState != 0 && handlingDoor)
+        {
           handlingDoor = false;
+        }
       }
       if (EnergyBar::m_boss == NULL)
       {
@@ -899,7 +919,13 @@ void StageManager::doStageSpecifics()
     break;
     case BOSS_DEAD:
     {
-      ;
+      if (stage->finished)
+      {
+        playing = false;
+        game_over = true;
+        handlingDoor = true;
+        stopAnimations = true;
+      }
     }
     break;
   }

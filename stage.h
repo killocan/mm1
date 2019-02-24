@@ -72,6 +72,8 @@ class Stage
     void resetReachMaxX();
 
     void runtimeLoadCharacter(mm_spritefiles::SPRT_TYPE);
+
+    bool finished;
   private:
     struct MAP_INFO
     {

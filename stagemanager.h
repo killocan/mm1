@@ -55,6 +55,8 @@ class StageManager
     enum STAGE_STATES {SEARCHING_BOSS_DOOR, HANDLING_DOOR, BOSS_WARNING, INITING_BOSS_FIGHT, FIGHT, BOSS_DEAD};
     STAGE_STATES cur_stage_state;
     unsigned int stage_number;
+    bool game_over;
+    bool playing;
 
   private:
     void doMegamanSpawning(BITMAP * buffer, FONT * mm_font);

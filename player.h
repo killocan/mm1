@@ -87,4 +87,6 @@ class Player : public Character
     bool bDying;
     unsigned long dyingTimer;
     int dieStep;
+    //boss stuff
+    bool lockmoves;
 };

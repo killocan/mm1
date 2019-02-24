@@ -37,6 +37,12 @@ ExplosionLittle::ExplosionLittle(const Stage & stage, int x, int y, void * param
 
 void ExplosionLittle::doLogic()
 {
+  if (cur_stage->finished)
+  {
+    alive = false;
+    return;
+  }
+ 
   switch(curState)
   {
     case ExplosionLittle::EXPLODING:

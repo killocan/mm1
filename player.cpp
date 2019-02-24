@@ -60,10 +60,13 @@ Player::Player(const Stage & stage) : Character(stage, 0)
   this->overstair  = false;
   this->holdingGutsmanRock = false;
   this->isStunned = false;
+  this->lockmoves = false;
 }
 
 void Player::reset()
 {
+  lockmoves = false;
+
   sx = 0;
   sy = 0;
 
@@ -137,6 +140,14 @@ void Player::hit(Character * pCharacter)
   int iUnits = 2;
   switch(pCharacter->type)
   {
+    case mm_spritefiles::STAGE_ORB_SPRITES:
+    {
+      cur_stage->finished = true;
+      pCharacter->alive = false;
+      return;
+    }
+    break;
+
     case mm_spritefiles::BIG_LIFE_RECHARGE_SPRITES:
       iUnits = 10;
     case mm_spritefiles::LITTLE_LIFE_RECHARGE_SPRITES:
@@ -496,7 +507,7 @@ void Player::normalLogic()
         }
       }
     }
-    else if (key[KEY_LEFT])
+    else if (key[KEY_LEFT] )
     {
       isFacingRight = false;
 
@@ -543,14 +554,26 @@ void Player::normalLogic()
       if (onground == true && grabstair == false)
       {
         //TODO: only fire again after already still, so you cant stop and continue firing without stop.
-        if (firing == false)
-          setAnimSeq(Player::STANDSTILL);
+        //This makes megaman kind of pose like it's starting to run after hit the ground,
+        //the original game has this, but it's not almost not noticiable and i think 
+        //it is a side effect of the original game control logic. keep turned off.
+        static int fallRuning = 0;
+        if (true) //fallRuning == 5)
+        {
+          fallRuning = 0;
+          if (firing == false)
+            setAnimSeq(Player::STANDSTILL);
+          else
+          {
+            if (handType())
+              setAnimSeq(Player::FIRINGSTILL);
+            else
+              setAnimSeq(Player::FIRINGSTILLHAND);
+          }
+        }
         else
         {
-          if (handType())
-            setAnimSeq(Player::FIRINGSTILL);
-          else
-            setAnimSeq(Player::FIRINGSTILLHAND);
+          fallRuning++;
         }
       }
     }
@@ -696,14 +719,7 @@ void Player::normalLogic()
       {
         if (lockjump == true) {lockJumpAccel = true;}
       }
-	  /*
-      if (grabstair == true)
-      {
-        if (!key[KEY_UP] && !key[KEY_DOWN])
-          grabstair = false;
-      }
-      else
-	  */
+
       if (!grabstair && lockjump == false)
       {
         jumpHigh = y;
@@ -733,7 +749,6 @@ void Player::normalLogic()
     }
   letgo:
 
-    //static bool fireKeyPressed = false;
     if (key[KEY_A] &&
        (fireKeyPressed == false || (curWeapon == mm_weapons::W_PLATFORM_CREATOR && MagneticBeamHandler::instance()->canCreateAgain())))
     {
@@ -1096,7 +1111,11 @@ void Player::firingOnJump()
 
 void Player::touchGround()
 {
-  setAnimSeq(Player::RUNNING);
+  if (lockmoves == false)
+    setAnimSeq(Player::RUNNING);
+  else
+    setAnimSeq(Player::STANDSTILL);
+
   if (onPlatform == false)
   {
     Sounds::mm_sounds->play(MM_JUMP);

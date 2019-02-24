@@ -1,5 +1,5 @@
 - Codigo para passar de fase.
-- Remover corrida do megaman se entrar na sala do mestre segurando corrida.
+- acertar explosao do mm e dos chefes
 - Finalizar fases
 - ajustar magnetic beam SE estiver atrapalhando, verificar se esta dentro de tiles e jogar para dentro 100%
   evitando que o mm fique preso.
@@ -19,20 +19,3 @@
 - ver se vale a pena remover todos hit e jogar para um so em character e so usar o array de dano.
 - animacao de teletransporte quando sai do menu de escolha de armas
 - Cai da escada se colisao com o teto for muito perto da escada (fireman por exemplo)
-
-STAGE CLEAR
-; What happens in regular stages.
-;1. Play item sound                                                  
-;2. Play stage clear music                                           
-;3. Load levelend gfx
-;4. Remove all objects except Megaman
-;5. Delay 383 frames
-;6. Hide energy bars
-;7. Draw first patch of text
-;8. Halt Megaman
-;9. Calculate score, 1000 points per frame
-;10. Delay 64 frames
-;11. Draw second patch of text
-;12. Calculate bonus pearls, one per frame (3000 points each)
-;13. Delay 383 frames
-;14. Reboot game without clearing game status
