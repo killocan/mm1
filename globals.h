@@ -78,4 +78,5 @@ class GameplayGlobals
   public:
     static bool bHoldLogic;
     static bool bWeaponUpdateRunning;
+    static bool bDontDrawBars;
 };

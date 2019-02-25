@@ -15,11 +15,15 @@ class StageEndScreen
     StageEndScreen();
     ~StageEndScreen();
     
-    bool play(unsigned int stage_number, BITMAP * buffer);
+    void draw(BITMAP * buffer);
+    bool play(unsigned int stage_number);
     
     SceneSoundManager * normal_stage_victory_music;
     unsigned long delayTimer;
 
-    enum state{PLAY_MUSIC, WAIT_MUSIC_TO_FINISH, DELAY, HIDE_ENERY_BARS};
+    enum state{PLAY_MUSIC, WAIT_MUSIC_TO_FINISH, DELAY1, HIDE_ENERY_BARS, DRAW_TEXT_1, UPDATE_SCORE, DELAY2, END};
     state cur_state;
+
+    bool bDrawText1;
+    bool bDrawScore;
 };

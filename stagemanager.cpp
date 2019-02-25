@@ -54,6 +54,9 @@ StageManager::StageManager()
   GlobalGameState::earthquake = false;
   game_over = false;
   playing   = false;
+
+  GameplayGlobals::bDontDrawBars = false;
+  stageEndScreen = NULL;
 }
 
 StageManager::~StageManager()
@@ -614,6 +617,9 @@ void StageManager::play()
       textprintf_right_ex(m_buffer, font, SCREEN_W, 1, makecol(255,255,255), 0, "FPS:[%d] LPS[%d]", 
                           GlobalGameState::sm_fps, GlobalGameState::game_logic_lps);
 
+      if (stageEndScreen != NULL)
+        stageEndScreen->draw(m_buffer);
+
       Vsync::Sync();
       blit(m_buffer,screen,0,0,0,0,SCREEN_W,SCREEN_H);
 
@@ -928,7 +934,7 @@ void StageManager::doStageSpecifics()
     break;
     case END_STAGE:
     {
-      if (stageEndScreen->play(stage_number, m_buffer))
+      if (stageEndScreen->play(stage_number))
       {
         playing = false;
         game_over = true;

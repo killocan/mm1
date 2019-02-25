@@ -24,6 +24,7 @@ std::list<Character *> TemporaryCharacterList::mm_tempCharacterLst;
 std::vector<Character *> * CurrentCharacterList::mm_characterLst = NULL;
 bool GameplayGlobals::bHoldLogic            = false;
 bool GameplayGlobals::bWeaponUpdateRunning  = false;
+bool GameplayGlobals::bDontDrawBars         = false;
 
 volatile int fps       = 0;
 volatile int fps_count = 0;

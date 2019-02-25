@@ -27,8 +27,26 @@ void draw_text_shadow(BITMAP * buffer, FONT * mm_font, int x, int y, int fg, con
   textprintf_ex(buffer, mm_font, x,   y,   fg, -1, "%s", str);
 }
 
-void draw_number(BITMAP * buffer, FONT * mm_font, int x, int y, int fg, int bg, int number)
+void draw_text_center_shadow(BITMAP * buffer, FONT * mm_font, int x, int y, int fg, const char * str)
 {
-  textprintf_ex(buffer, mm_font, x + 2, y + 2, 0, bg, "%d  ", number);
-  textprintf_ex(buffer, mm_font, x, y, fg, -1, "%d  ", number);
+  textprintf_centre_ex(buffer, mm_font, x+2, y+2, 0,  -1, "%s", str);
+  textprintf_centre_ex(buffer, mm_font, x,   y,   fg, -1, "%s", str);
+}
+
+void draw_number(BITMAP * buffer, FONT * mm_font, int x, int y, int fg, int number, int zeros)
+{
+  char mask[80] = {};
+  sprintf(mask, "%%0%dd", zeros);
+
+  textprintf_ex(buffer, mm_font, x + 2, y + 2, 0,  -1, mask, number);
+  textprintf_ex(buffer, mm_font, x,     y,     fg, -1, mask, number);
+}
+
+void draw_number_center(BITMAP * buffer, FONT * mm_font, int x, int y, int fg, int number, int zeros)
+{
+  char mask[80] = {};
+  sprintf(mask, "%%0%dd", zeros);
+
+  textprintf_centre_ex(buffer, mm_font, x+2, y+2, 0,  -1, mask, number);
+  textprintf_centre_ex(buffer, mm_font, x,   y,   fg, -1, mask, number);
 }

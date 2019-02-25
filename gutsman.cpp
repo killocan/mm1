@@ -274,7 +274,7 @@ void Gutsman::hit(mm_weapons::weapon_st * pWeapon)
     break;
     case mm_weapons::W_MEGA_BUSTER:
     default:
-      life-=4;
+      life-=6;
     break;
   }
   pWeapon->alive = false;

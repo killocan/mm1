@@ -18,6 +18,8 @@ unsigned long EnergyBar::iTimer = 0UL;
 
 void EnergyBar::drawEnerybar(BITMAP * buffer, int x, int y, mm_weapons::WEAPONS weapon, bool boss)
 {
+  if (GameplayGlobals::bDontDrawBars) return;
+
   rectfill(buffer, x, y, x+15, y+111, 0);
   x+=2;
 
