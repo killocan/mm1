@@ -348,6 +348,9 @@ void StageManager::play()
   playing = true;
   while(game_over == false)
   {
+    // Maybe it resets every life...
+    GlobalGameState::bonus_points = 0;
+
     EnergyBar::m_boss = NULL;
 
     GlobalGameState::playerShots.clear();
@@ -820,11 +823,12 @@ void StageManager::doStageSpecifics()
       if (door != NULL && door->curState == BossDoor::WAITING)
       {
         //stopAnimations = false;
-        if (autoMovePlayerCount < (mm_graphs_defs::TILES_X*2))
+        int xOffset = door->type == 0 ? (mm_graphs_defs::TILES_X*2) : (mm_graphs_defs::TILES_X);
+        if (autoMovePlayerCount < xOffset)
         {
           player->forceAnimation();
 
-          if ((float)autoMovePlayerCount < (float)(mm_graphs_defs::TILES_X*1.55f))
+          if ((float)autoMovePlayerCount < (float)xOffset)
           {
             player->goRight();
           }
@@ -838,9 +842,12 @@ void StageManager::doStageSpecifics()
         }
         else
         {
-          stopAnimations = false;
           cur_stage_state = StageManager::SEARCHING_BOSS_DOOR;
-          handlingDoor = false;
+          if (door->type == 0)
+          {
+            stopAnimations = false;
+            handlingDoor = false;
+          }
           autoMovePlayerCount = 0;
 
           // Put on a method called "endireitarmegaman" hahaha
@@ -905,9 +912,15 @@ void StageManager::doStageSpecifics()
       {
         if (EnergyBar::m_boss->curState != 0 && handlingDoor)
         {
-          handlingDoor = false;
+          if (door->type == 1)
+          {
+            stopAnimations = false;
+            handlingDoor = false;
+          }
+          //handlingDoor = false;
         }
       }
+
       if (EnergyBar::m_boss == NULL)
       {
         Sounds::mm_sounds->play(BOMBOMB_HIT);

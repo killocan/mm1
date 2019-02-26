@@ -19,6 +19,9 @@ class BossDoor : public Character
       int totalSize;
       int orientation;
       int blockedSide; // 0 - UP, 1 - DOWN, 2 - LEFT, 3 - RIGHT
+      // On the first 6 levels: 0 - free megaman moviment after block passage, 2 - wait until boss show to end
+      // Used to calculate how far to move megaman.
+      int type;
       bool defaultOpen;
     };
 

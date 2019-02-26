@@ -185,7 +185,7 @@ void Player::hit(Character * pCharacter)
     break;
     case mm_spritefiles::BONUS_POINT_SPRITES:
     {
-      GlobalGameState::bonus_points += 100;
+      ++GlobalGameState::bonus_points;
 
       pCharacter->die();
       Sounds::mm_sounds->play(BONUS_POINT);

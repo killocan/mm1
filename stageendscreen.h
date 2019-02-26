@@ -21,9 +21,10 @@ class StageEndScreen
     SceneSoundManager * normal_stage_victory_music;
     unsigned long delayTimer;
 
-    enum state{PLAY_MUSIC, WAIT_MUSIC_TO_FINISH, DELAY1, HIDE_ENERY_BARS, DRAW_TEXT_1, UPDATE_SCORE, DELAY2, END};
+    enum state{PLAY_MUSIC, WAIT_MUSIC_TO_FINISH, DELAY1, HIDE_ENERY_BARS, DRAW_TEXT_1, UPDATE_SCORE, DELAY2, DRAW_TEXT_2, UPDATE_SCORE_BONUS, DELAY3, END};
     state cur_state;
 
     bool bDrawText1;
+    bool bDrawText2;
     bool bDrawScore;
 };

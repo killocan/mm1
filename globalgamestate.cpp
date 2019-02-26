@@ -13,7 +13,9 @@ bool GlobalGameState::hasPlatformGun          = false;
 bool GlobalGameState::earthquake              = false;
 int  GlobalGameState::earthquakecount         = 0;
 
+int GlobalGameState::points                   = 0;
 int GlobalGameState::bonus_points             = 0;
+int GlobalGameState::cur_boss_points          = 0;
 int GlobalGameState::lives                    = 2;
 
 bool GlobalGameState::allEnemysDefeated       = false;

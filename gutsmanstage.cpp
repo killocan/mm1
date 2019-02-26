@@ -48,6 +48,7 @@ void GutsManStage::setupStage(bool hardStart)
   door1.totalSize = 4;
   door1.orientation = 0;
   door1.defaultOpen = false;
+  door1.type = 0;
   //door1.cameraHack = true;
 
   BossDoor::BossDoorSetupParam door2;
@@ -55,6 +56,7 @@ void GutsManStage::setupStage(bool hardStart)
   door2.totalSize = 4;
   door2.orientation = 0;
   door2.defaultOpen = false;
+  door2.type = 1;
   //door2.cameraHack = false;
 
   BossDoor::BossDoorSetupParam door3;
@@ -62,6 +64,7 @@ void GutsManStage::setupStage(bool hardStart)
   door3.totalSize = 4;
   door3.orientation = 0;
   door3.defaultOpen = true;
+  door3.type = 1;
   //door3.cameraHack = false;
 
   Character * pDoor1C = stage->createCharacter(mm_tile_actions::TILE_DOOR, 174*32, 66*32, 0,0, (void*)&door1);

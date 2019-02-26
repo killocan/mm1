@@ -371,7 +371,7 @@ static void boss_show(BITMAP * buffer, FONT * mm_font)
         {
           #define oht 100*1000
           #define tt  10*1000
-          int clearPoints = GlobalGameState::enemyClearPoints[curSelection];
+          int clearPoints = rand() % 10 * 10000; //GlobalGameState::enemyClearPoints[curSelection];
           int rndNumber = (rand() % 10) * ((clearPoints >= oht) ? oht : tt);
 
           textprintf_ex(buffer, mm_font, x, 178, white, -1, "%s", infoStr[0]);

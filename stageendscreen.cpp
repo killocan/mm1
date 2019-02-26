@@ -30,8 +30,8 @@ STAGE CLEAR
 ;13. Delay 383 frames
 ;14. Reboot game without clearing game status
 */
-StageEndScreen::StageEndScreen() : normal_stage_victory_music(NULL), cur_state(StageEndScreen::PLAY_MUSIC), delayTimer(0),
-bDrawText1(false), bDrawScore(false)
+StageEndScreen::StageEndScreen() : normal_stage_victory_music(NULL), delayTimer(0), cur_state(StageEndScreen::PLAY_MUSIC),
+                                   bDrawText1(false), bDrawText2(false), bDrawScore(false)
 {
   normal_stage_victory_music = new SceneSoundManager(mm_soundpack::sounds[mm_soundpack::VICTORY1]);
 }
@@ -44,14 +44,22 @@ StageEndScreen::~StageEndScreen()
 
 void StageEndScreen::draw(BITMAP * buffer)
 {
+  const int WHITE = makecol(255, 255, 255);
   if (bDrawText1)
   {
-    draw_text_center_shadow(buffer, Font::mm_font, SCREEN_W / 2 -20, 100, makecol(255, 255, 255), "CLEAR");
-    draw_text_center_shadow(buffer, Font::mm_font, SCREEN_W / 2 + 20, 120, makecol(255, 255, 255), "POINTS");
+    draw_text_center_shadow(buffer, Font::mm_font, SCREEN_W / 2 -20,  100, WHITE, "CLEAR");
+    draw_text_center_shadow(buffer, Font::mm_font, SCREEN_W / 2 + 20, 120, WHITE, "POINTS");
   }
   if (bDrawScore)
   {
-    draw_number_center(buffer, Font::mm_font, SCREEN_W / 2, 150, makecol(255, 255, 255), 0, 6);
+    draw_number_center(buffer, Font::mm_font, SCREEN_W / 2, 150, WHITE, 0, 6);
+  }
+  if (bDrawText2)
+  {
+    // spawn a point character
+    draw_text_center_shadow(buffer, Font::mm_font, SCREEN_W / 2, 180, WHITE, "- * 1000");
+    draw_number_center(buffer, Font::mm_font, SCREEN_W / 2 + 50, 180, WHITE, GlobalGameState::bonus_points, 2);
+    draw_number_center(buffer, Font::mm_font, SCREEN_W / 2, 200, WHITE, GlobalGameState::bonus_points * 1000, 6);
   }
 }
 
@@ -97,8 +105,17 @@ bool StageEndScreen::play(unsigned int stage_number)
     case StageEndScreen::UPDATE_SCORE:
     {
       bDrawScore = true;
-      delayTimer = Clock::clockTicks;
-      cur_state = StageEndScreen::DELAY2;
+
+      if (GlobalGameState::cur_boss_points > 0)
+      {
+        GlobalGameState::points          += 1000;
+        GlobalGameState::cur_boss_points -= 1000;
+      }
+      else
+      {
+        delayTimer = Clock::clockTicks;
+        cur_state = StageEndScreen::DELAY2;
+      }
     }
     break;
     case StageEndScreen::DELAY2:
@@ -106,7 +123,36 @@ bool StageEndScreen::play(unsigned int stage_number)
       if (Clock::clockTicks - delayTimer > 60)
       {
         delayTimer = Clock::clockTicks;
+        cur_state = StageEndScreen::DRAW_TEXT_2;
+      }
+    }
+    break;
+    case StageEndScreen::DRAW_TEXT_2:
+    {
+      bDrawText2 = true;
+      cur_state = StageEndScreen::UPDATE_SCORE_BONUS;
+    }
+    break;
+    case StageEndScreen::UPDATE_SCORE_BONUS:
+    {
+      if (GlobalGameState::bonus_points > 0)
+      {
+        GlobalGameState::bonus_points -= 1000;
+        GlobalGameState::points       += 1000;
+      }
+      else
+      {
+        delayTimer = Clock::clockTicks;
         cur_state = StageEndScreen::END;
+      }
+    }
+    break;
+    case StageEndScreen::DELAY3:
+    {
+      if (Clock::clockTicks - delayTimer > 100)
+      {
+        delayTimer = Clock::clockTicks;
+        cur_state = StageEndScreen::DRAW_TEXT_2;
       }
     }
     break;
