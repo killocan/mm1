@@ -8,11 +8,12 @@
 #include <allegro.h>
 
 class SceneSoundManager;
+class Stage;
 
 class StageEndScreen
 {
   public:
-    StageEndScreen();
+    StageEndScreen(Stage * stage);
     ~StageEndScreen();
     
     void draw(BITMAP * buffer);
@@ -27,4 +28,6 @@ class StageEndScreen
     bool bDrawText1;
     bool bDrawText2;
     bool bDrawScore;
+
+    Stage * stage;
 };

@@ -942,7 +942,7 @@ void StageManager::doStageSpecifics()
         handlingDoor = true;
         stopAnimations = true;
         cur_stage_state = END_STAGE;
-        stageEndScreen = new StageEndScreen();
+        stageEndScreen = new StageEndScreen(stage);
       }
     }
     break;

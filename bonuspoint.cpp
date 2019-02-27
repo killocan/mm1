@@ -42,6 +42,8 @@ void BonusPoint::doLogic()
     this->alive = false;
     return;
   }
+
+  TempCharacter::doLogic();
 }
 
 void BonusPoint::die()

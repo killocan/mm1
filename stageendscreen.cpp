@@ -5,12 +5,14 @@
 
 #include "stageendscreen.h"
 
+#include "tileactions.h"
 #include "scenesoundmanager.h"
 #include "sfx.h"
 #include "soundpack.h"
 #include "globals.h"
 #include "globalgamestate.h"
 #include "text_utils.h"
+#include "stage.h"
 
 /*
 STAGE CLEAR
@@ -30,9 +32,14 @@ STAGE CLEAR
 ;13. Delay 383 frames
 ;14. Reboot game without clearing game status
 */
-StageEndScreen::StageEndScreen() : normal_stage_victory_music(NULL), delayTimer(0), cur_state(StageEndScreen::PLAY_MUSIC),
-                                   bDrawText1(false), bDrawText2(false), bDrawScore(false)
+StageEndScreen::StageEndScreen(Stage * stage) : normal_stage_victory_music(NULL),
+                                                delayTimer(0),
+                                                cur_state(StageEndScreen::PLAY_MUSIC),
+                                                bDrawText1(false),
+                                                bDrawText2(false),
+                                                bDrawScore(false)
 {
+  this->stage = stage;
   normal_stage_victory_music = new SceneSoundManager(mm_soundpack::sounds[mm_soundpack::VICTORY1]);
 }
 
@@ -56,7 +63,6 @@ void StageEndScreen::draw(BITMAP * buffer)
   }
   if (bDrawText2)
   {
-    // spawn a point character
     draw_text_center_shadow(buffer, Font::mm_font, SCREEN_W / 2, 180, WHITE, "-1000 x ");
     draw_number_center(buffer, Font::mm_font, SCREEN_W / 2 + 50, 180, WHITE, GlobalGameState::bonus_points, 2);
     draw_text_center_shadow(buffer, Font::mm_font, SCREEN_W / 2, 200, WHITE, "BONUS");
@@ -131,6 +137,8 @@ bool StageEndScreen::play(unsigned int stage_number)
     case StageEndScreen::DRAW_TEXT_2:
     {
       bDrawText2 = true;
+      TemporaryCharacterList::mm_tempCharacterLst.push_back(stage->createCharacter(mm_tile_actions::BONUS_POINT_CHAR,
+                                                                                   SCREEN_W/2 - 100, 172));
       cur_state = StageEndScreen::UPDATE_SCORE_BONUS;
     }
     break;
