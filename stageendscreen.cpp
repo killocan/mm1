@@ -57,9 +57,10 @@ void StageEndScreen::draw(BITMAP * buffer)
   if (bDrawText2)
   {
     // spawn a point character
-    draw_text_center_shadow(buffer, Font::mm_font, SCREEN_W / 2, 180, WHITE, "- * 1000");
+    draw_text_center_shadow(buffer, Font::mm_font, SCREEN_W / 2, 180, WHITE, "-1000 x ");
     draw_number_center(buffer, Font::mm_font, SCREEN_W / 2 + 50, 180, WHITE, GlobalGameState::bonus_points, 2);
-    draw_number_center(buffer, Font::mm_font, SCREEN_W / 2, 200, WHITE, GlobalGameState::bonus_points * 1000, 6);
+    draw_text_center_shadow(buffer, Font::mm_font, SCREEN_W / 2, 200, WHITE, "BONUS");
+    draw_number_center(buffer, Font::mm_font, SCREEN_W / 2, 230, WHITE, GlobalGameState::bonus_points * 1000, 6);
   }
 }
 
@@ -137,8 +138,8 @@ bool StageEndScreen::play(unsigned int stage_number)
     {
       if (GlobalGameState::bonus_points > 0)
       {
-        GlobalGameState::bonus_points -= 1000;
-        GlobalGameState::points       += 1000;
+        GlobalGameState::points += GlobalGameState::bonus_points * 1000;
+        GlobalGameState::bonus_points = 0;
       }
       else
       {
