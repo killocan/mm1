@@ -823,7 +823,7 @@ void StageManager::doStageSpecifics()
       if (door != NULL && door->curState == BossDoor::WAITING)
       {
         //stopAnimations = false;
-        int xOffset = door->type == 0 ? (mm_graphs_defs::TILES_X*1.55) : (mm_graphs_defs::TILES_X*1.25);
+        int xOffset = door->config.type == 0 ? (mm_graphs_defs::TILES_X*1.555) : (mm_graphs_defs::TILES_X*1.3);
         if (autoMovePlayerCount < (mm_graphs_defs::TILES_X * 2))
         {
           player->forceAnimation();
@@ -843,7 +843,7 @@ void StageManager::doStageSpecifics()
         else
         {
           cur_stage_state = StageManager::SEARCHING_BOSS_DOOR;
-          if (door->type == 0)
+          if (door->config.type == 0)
           {
             stopAnimations = false;
             handlingDoor = false;
@@ -912,8 +912,8 @@ void StageManager::doStageSpecifics()
       {
         if (EnergyBar::m_boss->curState != 0 && handlingDoor)
         {
-          door = dynamic_cast<BossDoor*> (special_chars_vec[special_chars_vec.size() - 1]);
-          if (door != NULL && door->type == 1)
+          BossDoor * tmpDoor = dynamic_cast<BossDoor*> (special_chars_vec[special_chars_vec.size() - 1]);
+          if (tmpDoor != NULL && tmpDoor->config.type == 1)
           {
             stopAnimations = false;
             handlingDoor = false;

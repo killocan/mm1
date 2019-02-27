@@ -45,12 +45,10 @@ class BossDoor : public Character
     void block();
 
     bool hasBeenUsed;
+    BossDoorSetupParam config;
 
     enum {CLOSED, OPENED, OPENING, CLOSING, WAITING};
   private:
-
-    BossDoorSetupParam config;
-    //Stage * cur_stage; // current stage.
     BITMAP * sprite;
     int curDoorLevel;
     int xcamblock, ycamblock;
