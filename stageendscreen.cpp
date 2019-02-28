@@ -152,7 +152,7 @@ bool StageEndScreen::play(unsigned int stage_number)
       else
       {
         delayTimer = Clock::clockTicks;
-        cur_state = StageEndScreen::END;
+        cur_state = StageEndScreen::DELAY3;
       }
     }
     break;
@@ -161,7 +161,7 @@ bool StageEndScreen::play(unsigned int stage_number)
       if (Clock::clockTicks - delayTimer > 100)
       {
         delayTimer = Clock::clockTicks;
-        cur_state = StageEndScreen::DRAW_TEXT_2;
+        cur_state = StageEndScreen::END;
       }
     }
     break;

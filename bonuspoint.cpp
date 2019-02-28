@@ -29,10 +29,7 @@ BonusPoint::BonusPoint(const Stage & stage, int x, int y, void * pTemp)
   h = getFrameH();
   w = getFrameW();
 
-  if (pTemp != NULL)
-  {
-    bMortal = *((bool *)pTemp);
-  }
+  bMortal = (pTemp != NULL) ? *((bool *)pTemp) : false;
 }
 
 void BonusPoint::doLogic()

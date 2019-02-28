@@ -823,13 +823,12 @@ void StageManager::doStageSpecifics()
       if (door != NULL && door->curState == BossDoor::WAITING)
       {
         //stopAnimations = false;
-        int xOffset = door->config.type == 0 ? (mm_graphs_defs::TILES_X*1.555) : (mm_graphs_defs::TILES_X*1.3);
+        int xOffset = door->config.type == 0 ? (mm_graphs_defs::TILES_X*1.575) : (mm_graphs_defs::TILES_X*1.3);
         if (autoMovePlayerCount < (mm_graphs_defs::TILES_X * 2))
         {
-          player->forceAnimation();
-
           if ((float)autoMovePlayerCount < (float)xOffset)
           {
+            player->forceAnimation();
             player->goRight();
           }
 
@@ -877,6 +876,10 @@ void StageManager::doStageSpecifics()
         {
           player->lockmoves = true;
           player->doGravitation();
+        }
+        else
+        {
+          player->setAnimSeq(Player::STANDSTILL);
         }
       }
     }
