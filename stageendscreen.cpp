@@ -137,8 +137,10 @@ bool StageEndScreen::play(unsigned int stage_number)
     case StageEndScreen::DRAW_TEXT_2:
     {
       bDrawText2 = true;
+      float posX = GlobalCamera::mm_camera->x + 200;
+      float posY = GlobalCamera::mm_camera->y + 200;
       TemporaryCharacterList::mm_tempCharacterLst.push_back(stage->createCharacter(mm_tile_actions::BONUS_POINT_CHAR,
-                                                                                   SCREEN_W/2 - 100, 172));
+                                                                                   posX, posY));
       cur_state = StageEndScreen::UPDATE_SCORE_BONUS;
     }
     break;
