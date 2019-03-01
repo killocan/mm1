@@ -331,24 +331,24 @@ void Gutsman::die()
       xpos = this->x + explosionPts[0].x;
       ypos = this->y + explosionPts[0].y;
 
-      Character * pExplosion01 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos - iSize, ypos, -12, 0, (void*)&bOneCicle);
-      Character * pExplosion02 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos + iSize, ypos, 12, 0, (void*)&bOneCicle);
-      Character * pExplosion03 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos, ypos - iSize, 0, -12, (void*)&bOneCicle);
-      Character * pExplosion04 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos, ypos + iSize, 0, 12, (void*)&bOneCicle);
+      Character * pExplosion01 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos - iSize, ypos, -10, 0, (void*)&bOneCicle);
+      Character * pExplosion02 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos + iSize, ypos, 10, 0, (void*)&bOneCicle);
+      Character * pExplosion03 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos, ypos - iSize, 0, -10, (void*)&bOneCicle);
+      Character * pExplosion04 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos, ypos + iSize, 0, 10, (void*)&bOneCicle);
 
       iSize += 12;
 
-      Character * pExplosion05 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos - iSize, ypos, -18, 0, (void*)&bOneCicle);
-      Character * pExplosion06 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos + iSize, ypos, 18, 0, (void*)&bOneCicle);
-      Character * pExplosion07 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos, ypos - iSize, 0, -18, (void*)&bOneCicle);
-      Character * pExplosion08 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos, ypos + iSize, 0, 18, (void*)&bOneCicle);
+      Character * pExplosion05 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos - iSize, ypos, -19, 0, (void*)&bOneCicle);
+      Character * pExplosion06 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos + iSize, ypos, 19, 0, (void*)&bOneCicle);
+      Character * pExplosion07 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos, ypos - iSize, 0, -19, (void*)&bOneCicle);
+      Character * pExplosion08 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos, ypos + iSize, 0, 19, (void*)&bOneCicle);
 
       iSize -= 6;
 
-      Character * pExplosion09 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos - iSize, ypos - iSize, -16, -16, (void*)&bOneCicle);
-      Character * pExplosion10 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos - iSize, ypos + iSize, -16, 16, (void*)&bOneCicle);
-      Character * pExplosion11 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos + iSize, ypos - iSize, 16, -16, (void*)&bOneCicle);
-      Character * pExplosion12 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos + iSize, ypos + iSize, 16, 16, (void*)&bOneCicle);
+      Character * pExplosion09 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos - iSize, ypos - iSize, -14.5, -14.5, (void*)&bOneCicle);
+      Character * pExplosion10 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos - iSize, ypos + iSize, -14.5, 14.5, (void*)&bOneCicle);
+      Character * pExplosion11 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos + iSize, ypos - iSize, 14.5, -14.5, (void*)&bOneCicle);
+      Character * pExplosion12 = cur_stage->createCharacter(mm_tile_actions::EXPLOSION_LITTLE_CHAR, xpos + iSize, ypos + iSize, 14.5, 14.5, (void*)&bOneCicle);
 
       TemporaryCharacterList::mm_tempCharacterLst.push_back(pExplosion01);
       TemporaryCharacterList::mm_tempCharacterLst.push_back(pExplosion02);

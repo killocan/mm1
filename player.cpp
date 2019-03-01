@@ -194,7 +194,6 @@ void Player::hit(Character * pCharacter)
     break;
   }
 
-
   // Do not cause harm to megaman.
   if (pCharacter->type == mm_spritefiles::MOVING_PLATFORM_SPRITES ||
       pCharacter->type == mm_spritefiles::FOOTHOLDER_SPRITES ||
@@ -816,24 +815,24 @@ void Player::die()
       xpos = this->x+explosionPts[0].x;
       ypos = this->y+explosionPts[0].y;
 
-      Character * pExplosion01 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos-iSize, ypos, -12, 0);
-      Character * pExplosion02 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos+iSize, ypos,  12, 0);
-      Character * pExplosion03 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos, ypos-iSize,  0, -12);
-      Character * pExplosion04 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos, ypos+iSize,  0, 12);
+      Character * pExplosion01 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos-iSize, ypos, -10, 0);
+      Character * pExplosion02 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos+iSize, ypos,  10, 0);
+      Character * pExplosion03 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos, ypos-iSize,  0, -10);
+      Character * pExplosion04 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos, ypos+iSize,  0, 10);
 
       iSize+=12;
 
-      Character * pExplosion05 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos-iSize, ypos, -18, 0);
-      Character * pExplosion06 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos+iSize, ypos,  18, 0);
-      Character * pExplosion07 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos, ypos-iSize,  0, -18);
-      Character * pExplosion08 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos, ypos+iSize,  0, 18);
+      Character * pExplosion05 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos-iSize, ypos, -19, 0);
+      Character * pExplosion06 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos+iSize, ypos,  19, 0);
+      Character * pExplosion07 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos, ypos-iSize,  0, -19);
+      Character * pExplosion08 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos, ypos+iSize,  0, 19);
 
       iSize-=6;
       
-      Character * pExplosion09 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos-iSize, ypos-iSize, -16, -16);
-      Character * pExplosion10 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos-iSize, ypos+iSize, -16, 16);
-      Character * pExplosion11 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos+iSize, ypos-iSize, 16, -16);
-      Character * pExplosion12 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos+iSize, ypos+iSize, 16, 16);
+      Character * pExplosion09 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos-iSize, ypos-iSize, -14.5, -14.5);
+      Character * pExplosion10 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos-iSize, ypos+iSize, -14.5, 14.5);
+      Character * pExplosion11 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos+iSize, ypos-iSize, 14.5, -14.5);
+      Character * pExplosion12 = cur_stage->createCharacter(mm_tile_actions::MEGAMAN_EXPLOSION_CHAR, xpos+iSize, ypos+iSize, 14.5, 14.5);
 
       TemporaryCharacterList::mm_tempCharacterLst.push_back(pExplosion01);
       TemporaryCharacterList::mm_tempCharacterLst.push_back(pExplosion02);

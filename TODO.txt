@@ -1,4 +1,3 @@
-- Acertar explosao do mm e dos chefes
 - Finalizar fases
 - ajustar magnetic beam SE estiver atrapalhando, verificar se esta dentro de tiles e jogar para dentro 100%
   evitando que o mm fique preso.
