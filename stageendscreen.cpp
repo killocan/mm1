@@ -59,14 +59,14 @@ void StageEndScreen::draw(BITMAP * buffer)
   }
   if (bDrawScore)
   {
-    draw_number_center(buffer, Font::mm_font, SCREEN_W / 2, 150, WHITE, 0, 6);
+    draw_number_center(buffer, Font::mm_font, SCREEN_W / 2, 155, WHITE, GlobalGameState::cur_boss_points, 6);
   }
   if (bDrawText2)
   {
-    draw_text_center_shadow(buffer, Font::mm_font, SCREEN_W / 2, 180, WHITE, "-1000 x ");
-    draw_number_center(buffer, Font::mm_font, SCREEN_W / 2 + 50, 180, WHITE, GlobalGameState::bonus_points, 2);
-    draw_text_center_shadow(buffer, Font::mm_font, SCREEN_W / 2, 200, WHITE, "BONUS");
-    draw_number_center(buffer, Font::mm_font, SCREEN_W / 2, 230, WHITE, GlobalGameState::bonus_points * 1000, 6);
+    draw_text_center_shadow(buffer, Font::mm_font, SCREEN_W / 2, 190, WHITE, "-1000x"); 
+    draw_number_center(buffer, Font::mm_font, SCREEN_W / 2 + 67, 190, WHITE, GlobalGameState::bonus_points, 2);
+    draw_text_center_shadow(buffer, Font::mm_font, SCREEN_W / 2, 210, WHITE, "BONUS");
+    draw_number_center(buffer, Font::mm_font, SCREEN_W / 2, 245, WHITE, GlobalGameState::bonus_points * 1000, 6);
   }
 }
 
@@ -108,6 +108,7 @@ bool StageEndScreen::play(unsigned int stage_number)
     {
       bDrawText1 = true;
       cur_state = StageEndScreen::UPDATE_SCORE;
+      delayTimer = Clock::clockTicks;
     }
     case StageEndScreen::UPDATE_SCORE:
     {
@@ -115,8 +116,15 @@ bool StageEndScreen::play(unsigned int stage_number)
 
       if (GlobalGameState::cur_boss_points > 0)
       {
-        GlobalGameState::points          += 1000;
-        GlobalGameState::cur_boss_points -= 1000;
+        if (Clock::clockTicks - delayTimer > 2)
+        {
+          delayTimer = Clock::clockTicks;
+
+          Sounds::mm_sounds->play(BONUS_POINT_SOUND);
+
+          GlobalGameState::points += 1000;
+          GlobalGameState::cur_boss_points -= 1000;
+        }
       }
       else
       {
@@ -137,10 +145,11 @@ bool StageEndScreen::play(unsigned int stage_number)
     case StageEndScreen::DRAW_TEXT_2:
     {
       bDrawText2 = true;
-      float posX = GlobalCamera::mm_camera->x + 200;
-      float posY = GlobalCamera::mm_camera->y + 200;
+      float posX = GlobalCamera::mm_camera->x + 195;
+      float posY = GlobalCamera::mm_camera->y + 194;
       TemporaryCharacterList::mm_tempCharacterLst.push_back(stage->createCharacter(mm_tile_actions::BONUS_POINT_CHAR,
                                                                                    posX, posY));
+      delayTimer = Clock::clockTicks;
       cur_state = StageEndScreen::UPDATE_SCORE_BONUS;
     }
     break;
@@ -149,13 +158,10 @@ bool StageEndScreen::play(unsigned int stage_number)
       if (GlobalGameState::bonus_points > 0)
       {
         GlobalGameState::points += GlobalGameState::bonus_points * 1000;
-        GlobalGameState::bonus_points = 0;
+        Sounds::mm_sounds->play(BONUS_POINT_SOUND);
       }
-      else
-      {
-        delayTimer = Clock::clockTicks;
-        cur_state = StageEndScreen::DELAY3;
-      }
+      delayTimer = Clock::clockTicks;
+      cur_state = StageEndScreen::DELAY3;
     }
     break;
     case StageEndScreen::DELAY3:

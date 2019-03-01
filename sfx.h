@@ -1,13 +1,13 @@
-/* Allegro datafile object indexes, produced by grabber v4.4.2, Unix */
-/* Datafile: /home/marcos/megaman/sounds/mm_sfx/sfx.dat */
-/* Date: Sat Nov 24 01:12:34 2018 */
+/* Allegro datafile object indexes, produced by grabber v4.2.3, MinGW32.s */
+/* Datafile: c:\Users\killo\Documents\MegamanDev\mmprojvc\Debug\sounds\mm_sfx\sfx.dat */
+/* Date: Thu Feb 28 22:01:40 2019 */
 /* Do not hand edit! */
 
 #define BOSS_SELECTED                    0        /* SAMP */
 #define PAUSE                            1        /* SAMP */
 #define MENU_ARROW                       2        /* SAMP */
 #define TELE                             3        /* SAMP */
-#define SAMPLE_04                        4        /* SAMP */
+#define BONUS_POINT_SOUND                4        /* SAMP */
 #define MEGA_BUSTER                      5        /* SAMP */
 #define MM_HIT                           6        /* SAMP */
 #define LIGHTNING                        7        /* SAMP */

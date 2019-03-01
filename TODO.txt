@@ -1,9 +1,4 @@
-MODIFIQUEI VER>
-- Codigo para passar de fase. (jogar para dentro da maquina de estados a tela de terminar fase)
 - Acertar explosao do mm e dos chefes
-- Criar porta tipo 1 e 2, a 2 só libera controle depois do boss show.
-X porta tratar gravidade quando megaman ficar em lugar que ele caia (na propria classe da fase?)
-
 - Finalizar fases
 - ajustar magnetic beam SE estiver atrapalhando, verificar se esta dentro de tiles e jogar para dentro 100%
   evitando que o mm fique preso.

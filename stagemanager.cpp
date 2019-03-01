@@ -10,7 +10,7 @@
 
 #include "soundpack.h"
 #include "sfx.h"
-
+#include "text_utils.h"
 #include "stage.h"
 #include "camera.h"
 #include "player.h"
@@ -441,7 +441,8 @@ void StageManager::play()
             if (curr_character == NULL) continue;
 
             curr_character->checkOnCamera();
-            curr_character->doGravitation();
+            if (handlingDoor == false)
+              curr_character->doGravitation();
             curr_character->doLogic();
 
             //TODO: ver se tah colidindo com o megaman em blinking... e mover isso pra um lugar so :D
@@ -596,6 +597,11 @@ void StageManager::play()
       {
         EnergyBar::drawEnerybar(m_buffer, 78, 34, player->curWeapon, true);
       }
+
+      draw_number_center(m_buffer, Font::mm_font,
+                         SCREEN_W / 2, 20,
+                         makecol(255, 255, 255),
+                         GlobalGameState::points, 7);
 
 #ifdef DEBUG
       if (key[KEY_T]) tvmode(m_buffer);
