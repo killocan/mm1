@@ -41,14 +41,24 @@ int main(int argc, char ** argv)
 
   while(!key[KEY_ESC])
   {
-    if (key[KEY_A])
+    if (key[KEY_F])
     {
       if (step == 16) step = 32;
       else if (step == 32) step = 16;
 
-      while(key[KEY_A]);
+      while(key[KEY_F]);
     }
 
+    if (key[KEY_D])
+    {
+      x+=(32*16);
+      while(key[KEY_D]);
+    }
+    if (key[KEY_A])
+    {
+      x-=(32*16);
+      while(key[KEY_A]);
+    }
     if (key[KEY_RIGHT])
     {
       x+=32;
