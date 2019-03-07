@@ -14,6 +14,7 @@ class BombManStage : public StageManager
 
     virtual void setupStage(bool hardStart);
     virtual void doStageSpecifics();
+    virtual void createBoss();
 
   protected:
     SceneSoundManager * CreateSoundManager();

@@ -34,29 +34,46 @@ Beak::Beak(const Stage & stage, int x_map, int y_map) : Character(stage, mm_spri
 
   fireCount     = 0;
 
-  colorOffset = cur_stage->getOffset(mm_spritefiles::BEAK_SPRITES);
-  curState    = Beak::SLEEPING;
-  setAnimSeq(colorOffset + Beak::SLEEPING);
-  h = getFrameH();
-
-  switch(colorOffset)
-  {
-    case 0:
-      bulletOffset = 2;
-    break;
-    case 4:
-      bulletOffset = 1;
-    break;
-    case 8:
-      bulletOffset = 3;
-    break;
-  }
+  handleWorkAround();
 
   adjustToWall(x_map / mm_graphs_defs::TILE_SIZE, y_map / mm_graphs_defs::TILE_SIZE);
   
   this->old_x = this->x;
 
   life  = 1;
+}
+
+void Beak::handleWorkAround()
+{
+  colorOffset = cur_stage->getOffset(mm_spritefiles::BEAK_SPRITES);
+  curState = Beak::SLEEPING;
+  setAnimSeq(colorOffset + Beak::SLEEPING);
+  h = getFrameH();
+
+  if (cur_stage->stageNumber == 3)
+  {
+    int xp = int(this->x) / mm_graphs_defs::TILE_SIZE;
+    int yp = int(this->y) / mm_graphs_defs::TILE_SIZE;
+    if (xp == 102 && (yp == 52 || yp == 56))
+    {
+      curState = Beak::OPENING;
+      setAnimSeq(colorOffset + Beak::OPENING);
+      animSeqSize = anim_seqs[curAnimSeq].size();
+    }
+  }
+
+  switch (colorOffset)
+  {
+  case 0:
+    bulletOffset = 2;
+    break;
+  case 4:
+    bulletOffset = 1;
+    break;
+  case 8:
+    bulletOffset = 3;
+    break;
+  }
 }
 
 bool Beak::handleAnimation(bool * bAnimationEnded)

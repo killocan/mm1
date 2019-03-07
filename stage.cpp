@@ -54,6 +54,7 @@
 
 #include "gutsman.h"
 #include "fireman.h"
+#include "bombman.h"
 
 #include "magneticbeamhandler.h"
 #include "movingflame.h"
@@ -909,7 +910,7 @@ Character * Stage::createCharacter(int TYPE, int x, int y, int vx, int vy, void 
     break;
     case mm_tile_actions::TILE_ENEMY_FLYINGSHELL:
     {
-      cur_character = new FlyingShell(*this, x, y);
+      cur_character = new FlyingShell(*this, x, y, param);
     }
     break;
     case mm_tile_actions::TILE_ENEMY_KILLERBULLET:
@@ -1124,6 +1125,11 @@ Character * Stage::createCharacter(int TYPE, int x, int y, int vx, int vy, void 
     case mm_tile_actions::FIREMAN:
     {
       cur_character = new Fireman(*this, x, y, param);
+    }
+    break;
+    case mm_tile_actions::BOMBMAN:
+    {
+      cur_character = new Bombman(*this, x, y, param);
     }
     break;
     case mm_tile_actions::ELECMAN:

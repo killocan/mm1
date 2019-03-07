@@ -193,7 +193,7 @@ void SniperJoe::doLogic()
 
 void SniperJoe::hit(mm_weapons::weapon_st * pWeapon)
 {
-  if (curState == SniperJoe::STILL)
+  if (curState != SniperJoe::FIRING)
   {
     Sounds::mm_sounds->play(HIT_SHIELD);
     if (pWeapon->weapon == mm_weapons::W_MEGA_BUSTER) pWeapon->alive = false;

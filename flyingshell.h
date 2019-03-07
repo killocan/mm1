@@ -13,7 +13,8 @@ class Stage;
 class FlyingShell : public Character
 {
   public:
-    FlyingShell(const Stage & stage, int x, int y);
+    FlyingShell(const Stage & stage, int x, int y, void * pTemp);
+    virtual ~FlyingShell();
 
     virtual void doLogic();
     virtual bool handleAnimation(bool * bAnimationEnded = NULL);
@@ -29,8 +30,8 @@ class FlyingShell : public Character
     // This dude is kind of imortal.
     virtual void checkOnCamera();
 
-    enum {RESTING, FIRING, CLOSED};
+    enum {RESTING, PRE_FIRING, FIRING, CLOSED};
 
   private:
-    //Stage * cur_stage; // current stage.
+    int * active_sectors;
 };

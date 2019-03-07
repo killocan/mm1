@@ -25,11 +25,13 @@
 
 KillerBullet::KillerBullet(const Stage & stage, int x, int y, void * pTemp) : Character(stage, mm_spritefiles::KILLERBULLET_SPRITES)
 {
+  this->old_x = x;
+
   this->x = (GlobalCamera::mm_camera->x + GlobalCamera::mm_camera->w);
 
   this->old_y = y;
 
-  velx          = -3.0f;
+  velx          = -3.1f;
   overstair     = false;
   isFacingRight = false;
   ang           = M_PI_2;
@@ -40,15 +42,17 @@ KillerBullet::KillerBullet(const Stage & stage, int x, int y, void * pTemp) : Ch
   h = getFrameH();
   w = getFrameW();
 
-  curState = KillerBullet::MOVING;
+  curState = KillerBullet::WAITING;
 
   life  = 1;
 
   active_sectors = NULL;
   if (pTemp != NULL)
   {
-    active_sectors = (int*) pTemp;
+    active_sectors = (int*)pTemp;
   }
+  else
+    exit(-1);
 
   ticks = Clock::clockTicks;
 }
@@ -60,6 +64,13 @@ KillerBullet::~KillerBullet()
 
 void KillerBullet::doLogic()
 {
+  if (cur_stage->horz_scroll)
+  {
+    respawn();
+    alive = false;
+    return;
+  }
+
   switch(curState)
   {
     case KillerBullet::WAITING:
@@ -156,10 +167,10 @@ void KillerBullet::checkOnCamera()
   {
     alive = true;
   }
-  else if (curState != KillerBullet::WAITING)
+  else if (curState != KillerBullet::MOVING)
   {
     respawn();
-    alive   = false;
+    alive = false;
   }
 }
 
@@ -171,10 +182,14 @@ void KillerBullet::respawn()
   if (cur_stage->m_player->sy > 400)
     offset += 2*mm_graphs_defs::TILE_SIZE;
 
+  ang = M_PI_2;
+
+  if (cur_stage->stageNumber == 3 && this->old_x == (191 * 32))
+    ang = M_PI;
+
   this->x     = (GlobalCamera::mm_camera->x + GlobalCamera::mm_camera->w) + (2*mm_graphs_defs::TILE_SIZE);
   this->old_y = cur_stage->m_player->y-offset;
   this->y = this->old_y;
-  ang = M_PI_2;
 
   ticks = Clock::clockTicks;
   curState = KillerBullet::WAITING;

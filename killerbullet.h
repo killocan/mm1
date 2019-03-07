@@ -14,7 +14,7 @@ class KillerBullet : public Character
 {
   public:
     KillerBullet(const Stage & stage, int x, int y, void * pTemp);
-    ~KillerBullet();
+    virtual ~KillerBullet();
 
     virtual void doLogic();
 

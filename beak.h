@@ -30,6 +30,7 @@ class Beak : public Character
 
     enum {SLEEPING, OPENING, FIRING, CLOSING};//, FREEZE};
   private:
+    void handleWorkAround();
     // Adjust x coord to keep it right next to the nearest wall.
     void adjustToWall(int x_map, int y_map);
 

@@ -652,6 +652,7 @@ void StageManager::play()
       weaponMenu->selected = 7;
       player->curWeapon = mm_weapons::W_MEGA_BUSTER;
       player->changeWeapon();
+      player->grabstair = false;
       stage->horz_scroll = false;
       TemporaryCharacterList::mm_tempCharacterLst.remove_if(tempCharacterKill);
       special_chars_vec.clear();

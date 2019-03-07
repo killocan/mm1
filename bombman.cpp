@@ -1,13 +1,12 @@
 /*
- * Killocan 2016
+ * Killocan 2019
  * http://killocan.blogspot.com
 */
 
-#include "gutsman.h"
+#include "Bombman.h"
 #include "stage.h"
 #include "tileactions.h"
 #include "defines.h"
-#include "gutsmangun.h"
 #include "scenesoundmanager.h"
 #include "globals.h"
 #include "globalgamestate.h"
@@ -15,9 +14,9 @@
 #include "energybar.h"
 #include "spritefiles.h"
 #include "mm_math.h"
-//Gutsman
+//Bombman
 
-Gutsman::Gutsman(const Stage & stage, int x_map, int y_map, void * param) : Character(stage, mm_spritefiles::GUTSMAN_SPRITES)
+Bombman::Bombman(const Stage & stage, int x_map, int y_map, void * param) : Character(stage, mm_spritefiles::BOMBMAN_SPRITES)
 {
   EnergyBar::m_boss = this;
   this->x = x_map;
@@ -26,25 +25,22 @@ Gutsman::Gutsman(const Stage & stage, int x_map, int y_map, void * param) : Char
   this->vely = 0;
   this->velx = 3;
 
-  overstair     = false;
+  overstair = false;
   isFacingRight = false;
 
-  jumping       = false;
+  jumping = false;
   jumping_right = false;
 
-  curState = Gutsman::SHOW_OFF;
-  setAnimSeq(Gutsman::SHOW_OFF);
+  curState = Bombman::SHOW_OFF;
+  setAnimSeq(Bombman::SHOW_OFF);
   h = getFrameH();
   w = getFrameW();
 
-  life  = 1;
+  life = 1;
   alive = true;
-
-  bFirstTime = true;
 
   cycleCount = 0;
 
-  GutsmanGun::firstOne = true;
   canCollideBullet = true;
 
   dyingTimer = 0;
@@ -57,28 +53,17 @@ Gutsman::Gutsman(const Stage & stage, int x_map, int y_map, void * param) : Char
   blinkCount = 0;
 }
 
-bool Gutsman::handleAnimation(bool * bAnimationEnded)
+bool Bombman::handleAnimation(bool * bAnimationEnded)
 {
   return false;
 }
 
-void Gutsman::touchGround()
+void Bombman::touchGround()
 {
-  if (bFirstTime == true)
-  {
-    bFirstTime = false;
-    return;
-  }
 
-  if (GlobalGameState::earthquake == false)
-  {
-    Sounds::mm_sounds->play(EARTHQUAKE);
-    GlobalGameState::earthquake = true;
-    GlobalGameState::earthquakecount = 360;
-  }
 }
 
-void Gutsman::doLogic()
+void Bombman::doLogic()
 {
   if (bDying == true)
   {
@@ -105,51 +90,39 @@ void Gutsman::doLogic()
 
   isFacingRight = (this->x > cur_stage->m_player->x) ? false : true;
 
-  switch(curState)
+  switch (curState)
   {
-    case Gutsman::SHOW_OFF:
+    case Bombman::SHOW_OFF:
     {
       bool cycleDone = false;
       Character::handleAnimation(&cycleDone);
       if (cycleDone == true)
       {
-        curState = Gutsman::DECIDING;
-        setAnimSeq(Gutsman::DECIDING);
+        return;
       }
     }
     break;
-    case Gutsman::DECIDING:
+    case Bombman::DECIDING:
     {
       int decision = rand() % 2;
       switch (decision)
       {
-        case 0:
-        {
-          curState = Gutsman::PRE_JUMP;
-          setAnimSeq(Gutsman::PRE_JUMP);
-        }
-        break;
-        case 1:
-        {
-          curState = Gutsman::PRE_JUMP_ATTACK;
-          setAnimSeq(Gutsman::PRE_JUMP_ATTACK);
-        }
-        break;
-      }
-    }
-    break;
-    case Gutsman::PRE_JUMP:
-    {
-      bool cycleDone = false;
-      Character::handleAnimation(&cycleDone);
-      if (cycleDone == true)
+      case 0:
       {
-        curState = Gutsman::JUMP;
-        setAnimSeq(Gutsman::JUMP);
+        curState = Bombman::JUMP;
+        setAnimSeq(Bombman::JUMP);
+      }
+      break;
+      case 1:
+      {
+        curState = Bombman::JUMP_ATTACK;
+        setAnimSeq(Bombman::JUMP_ATTACK);
+      }
+      break;
       }
     }
     break;
-    case Gutsman::JUMP:
+    case Bombman::JUMP:
     {
       if (onground == true && jumping == false)
       {
@@ -166,7 +139,7 @@ void Gutsman::doLogic()
       {
         int tilecoordx, tilecoordy, tiletype;
 
-        // 10 offset avoid gutsman to stand too close of the wall and mess with the rock
+        // 10 offset avoid Bombman to stand too close of the wall and mess with the rock
         // cause it colide with the wall from the start.
         if (jumping_right == true)
         {
@@ -185,53 +158,27 @@ void Gutsman::doLogic()
 
         if (onground == true)
         {
-          curState = Gutsman::DECIDING;
-          setAnimSeq(Gutsman::DECIDING);
+          curState = Bombman::DECIDING;
+          setAnimSeq(Bombman::DECIDING);
           jumping = false;
         }
       }
     }
     break;
-    case Gutsman::PRE_JUMP_ATTACK:
+    case Bombman::JUMP_ATTACK:
     {
       bool cycleDone = false;
       Character::handleAnimation(&cycleDone);
       if (cycleDone == true)
       {
-        curState = Gutsman::JUMP_ATTACK;
-        setAnimSeq(Gutsman::JUMP_ATTACK);
+        curState = Bombman::JUMP_ATTACK;
+        setAnimSeq(Bombman::JUMP_ATTACK);
       }
     }
     break;
-    case Gutsman::JUMP_ATTACK:
+    case Bombman::ATTACK:
     {
-      if (onground == true && jumping == false)
-      {
-        bool cycleDone = Character::handleAnimation();
-        if (cycleDone == true)
-        {
-          this->vely = -12;
-          jumping = true;
-        }
-      }
-      else
-      {
-        if (onground == true)
-        {
-          curState = Gutsman::ATTACK;
-          setAnimSeq(Gutsman::ATTACK);
-          jumping = false;
-
-          rock = mm_weapons::createGutsmanRock(this, this->x + (isFacingRight ? -5.0f : 5.0f),
-                                               GlobalCamera::mm_camera->y-64.0f, 
-                                               0, 0, 0);
-        }
-      }
-    }
-    break;
-    case Gutsman::ATTACK:
-    {
-      if (rock == NULL || rock->curState == GutsmanGun::ATTACHED_TO)
+      if (false)
       {
         bool cycleDone = false;
         if (Character::handleAnimation(&cycleDone) && cycleCount < 2)
@@ -243,8 +190,8 @@ void Gutsman::doLogic()
         if (cycleDone == true)
         {
           cycleCount = 0;
-          curState = Gutsman::DECIDING;
-          setAnimSeq(Gutsman::DECIDING);
+          curState = Bombman::DECIDING;
+          setAnimSeq(Bombman::DECIDING);
         }
       }
     }
@@ -252,29 +199,24 @@ void Gutsman::doLogic()
   }
 }
 
-void Gutsman::fire()
+void Bombman::fire()
 {
-  if (rock->curState == GutsmanGun::ATTACHED_TO)
-  {
-    rock->launch();
-    rock = NULL;
-  }
 }
 
-void Gutsman::hit(mm_weapons::weapon_st * pWeapon)
+void Bombman::hit(mm_weapons::weapon_st * pWeapon)
 {
   if (isHitAnimOn == true) return;
 
-  switch(pWeapon->weapon)
+  switch (pWeapon->weapon)
   {
-    case mm_weapons::W_ICEMAN_GUN:
-    {
-      freeze();
-    }
-    break;
-    case mm_weapons::W_MEGA_BUSTER:
-    default:
-      life-=6;
+  case mm_weapons::W_ICEMAN_GUN:
+  {
+    freeze();
+  }
+  break;
+  case mm_weapons::W_MEGA_BUSTER:
+  default:
+    life -= 6;
     break;
   }
   pWeapon->alive = false;
@@ -288,25 +230,25 @@ void Gutsman::hit(mm_weapons::weapon_st * pWeapon)
 
   isHitAnimOn = true;
   Sounds::mm_sounds->play(MM_HIT);
-  TemporaryCharacterList::mm_tempCharacterLst.push_back(cur_stage->createCharacter(mm_tile_actions::HIT_EXPLOSION_CHAR, 
-                                                                                   this->x, this->y - 5.0f));
+  TemporaryCharacterList::mm_tempCharacterLst.push_back(cur_stage->createCharacter(mm_tile_actions::HIT_EXPLOSION_CHAR,
+    this->x, this->y - 5.0f));
 }
 
-void Gutsman::drawCharacter(BITMAP * bmp)
+void Bombman::drawCharacter(BITMAP * bmp)
 {
   int curSpriteFrame = bDraw ? anim_seqs[curAnimSeq][curAnimFrame].frameNumber : spriteSheet->frameNumber() - 1;
 
   if (isFacingRight == true)
   {
-    draw_sprite(bmp, this->spriteSheet->getFrame(curSpriteFrame), this->sx, this->sy+1);
+    draw_sprite(bmp, this->spriteSheet->getFrame(curSpriteFrame), this->sx, this->sy + 1);
   }
   else
   {
-    draw_sprite_h_flip(bmp, this->spriteSheet->getFrame(curSpriteFrame), this->sx, this->sy+1);
+    draw_sprite_h_flip(bmp, this->spriteSheet->getFrame(curSpriteFrame), this->sx, this->sy + 1);
   }
 }
 
-void Gutsman::die()
+void Bombman::die()
 {
   if (Clock::clockTicks - 7 > dyingTimer)
   {

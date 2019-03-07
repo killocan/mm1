@@ -28,8 +28,6 @@ OctopusBattery::OctopusBattery(const Stage & stage, int x_map, int y_map,  e_ori
 
   this->m_orientation = orientation;
 
-
-  
   overstair     = false;
   isFacingRight = true;
   isFacingDown  = true;
@@ -37,7 +35,7 @@ OctopusBattery::OctopusBattery(const Stage & stage, int x_map, int y_map,  e_ori
 
   colorOffset = cur_stage->getOffset(mm_spritefiles::OCTOPUSBATTERY_SPRITES);
   setAnimSeq(colorOffset + OctopusBattery::SLEEPING);
-  curState = OctopusBattery::SLEEPING;
+  curState = OctopusBattery::ACTIVE;
   h = getFrameH();
 
   velx = 1;

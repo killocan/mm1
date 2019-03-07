@@ -22,21 +22,14 @@
 
 //Flying Shell
 
-FlyingShell::FlyingShell(const Stage & stage, int x, int y) : Character(stage, mm_spritefiles::FLYINGSHELL_SPRITES)
+FlyingShell::FlyingShell(const Stage & stage, int x, int y, void * pTemp) : Character(stage, mm_spritefiles::FLYINGSHELL_SPRITES)
 {
-  // Map coords to global world coords
-  //this->x = x*mm_graphs_defs::TILE_SIZE;
-  this->y = y;//*mm_graphs_defs::TILE_SIZE;
-
-  //TODO: need camera x to place it always offscreen.
+  this->y = y;
 
   this->x = (GlobalCamera::mm_camera->x + GlobalCamera::mm_camera->w);
-  //this->old_x = this->x;
   this->old_y = this->y;
 
-
-
-  velx          = -2;
+  velx          = -3.2;
   overstair     = false;
   isFacingRight = false;
   colorOffset   = 0;
@@ -48,10 +41,30 @@ FlyingShell::FlyingShell(const Stage & stage, int x, int y) : Character(stage, m
   curState = FlyingShell::CLOSED;
 
   life  = 1;
+
+  active_sectors = NULL;
+  if (pTemp != NULL)
+  {
+    active_sectors = (int*)pTemp;
+  }
+  else
+    exit(-1);
+}
+
+FlyingShell::~FlyingShell()
+{
+  delete[] active_sectors;
 }
 
 void FlyingShell::doLogic()
 {
+  if (cur_stage->horz_scroll)
+  {
+    respawn();
+    alive = false;
+    return;
+  }
+
   bool cycleDone = false;
 
   switch(curState)
@@ -80,11 +93,21 @@ void FlyingShell::doLogic()
         cycleDone = Character::handleAnimation();
         if (cycleDone == true)
         {
-          fire();
-
-          curState = FlyingShell::FIRING;
-          setAnimSeq(FlyingShell::FIRING);
+          curState = FlyingShell::PRE_FIRING;
+          setAnimSeq(FlyingShell::PRE_FIRING);
         }
+      }
+    }
+    break;
+    case FlyingShell::PRE_FIRING:
+    {
+      cycleDone = Character::handleAnimation();
+      if (cycleDone == true)
+      {
+        fire();
+
+        curState = FlyingShell::FIRING;
+        setAnimSeq(FlyingShell::FIRING);
       }
     }
     break;
@@ -174,17 +197,33 @@ void FlyingShell::hit(mm_weapons::weapon_st * pWeapon)
 
 void FlyingShell::checkOnCamera()
 {
-  if (this->y >= GlobalCamera::mm_camera->y && this->y <= GlobalCamera::mm_camera->y+GlobalCamera::mm_camera->h)
-  {
-    if (alive == false)
-    {
-      respawn();
-    }
+  int yd = ((int)(cur_stage->m_player->y + (cur_stage->m_player->h / 1.5f))) / mm_graphs_defs::TILE_SIZE;
+  int xd = ((int)cur_stage->m_player->x) / mm_graphs_defs::TILE_SIZE;
+  int ydesl = yd / mm_graphs_defs::TILES_Y;
+  int xdesl = xd / mm_graphs_defs::TILES_X;
+  int sector = ydesl * (cur_stage->max_x / mm_graphs_defs::TILES_X) + xdesl;
 
+  bool found = false;
+  for (int i = 0; active_sectors[i] != -1; ++i)
+  {
+    if (active_sectors[i] == sector)
+    {
+      found = true;
+
+      if (cur_stage->stageNumber == 3 && sector == 13 && cur_stage->m_player->x >= 6740)
+        found = false;
+
+      break;
+    }
+  }
+
+  if (found && cur_stage->horz_scroll == false)
+  {
     alive = true;
   }
-  else
+  else if (curState == FlyingShell::RESTING)
   {
+    respawn();
     alive = false;
   }
 }
@@ -194,8 +233,7 @@ void FlyingShell::respawn()
   life  = 1;
   alive = true;
 
-  //this->x = this->old_x;
-  this->x = (GlobalCamera::mm_camera->x + GlobalCamera::mm_camera->w);
+  this->x = (GlobalCamera::mm_camera->x + GlobalCamera::mm_camera->w) + (3 * mm_graphs_defs::TILE_SIZE);
   this->y = this->old_y;
 
   resetAnimSeq(FlyingShell::RESTING);
