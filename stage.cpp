@@ -101,7 +101,7 @@ Stage::~Stage()
 unsigned char Stage::tileAction(int x, int y) const
 {
   if (x < 0 || y < 0) return mm_tile_actions::TILE_VOID;
-
+  //TODO se for fora do mapa para baixo, retorna tile de morrer... (depois de um tempo? hauwhuaw)
   return map[y][x].action;
 }
 

@@ -59,18 +59,18 @@ void Bombomb::BombombFragment::checkOnCamera()
 
 Bombomb::Bombomb(const Stage & stage, int x, int y) : Character(stage, mm_spritefiles::BOMBOMB_SPRITES)
 {
-  this->x = x;//*mm_graphs_defs::TILE_SIZE;
-  //this->x += 16;
+  this->x = x;
   this->y = (GlobalCamera::mm_camera->y + GlobalCamera::mm_camera->w);
   this->old_y = this->y;
 
-  vely = 9;
+  vely = 10.5f;
 
   colorOffset = cur_stage->getOffset(mm_spritefiles::BOMBOMB_SPRITES);
   setAnimSeq(colorOffset + Bombomb::MOVING);
   curState = Bombomb::WAITING;
 
   dropItem = false;
+  bFirstTime = true;
 }
 
 void Bombomb::die()
@@ -78,10 +78,10 @@ void Bombomb::die()
   Character::die();
   // Spawn 4 fragments.
   int ypos = this->y-8;
-  Character * pFragment01 = cur_stage->createCharacter(mm_tile_actions::BOMBOMB_FRAGMENT_CHAR, this->x, ypos, -6,-3);
-  Character * pFragment02 = cur_stage->createCharacter(mm_tile_actions::BOMBOMB_FRAGMENT_CHAR, this->x, ypos,  6,-3);
-  Character * pFragment03 = cur_stage->createCharacter(mm_tile_actions::BOMBOMB_FRAGMENT_CHAR, this->x, ypos, -3,-5);
-  Character * pFragment04 = cur_stage->createCharacter(mm_tile_actions::BOMBOMB_FRAGMENT_CHAR, this->x, ypos,  3,-5);
+  Character * pFragment01 = cur_stage->createCharacter(mm_tile_actions::BOMBOMB_FRAGMENT_CHAR, this->x, ypos, -6.5f,-3);
+  Character * pFragment02 = cur_stage->createCharacter(mm_tile_actions::BOMBOMB_FRAGMENT_CHAR, this->x, ypos,  6.5f,-3);
+  Character * pFragment03 = cur_stage->createCharacter(mm_tile_actions::BOMBOMB_FRAGMENT_CHAR, this->x, ypos, -3.5f,-5);
+  Character * pFragment04 = cur_stage->createCharacter(mm_tile_actions::BOMBOMB_FRAGMENT_CHAR, this->x, ypos,  3.5f,-5);
   TemporaryCharacterList::mm_tempCharacterLst.push_back(pFragment01);
   TemporaryCharacterList::mm_tempCharacterLst.push_back(pFragment02);
   TemporaryCharacterList::mm_tempCharacterLst.push_back(pFragment03);
@@ -95,8 +95,9 @@ void Bombomb::doLogic()
     case Bombomb::WAITING:
     {
       bool cycleDone = Character::handleAnimation();
-      if (cycleDone == true)
+      if (cycleDone == true || bFirstTime == true)
       {
+        bFirstTime = false;
         curState = Bombomb::MOVING;
       }
     }
@@ -133,6 +134,7 @@ void Bombomb::checkOnCamera()
   {
     if (alive == false)
     {
+      bFirstTime = true;
       respawn();
     }
 

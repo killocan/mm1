@@ -27,6 +27,7 @@ class Bombomb : public Character
     };
 
     Bombomb(const Stage & stage, int x, int y);
+    bool bFirstTime;
 
     virtual void die();
     virtual void doLogic();
