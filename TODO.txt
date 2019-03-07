@@ -1,4 +1,4 @@
-- Finalizar fases (SE CAIR PARA TELA FORA DO MAPA RETORNAR MORTE)
+- Finalizar fases 
 - ajustar magnetic beam SE estiver atrapalhando, verificar se esta dentro de tiles e jogar para dentro 100%
   evitando que o mm fique preso.
 - Corrida do megaman aceleracao gradual. (Ajustar corrida para comecar com 1 px depois passar para 3 quando ja correndo.)

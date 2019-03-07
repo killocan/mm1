@@ -170,9 +170,9 @@ void ScrewBomber::fire()
     ypos +=  this->h - 10;
 
     mm_weapons::createMegaBuster(this, xpos, ypos,  3.7f, 0.0f, bulletOffset);
-    mm_weapons::createMegaBuster(this, xpos, ypos,  2.7f, 2.7f, bulletOffset);
+    mm_weapons::createMegaBuster(this, xpos, ypos,  2.8f, 2.8f, bulletOffset);
     mm_weapons::createMegaBuster(this, xpos, ypos,  0.0f, 3.7f, bulletOffset);
-    mm_weapons::createMegaBuster(this, xpos, ypos, -2.7f, 2.7f, bulletOffset);
+    mm_weapons::createMegaBuster(this, xpos, ypos, -2.8f, 2.8f, bulletOffset);
     mm_weapons::createMegaBuster(this, xpos, ypos, -3.7f, 0.0f, bulletOffset);
   }
   else

@@ -350,7 +350,13 @@ void Player::normalLogic()
 {
   if (bDying == true) return;
 
-  if (touchSpike == true || this->life <= 0)
+  bool outsideMap = false;
+  int tilex = int(x) / mm_graphs_defs::TILE_SIZE;
+  int tiley = int(y) / mm_graphs_defs::TILE_SIZE;
+  if (tilex >= cur_stage->max_x || tiley >= cur_stage->max_y)
+    outsideMap = true;
+  
+  if (touchSpike == true || this->life <= 0 || outsideMap)
   {
     dyingTimer = Clock::clockTicks;
     bDying = true;
@@ -865,6 +871,39 @@ void Player::doLogic()
 
     onPlatform = false;
   }
+}
+
+bool Player::collisionVer(int x, int yp, int &tilecoordx, int &tilecoordy, int &tiletype)
+{
+  int realFrameHeight = getFrameH();
+
+  if (onground == true)
+    yp = (yp + (h-realFrameHeight));
+
+  int tileypixels = yp - (yp%mm_graphs_defs::TILE_SIZE);
+  int testend = yp + realFrameHeight;
+
+  tilecoordx = x / mm_graphs_defs::TILE_SIZE;
+
+  tilecoordy = tileypixels / mm_graphs_defs::TILE_SIZE;
+  while (tileypixels <= testend)
+  {
+    tiletype = cur_stage->tileAction(tilecoordx, tilecoordy);
+
+    if (tiletype == mm_tile_actions::TILE_SOLID)
+    {
+      return true;
+    }
+    else if (tiletype == mm_tile_actions::TILE_DEATH)
+    {
+      touchSpike = true;
+    }
+
+    tilecoordy++;
+    tileypixels += mm_graphs_defs::TILE_SIZE;
+  }
+
+  return false;
 }
 
 bool Player::collisionStair(int x, int y, int &tilecoordx, int &tilecoordy, int &tiletype, bool grabing)

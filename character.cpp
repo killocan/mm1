@@ -288,7 +288,6 @@ bool Character::collisionVer(int x, int y, int &tilecoordx, int &tilecoordy, int
 {
   int realFrameHeight = getFrameH();
   y = (y + (h-realFrameHeight));
-  //printf("realFrameHeight = [%d] y = [%d] testend= [%d]\n", realFrameHeight, y, ((y + (h-realFrameHeight)) + realFrameHeight));
 
   int tileypixels = y-(y%mm_graphs_defs::TILE_SIZE);
   int testend     = y + realFrameHeight;
