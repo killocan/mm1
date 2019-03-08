@@ -83,12 +83,12 @@ int main(int argc, char ** argv)
 
     if (key[KEY_W])
     {
-      y-=step;
+      y-=15*32;//step;
       while(key[KEY_W]);
     }
     else if (key[KEY_S])
     {
-      y+=step;
+      y+=15*32;//step;
       while(key[KEY_S]);
     }
 
