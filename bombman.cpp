@@ -3,7 +3,7 @@
  * http://killocan.blogspot.com
 */
 
-#include "Bombman.h"
+#include "bombman.h"
 #include "stage.h"
 #include "tileactions.h"
 #include "defines.h"
