@@ -11,7 +11,7 @@ BITMAP * makegrid()
   {
     vline(grid, i-1, 0, SCREEN_H, makecol(255,0,0));
   }
-  for (int i = 16; i < SCREEN_H; i+=32)
+  for (int i = 32; i < SCREEN_H; i+=32)
   {
     hline(grid, 0, i-1, SCREEN_W, makecol(255,0,0));
   }
