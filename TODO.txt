@@ -15,3 +15,5 @@
 - ver se vale a pena remover todos hit e jogar para um so em character e so usar o array de dano.
 - animacao de teletransporte quando sai do menu de escolha de armas
 - Parar de cair da escada se colisao com o teto for muito perto da escada (fireman por exemplo)
+
+Watcher::doLogic (this=0xd1ed90) at watcher.cpp:326
