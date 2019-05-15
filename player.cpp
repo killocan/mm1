@@ -51,8 +51,9 @@ Player::Player(const Stage & stage) : Character(stage, 0)
   this->sy = 0;
   this->h = mm_player_defs::PLAYERHEIGHT;
   this->w = mm_player_defs::PLAYERWIDTH;
-  this->velx = mm_player_defs::VELMOVING;
+  this->velx = 0; //mm_player_defs::VELMOVING;
   this->vely = 0;
+  this->accelx = 0.0f;
   this->isFacingRight  = true;
   this->isFacingDown   = false;
   this->lockjump   = false;
@@ -508,7 +509,8 @@ void Player::normalLogic()
         {
           if (curAnimSeq != Player::FIRINGSTILLHAND)
           {
-              x += velx;
+              //x += velx;
+			  accelx = 1.0f;
           }
         }
       }

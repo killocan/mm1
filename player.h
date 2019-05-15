@@ -43,7 +43,8 @@ class Player : public Character
     void forceAnimation();
 
     bool lockJumpAccel;
-	  bool fireKeyPressed;
+    bool fireKeyPressed;
+	float accelx;
 
     enum {
           SPAWNING, 
