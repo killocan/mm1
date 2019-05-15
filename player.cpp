@@ -469,6 +469,11 @@ void Player::normalLogic()
   
   checkStair();
 
+  velx += accelx;
+  if (velx >= mm_player_defs::VELMOVING) velx = mm_player_defs::VELMOVING;
+  else if (velx <= -mm_player_defs::VELMOVING) velx = -mm_player_defs::VELMOVING;
+  x += velx;
+
   if (cur_stage->horz_scroll == false)
   {
     if (key[KEY_RIGHT])
@@ -552,7 +557,9 @@ void Player::normalLogic()
         if(!collisionVer((x+utilX)-velx, y, tilecoordx, tilecoordy, tiletype))
         {
           if (curAnimSeq != Player::FIRINGSTILLHAND)
-            x -= velx;
+		  {
+            accelx = -1.0f; //x -= velx;
+		  }
         }
       }
     }
