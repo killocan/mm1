@@ -12,6 +12,7 @@ class AnimSequence
     {
       int frameNumber;
       int frameDuration;
+      bool frameLoop;
     };
 
     AnimSequence(const char * seqFile, bool keepCopy = false);
@@ -82,11 +83,13 @@ void AnimSequence::loadSequences(const char * def_file)
       for (std::vector<std::string>::iterator i = tmp_pairs.begin(); i != tmp_pairs.end(); i++)
       {
         std::string frame    = i->substr(0, i->find_first_of(','));
-        std::string duration = i->substr(i->find_first_of(',')+1);
+        std::string duration = i->substr(i->find_first_of(',')+1, i->find_last_of(','));
+        std::string loop     = i->substr(i->find_last_of(',')+1);
 
         AnimSequence::FrameInfoSt frameInfo;
         frameInfo.frameNumber   = atoi(frame.c_str());
         frameInfo.frameDuration = atoi(duration.c_str());
+        frameInfo.frameLoop     = (bool) atoi(loop.c_str()) > 0; 
 
         tmp_frameInfo.push_back(frameInfo);
       }
@@ -228,120 +231,134 @@ int cur_rotation = 0;
 bool rotation_mode = false;
 int main(int argc, char ** argv)
 {
-	BITMAP * buffer;
-	char anim_file[80];
-	bool invertDraw = false;
+    BITMAP * buffer;
+    char anim_file[80];
+    bool invertDraw = false;
 
-	if (argc < 2)
-	{
-		fprintf(stderr,"test_animation <animation_file>\n");
-		exit(-1);
-	}
-
-	strcpy(anim_file, argv[1]);
-
-	allegro_init();
-	install_keyboard();
-	install_timer();
-
-	install_int_ex(update_game_logic_tick, BPS_TO_TIMER(60));	
-
-	set_color_depth(32);
-	set_gfx_mode(GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0);
-
-	buffer = create_bitmap(SCREEN_W, SCREEN_H);
-	clear_bitmap(buffer);
-
-	AnimSequence * seq = new AnimSequence(anim_file);
-	int w,h;
-	w = seq->getFrame(0)->w;
-	h = seq->getFrame(0)->h;
-	
-	int num_seqs = seq->getAnimSeq().size();
-	int cur_seq  = 0;
-	int seq_frames    = seq->getAnimSeq()[cur_seq].size();
-	int cur_frame_num = 0;
-	int cur_frame          = seq->getAnimSeq()[cur_seq][cur_frame_num].frameNumber;
-	int cur_frame_duration = seq->getAnimSeq()[cur_seq][cur_frame_num].frameDuration;
-
-	while(!key[KEY_ESC])
-	{
-		if (game_logic_tick)
-		{
-			game_logic_tick = 0;
-
-			if (cur_frame_duration-- <= 0)
-			{
-				++cur_frame_num;
-				if (cur_frame_num >= seq_frames) cur_frame_num = 0;
-				
-				cur_frame_duration = seq->getAnimSeq()[cur_seq][cur_frame_num].frameDuration;
-			}
-		}
-
-		if (key[KEY_SPACE])
-		{
-			while(key[KEY_SPACE]);
-
-			++cur_seq;
-			if (cur_seq >= num_seqs) cur_seq = 0;
-
-			seq_frames = seq->getAnimSeq()[cur_seq].size();
-			cur_frame_num = 0;
-			cur_frame_duration = seq->getAnimSeq()[cur_seq][cur_frame_num].frameDuration;
-		}
-
-		if (key[KEY_R])
+    if (argc < 2)
     {
-      rotation_mode = !rotation_mode;
-      while(key[KEY_R]);
-    }
-		if (key[KEY_A])
-		{
-			invertDraw = !invertDraw;
-      while(key[KEY_A]);
-		}
-
-		cur_frame = seq->getAnimSeq()[cur_seq][cur_frame_num].frameNumber;
-		if (!rotation_mode)
-    {
-      if (!invertDraw)
-        draw_sprite(buffer, seq->getFrame(cur_frame), (SCREEN_W / 2) - (w / 2), (SCREEN_H / 2) - (h / 2));
-      else
-        draw_sprite_h_flip(buffer, seq->getFrame(cur_frame), (SCREEN_W / 2) - (w / 2), (SCREEN_H / 2) - (h / 2));
-    }
-    else
-    {
-      rotate_sprite(buffer,
-                    seq->getFrame(cur_frame),
-                    (SCREEN_W / 2) - (w / 2), (SCREEN_H / 2) - (h / 2),
-                    itofix(rotations[cur_rotation]));
+        fprintf(stderr,"test_animation <animation_file>\n");
+        exit(-1);
     }
 
-    if (key[KEY_RIGHT])
+    strcpy(anim_file, argv[1]);
+
+    allegro_init();
+    install_keyboard();
+    install_timer();
+
+    install_int_ex(update_game_logic_tick, BPS_TO_TIMER(60));    
+
+    set_color_depth(32);
+    set_gfx_mode(GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0);
+
+    buffer = create_bitmap(SCREEN_W, SCREEN_H);
+    clear_bitmap(buffer);
+
+    AnimSequence * seq = new AnimSequence(anim_file);
+    int w,h;
+    w = seq->getFrame(0)->w;
+    h = seq->getFrame(0)->h;
+    
+    int num_seqs = seq->getAnimSeq().size();
+    int cur_seq  = 0;
+    int seq_frames    = seq->getAnimSeq()[cur_seq].size();
+    int cur_frame_num = 0;
+    int cur_frame          = seq->getAnimSeq()[cur_seq][cur_frame_num].frameNumber;
+    int cur_frame_duration = seq->getAnimSeq()[cur_seq][cur_frame_num].frameDuration;
+
+    bool firstPass = true;
+
+    while(!key[KEY_ESC])
     {
-      cur_rotation++;
-      if (cur_rotation == 4) cur_rotation = 0;
+        if (game_logic_tick)
+        {
+            game_logic_tick = 0;
 
-      while(key[KEY_RIGHT]);
+            if (cur_frame_duration-- <= 0)
+            {
+                while(true)
+                {
+                    ++cur_frame_num;
+                    if (cur_frame_num >= seq_frames)
+                    {
+                        cur_frame_num = 0;
+                        firstPass = false;
+                    }
+                
+                    if (!firstPass && !seq->getAnimSeq()[cur_seq][cur_frame_num].frameLoop) continue;
+
+                    cur_frame_duration = seq->getAnimSeq()[cur_seq][cur_frame_num].frameDuration;
+                    break;
+                }
+            }
+        }
+
+        if (key[KEY_SPACE])
+        {
+            while(key[KEY_SPACE]);
+
+            firstPass = true;
+            ++cur_seq;
+            if (cur_seq >= num_seqs) cur_seq = 0;
+
+            seq_frames = seq->getAnimSeq()[cur_seq].size();
+            cur_frame_num = 0;
+            cur_frame_duration = seq->getAnimSeq()[cur_seq][cur_frame_num].frameDuration;
+        }
+
+        if (key[KEY_R])
+        {
+            rotation_mode = !rotation_mode;
+            while(key[KEY_R]);
+        }
+        if (key[KEY_A])
+        {
+            invertDraw = !invertDraw;
+            while(key[KEY_A]);
+        }
+
+        cur_frame = seq->getAnimSeq()[cur_seq][cur_frame_num].frameNumber;
+        if (!rotation_mode)
+        {
+            if (!invertDraw)
+                draw_sprite(buffer, seq->getFrame(cur_frame), (SCREEN_W / 2) - (w / 2), (SCREEN_H / 2) - (h / 2));
+            else
+                draw_sprite_h_flip(buffer, seq->getFrame(cur_frame), (SCREEN_W / 2) - (w / 2), (SCREEN_H / 2) - (h / 2));
+        }
+        else
+        {
+            rotate_sprite(buffer,
+                          seq->getFrame(cur_frame),
+                          (SCREEN_W / 2) - (w / 2), (SCREEN_H / 2) - (h / 2),
+                          itofix(rotations[cur_rotation]));
+        }
+
+        if (key[KEY_RIGHT])
+        {
+            cur_rotation++;
+            if (cur_rotation == 4) cur_rotation = 0;
+
+            while(key[KEY_RIGHT]);
+        }
+
+        textprintf_ex(buffer, font, 5, 5,  makecol(255,255,255), -1, "N de Sequencias: [%d]", num_seqs);
+        textprintf_ex(buffer, font, 5, 15, makecol(255,255,255), -1, "Sequencia atual: [%d]", cur_seq);
+        textprintf_ex(buffer, font, 5, 25, makecol(255,255,255), -1, "N de Frames da Sequencia atual: [%d]", seq_frames);
+        textprintf_ex(buffer, font, 5, 35, makecol(255,255,255), -1, "Frame Atual na Sequencia: [%d]", cur_frame_num);
+        textprintf_ex(buffer, font, 5, 45, makecol(255,255,255), -1, "Duração do Frame Atual: [%d]", cur_frame_duration);
+        textprintf_ex(buffer, font, 5, 55, makecol(255,255,255), -1, "Frame na Sequencia: [%d]", cur_frame);
+        textprintf_ex(buffer, font, 5, 65, makecol(255,255,255), -1, "Sentido Direita: [%d]", !invertDraw);
+        textprintf_ex(buffer, font, 5, 75, makecol(255,255,255), -1, "Rotacao: [%d]", rotations[cur_rotation]);
+
+        blit(buffer, screen, 0,0,0,0, SCREEN_W, SCREEN_H);
+        clear_bitmap(buffer);
     }
-		textprintf_ex(buffer, font, 5, 5,  makecol(255,255,255), -1, "N de Sequencias: [%d]", num_seqs);
-		textprintf_ex(buffer, font, 5, 15, makecol(255,255,255), -1, "Sequencia atual: [%d]", cur_seq);
-		textprintf_ex(buffer, font, 5, 25, makecol(255,255,255), -1, "N de Frames da Sequencia atual: [%d]", seq_frames);
-		textprintf_ex(buffer, font, 5, 35, makecol(255,255,255), -1, "Frame Atual na Sequencia: [%d]", cur_frame_num);
-		textprintf_ex(buffer, font, 5, 45, makecol(255,255,255), -1, "Duração do Frame Atual: [%d]", cur_frame_duration);
-		textprintf_ex(buffer, font, 5, 55, makecol(255,255,255), -1, "Frame na Sequencia: [%d]", cur_frame);
-		textprintf_ex(buffer, font, 5, 65, makecol(255,255,255), -1, "Sentido Direita: [%d]", !invertDraw);
-    textprintf_ex(buffer, font, 5, 75, makecol(255,255,255), -1, "Rotacao: [%d]", rotations[cur_rotation]);
 
-		blit(buffer, screen, 0,0,0,0, SCREEN_W, SCREEN_H);
-		clear_bitmap(buffer);
-	}
+    delete seq;
 
-	delete seq;
+    allegro_exit();
 
-	allegro_exit();
-
-	return 0;
+    return 0;
 }
 
