@@ -74,8 +74,9 @@ void Player::reset()
   x = old_x;
   y = old_y;
 
-  velx = mm_player_defs::VELMOVING;
+  velx = 0; //mm_player_defs::VELMOVING;
   vely = 0;
+  accelx = 0.0f;
 
   lockJumpAccel = false;
   curWeapon     = mm_weapons::W_MEGA_BUSTER;
@@ -214,9 +215,9 @@ void Player::hit(Character * pCharacter)
     {
       if (this->y+10.0f > pCharacter->y)
       {
-        if (isFacingRight)
+        if (this->x < pCharacter->x) //isFacingRight)
         {
-          this->x = (pCharacter->x - this->w)-6;
+          this->x = (pCharacter->x - this->w)-5.0f;
           return;
         }
         else
@@ -469,10 +470,35 @@ void Player::normalLogic()
   
   checkStair();
 
+/*
   velx += accelx;
   if (velx >= mm_player_defs::VELMOVING) velx = mm_player_defs::VELMOVING;
-  else if (velx <= -mm_player_defs::VELMOVING) velx = -mm_player_defs::VELMOVING;
-  x += velx;
+  else if (velx <= 0.0f) velx = 0.0f;
+*/
+
+  float coloffset = 0.0f;
+  if (isFacingRight)
+    coloffset = (x+utilX)+velx+utilXLen;
+  else
+    coloffset = (x+utilX)-velx;
+
+  if(!collisionVer((int)coloffset, y, tilecoordx, tilecoordy, tiletype))
+  {
+    if (curAnimSeq != Player::FIRINGSTILLHAND)
+    {
+      if (isFacingRight)
+        x += velx;
+      else 
+        x -= velx;
+
+  velx += accelx;
+  if (velx >= mm_player_defs::VELMOVING) velx = mm_player_defs::VELMOVING;
+  else if (velx <= 0.0f) velx = 0.0f;
+    }
+  }
+else
+{
+velx=accelx=0.0f;}
 
   if (cur_stage->horz_scroll == false)
   {
@@ -510,14 +536,16 @@ void Player::normalLogic()
           }
         }
 
-        if(!collisionVer((x+utilX)+velx+utilXLen, y, tilecoordx, tilecoordy, tiletype))
-        {
-          if (curAnimSeq != Player::FIRINGSTILLHAND)
-          {
-              //x += velx;
-			  accelx = 1.0f;
-          }
-        }
+        //if(!collisionVer((x+utilX)+velx+utilXLen, y, tilecoordx, tilecoordy, tiletype))
+        //{
+        //  if (curAnimSeq != Player::FIRINGSTILLHAND)
+        //  {
+            //x += velx;
+            if (accelx <= 0.1) accelx = .1f;
+            else if (accelx <= 1.0f) accelx += .1f;
+            else accelx = 1.0f;
+        //  }
+        //}
       }
     }
     else if (key[KEY_LEFT] )
@@ -554,17 +582,22 @@ void Player::normalLogic()
           }
         }
 
-        if(!collisionVer((x+utilX)-velx, y, tilecoordx, tilecoordy, tiletype))
-        {
-          if (curAnimSeq != Player::FIRINGSTILLHAND)
-		  {
-            accelx = -1.0f; //x -= velx;
-		  }
-        }
+        //if(!collisionVer((x+utilX)-velx, y, tilecoordx, tilecoordy, tiletype))
+        //{
+          //if (curAnimSeq != Player::FIRINGSTILLHAND)
+          //{
+            if (accelx <= 0.1) accelx = .1f;
+            else if (accelx <= 1.0f) accelx += .1f;
+            else accelx = 1.0f;
+            //x -= velx;
+            //accelx = .5f;
+          //}
+        //}
       }
     }
     else
     {
+      if (velx > 0.0f) accelx = -.35f;
       //if (lockjump == false && grabstair == false)
       if (onground == true && grabstair == false)
       {

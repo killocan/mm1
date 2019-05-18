@@ -79,20 +79,26 @@ void AnimSequence::loadSequences(const char * def_file)
           tmp_pairs.push_back(pair);
       }
 
+      fprintf(stderr,"SEQUENCIA:\n");
       std::vector<AnimSequence::FrameInfoSt> tmp_frameInfo;
       for (std::vector<std::string>::iterator i = tmp_pairs.begin(); i != tmp_pairs.end(); i++)
       {
         std::string frame    = i->substr(0, i->find_first_of(','));
-        std::string duration = i->substr(i->find_first_of(',')+1, i->find_last_of(','));
-        std::string loop     = i->substr(i->find_last_of(',')+1);
+        std::string duration = i->substr(i->find_first_of(',')+1, i->find_last_of(".|"));
+        size_t pos = i->find_last_of('.');
+        std::string loop     = pos != std::string::npos ? i->substr(pos+1) : "1";
 
         AnimSequence::FrameInfoSt frameInfo;
         frameInfo.frameNumber   = atoi(frame.c_str());
         frameInfo.frameDuration = atoi(duration.c_str());
         frameInfo.frameLoop     = (bool) atoi(loop.c_str()) > 0; 
 
+        fprintf(stderr,"FrameNumber: [%d] FrameDuration: [%d] FrameLoop: [%d]\n",
+                frameInfo.frameNumber, frameInfo.frameDuration, (int)frameInfo.frameLoop);
+
         tmp_frameInfo.push_back(frameInfo);
       }
+      fprintf(stderr,"\n");
 
       if (tmp_frameInfo.size() > 0)
       {
@@ -286,7 +292,11 @@ int main(int argc, char ** argv)
                         firstPass = false;
                     }
                 
-                    if (!firstPass && !seq->getAnimSeq()[cur_seq][cur_frame_num].frameLoop) continue;
+                    if (!firstPass && !seq->getAnimSeq()[cur_seq][cur_frame_num].frameLoop) 
+                    {
+                      fprintf(stderr,"PULANDO FRAME [%d]\n",cur_frame_num);
+                      continue;
+                    }
 
                     cur_frame_duration = seq->getAnimSeq()[cur_seq][cur_frame_num].frameDuration;
                     break;
