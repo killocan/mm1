@@ -49,7 +49,8 @@ Character::Character(const Stage & stage, int TYPE) :
   conPlayer(NULL),
   spriteSheet(NULL),
   type(TYPE),
-  xcol(0), ycol(0)
+  xcol(0), ycol(0),
+  animationFirstPass(true)
 {
   cur_stage = const_cast<Stage*> (&stage);
   loadAnimSeqs(TYPE);
@@ -90,7 +91,8 @@ Character::Character() :
   cur_stage(NULL),
   spriteSheet(NULL),
   type(-1),
-  xcol(0), ycol(0)
+  xcol(0), ycol(0),
+  animationFirstPass(true)
 {
 }
 
@@ -118,9 +120,10 @@ void Character::loadAnimSeqs(int TYPE)
   isFacingDown = false;
 
   curAnimFrameDuration = getCurrFrameDuration();
+  animationFirstPass = true;
 }
 
-void Character::calcScreenCoords() //const Camera & camera)
+void Character::calcScreenCoords()
 {
   this->sx = (this->x - GlobalCamera::mm_camera->x);
   this->sy = (this->y - GlobalCamera::mm_camera->y);
@@ -329,9 +332,6 @@ void Character::drawCharacter(BITMAP * bmp)
 {
   int curSpriteFrame = anim_seqs[curAnimSeq][curAnimFrame].frameNumber;
 
-  //blit(this->spriteSheet->getFrame(curSpriteFrame), bmp, 0, 0, this->sx, this->sy, 
-  //this->spriteSheet->getFrame(curSpriteFrame)->w, this->spriteSheet->getFrame(curSpriteFrame)->h);
-
   if (isFacingRight == true)
   {
     draw_sprite(bmp, this->spriteSheet->getFrame(curSpriteFrame), this->sx, this->sy);
@@ -351,7 +351,6 @@ void Character::drawCharacter(BITMAP *bmp, int rotation)
 int Character::getFrameH()
 {
   int curSpriteFrame = anim_seqs[curAnimSeq][curAnimFrame].frameNumber;
-  //return (this->spriteSheet->getFrame(curSpriteFrame)->h);
   return (this->spriteSheet->getFrameHeight(curSpriteFrame));
 }
 
@@ -380,7 +379,7 @@ bool Character::handleAnimation(bool * bAnimationEnded)
     }
 
     // Either or not the full anim cicle ended, the function itself
-    // returns based on current frame not whole animation cycle.
+    // returns based on current frame not the whole animation cycle.
     bEnded = this->nextAnimFrame();
 
     if (bAnimationEnded != NULL)
@@ -401,23 +400,34 @@ bool Character::handleAnimation(bool * bAnimationEnded)
 
 bool Character::nextAnimFrame()
 {
-  if ((unsigned int)(curAnimFrame+1) < anim_seqs[curAnimSeq].size())
+  while (true)
   {
-    curAnimFrame++;
-    curAnimFrameDuration = getCurrFrameDuration();
+    if ((unsigned int)(curAnimFrame+1) < anim_seqs[curAnimSeq].size())
+    {
+      curAnimFrame++;
+      curAnimFrameDuration = getCurrFrameDuration();
 
-    //h = getFrameH();
+      if (!animationFirstPass && !anim_seqs[curAnimSeq][curAnimFrame].frameLoop)
+      {
+        continue;
+      }
 
-    return false;
-  }
-  else
-  {
-    curAnimFrame = 0;
-    curAnimFrameDuration = getCurrFrameDuration();
+      return false;
+    }
+    else
+    {
+      animationFirstPass = false;
+      curAnimFrame = 0;
 
-    //h = getFrameH();
+      if (!animationFirstPass && !anim_seqs[curAnimSeq][curAnimFrame].frameLoop)
+      {
+        continue;
+      }
 
-    return true;
+      curAnimFrameDuration = getCurrFrameDuration();
+
+      return true;
+    }
   }
 }
 
@@ -459,6 +469,8 @@ void Character::setAnimSeq(int newAnimSeq, bool reset)
 {
   if ((unsigned int)newAnimSeq < anim_seqs.size() && newAnimSeq != curAnimSeq)
   {
+    animationFirstPass = true;
+
     curAnimSeq = newAnimSeq;
     if (reset == true) curAnimFrame = 0;
     curAnimFrameDuration = getCurrFrameDuration();
@@ -469,6 +481,8 @@ void Character::resetAnimSeq(int animSeq)
 {
   if ((unsigned int) animSeq < anim_seqs.size())
   {
+    animationFirstPass = true;
+
     curAnimSeq = animSeq;
     curAnimFrame = 0;
     curAnimFrameDuration = getCurrFrameDuration();

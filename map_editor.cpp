@@ -45,6 +45,15 @@ typedef struct
 
 MAP_INFO **map;
 
+typedef struct 
+{
+  unsigned char tile_number;
+  unsigned char action;
+  int xOffset;
+  bool isForeground;
+  bool isIce;
+} NEW_MAP_INFO;
+
 int x_desloc = 0;
 int cur_tile = 0;
 int cur_act  = 0;
@@ -463,6 +472,45 @@ void draw_grid(BITMAP * bmp)
     hline(bmp, 0, i, SCREEN_W, color);
 }
 
+void convert_map(char * stage)
+{
+  FILE * fp = NULL;
+  if ((fp = fopen(stage, "rb")) != NULL)
+  {
+    map_load(fp);
+  }
+  
+  NEW_MAP_INFO ** converted_map;
+  converted_map = (NEW_MAP_INFO**) malloc(sizeof(NEW_MAP_INFO*) * max_y);
+
+  for(int i = 0; i < max_y; i++)
+  {
+    converted_map[i] = (NEW_MAP_INFO*) malloc(sizeof(NEW_MAP_INFO) * max_x);
+    for (int j = 0; j < max_x; j++)
+	{
+	  converted_map[i][j].tile_number  = map[i][j].tile_number;
+	  converted_map[i][j].action       = map[i][j].action;
+	  converted_map[i][j].xOffset      = map[i][j].xOffset;
+	  converted_map[i][j].isForeground = map[i][j].isForeground;
+	  converted_map[i][j].isIce        = false;
+	}
+  }
+  
+  std::string stageOut = stage;
+  stageOut += ".new";
+  fp = fopen(stageOut.c_str(), "wb+");
+
+  fwrite(&max_x, sizeof(int), 1, fp);
+  fwrite(&max_y, sizeof(int), 1, fp);
+  fwrite(&default_tile, sizeof(unsigned char), 1, fp);
+
+  for (int i = 0; i < max_y; i++)
+  {
+    fwrite(&converted_map[i][0], sizeof(MAP_INFO), max_x, fp);
+  }
+  fclose(fp);
+}
+
 int main(int argc, char *argv[])
 {
   BITMAP * buffer;
@@ -477,7 +525,13 @@ int main(int argc, char *argv[])
   install_mouse();
   install_keyboard();
 
- 
+  std::string convert = argv[1];
+  if (convert.compare("convert") == 0)
+  {
+    convert_map(argv[2]);
+	exit(0);
+  }
+
   set_color_depth(32);
   set_gfx_mode(GFX_AUTODETECT_WINDOWED, 1024, 768, 0, 0);
 

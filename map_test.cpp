@@ -38,6 +38,7 @@ typedef struct
   unsigned char action;
   int xOffset;
   bool isForeground;
+  bool isIce;
 } MAP_INFO;
 MAP_INFO **map;
 
@@ -347,6 +348,10 @@ void map_draw(BITMAP * bmp, const camera_t & camera, bool bg_only=true, bool bg=
         y = i * TILE_SIZE - map_yoff;
 
         tile_draw(bmp, stage.map[mapy + i][mapx + j].tile_number, x, y);
+		if (stage.map[mapy + i][mapx + j].action == 1)
+          rect(bmp, x,y, x+TILE_SIZE, y+TILE_SIZE, makecol(255,0,0));
+		if (stage.map[mapy + i][mapx + j].isIce)
+		  rect(bmp, x+2,y+2, x+TILE_SIZE-1, y+TILE_SIZE-1, makecol(0,0,255));
       }
     }
   }
@@ -363,9 +368,13 @@ void map_draw(BITMAP * bmp, const camera_t & camera, bool bg_only=true, bool bg=
         x = j * TILE_SIZE - map_xoff;
         y = i * TILE_SIZE - map_yoff;
 
-        //tile_draw(bmp, stage.map[mapy + i][mapx + j].tile_number, x, y);
         int tilenumber = stage.map[mapy + i][mapx + j].tile_number;
         masked_blit(tiles.tile_img[tilenumber], bmp, 0,0, x,y, TILE_SIZE,TILE_SIZE);
+		
+		if (stage.map[mapy + i][mapx + j].action == 1)
+          rect(bmp, x,y, x+TILE_SIZE, y+TILE_SIZE, makecol(255,0,0));
+		if (stage.map[mapy + i][mapx + j].isIce)
+		  rect(bmp, x+2,y+2, x+TILE_SIZE-1, y+TILE_SIZE-1, makecol(0,0,255));
       }
     }
   }
@@ -664,8 +673,6 @@ int main(int argc, char *argv[])
           if(player.collision_hor(player.x, player.y+player.vely+player.h, tilecoord, !player.overstair, tiletype))
           {
             player.y = tilecoord*TILE_SIZE - player.h-1;
-            // 1 so we test against the ground again 
-            // in the next frame (0 would test against the ground in the next+1 frame)
             player.vely = 1; 
 
             if(!key[KEY_SPACE])
@@ -723,11 +730,12 @@ int main(int argc, char *argv[])
       map_draw(buffer, camera, false, false);
     }
 
-    if (earthquake == false)
-    {
+    //if (earthquake == false)
+    //{
       vsync();
       blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
-    }
+    //}
+	/*
     else
     {
       static int eq_x=-4, eq_y=4;
@@ -747,7 +755,7 @@ int main(int argc, char *argv[])
       vsync();
       clear_bitmap(screen);
       blit(buffer, screen, 0, 0, eq_x<<1, eq_y<<1, SCREEN_W, SCREEN_H); 
-    }
+    }*/
   }
 
   return 0;

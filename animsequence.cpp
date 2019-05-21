@@ -33,16 +33,11 @@ void AnimSequence::loadSequences(const char * def_file)
   std::string sprite_shet_file = std::string(temp_buf);
   std::size_t pos = sprite_shet_file.find_first_of("\r\n");
   sprite_shet_file.insert(pos, 1, '\0');
-  // Load sprite file.
-  //spriteSheet = new AnimSequence(sprite_shet_file.c_str());
-  //utilX    = spriteSheet->getUtilXInfo()[0];
-  //utilXLen = spriteSheet->getUtilXInfo()[1];
+
   loadSprites(sprite_shet_file.c_str());
 
-  //Now that i've done it, i guess 'twould be better to use a single loop
-  //and use std::find to load it all, but i'm fucking lazy and refuse to redo 
-  //the code, maybe one day.
   std::vector<std::string> tmp_pairs;
+  fprintf(stderr,"Loading [%s]...\n", def_file);
   while(fgets(temp_buf, sizeof(temp_buf)*sizeof(char), fp) != NULL)
   {
     tmp_pairs.clear();
@@ -62,11 +57,17 @@ void AnimSequence::loadSequences(const char * def_file)
       for (std::vector<std::string>::iterator i = tmp_pairs.begin(); i != tmp_pairs.end(); i++)
       {
         std::string frame    = i->substr(0, i->find_first_of(','));
-        std::string duration = i->substr(i->find_first_of(',')+1);
+        std::string duration = i->substr(i->find_first_of(',')+1, i->find_last_of(".|"));
+        size_t pos = i->find_last_of('.');
+        std::string loop     = pos != std::string::npos ? i->substr(pos+1) : "1";
 
         AnimSequence::FrameInfoSt frameInfo;
         frameInfo.frameNumber   = atoi(frame.c_str());
         frameInfo.frameDuration = atoi(duration.c_str());
+        frameInfo.frameLoop     = (bool) atoi(loop.c_str()) > 0; 
+
+        fprintf(stderr,"AnimSeq-> FrameNumber: [%d] FrameDuration: [%d] FrameLoop: [%d]\n",
+                frameInfo.frameNumber, frameInfo.frameDuration, (int)frameInfo.frameLoop);
 
         tmp_frameInfo.push_back(frameInfo);
       }
@@ -79,6 +80,7 @@ void AnimSequence::loadSequences(const char * def_file)
     else
       break;
   }
+  fprintf(stderr,"\n");
   fclose(fp);
 
   if (anim_seqs.size() == 0)
@@ -86,8 +88,6 @@ void AnimSequence::loadSequences(const char * def_file)
     fprintf(stderr, "ERRO Char Def File: [%s] format error (no animation desc)\n", def_file);
     exit(-1); 
   }
-
-  //curAnimFrameDuration = getCurrFrameDuration();
 }
 
 void AnimSequence::loadSprites(const char * seqFile)
@@ -158,9 +158,7 @@ void AnimSequence::loadSprites(const char * seqFile)
   }
 
   utilXSize[1]=utilXSize[1]-utilXSize[0];
-  //fprintf(stderr,"anim sequence[%s]\nInitX[%d] LenX[%d]\n", seqFile, utilXSize[0], utilXSize[1]);
 
-  //int x = 0;
   for (unsigned int i = 0, x = 0; i < framesLen.size(); i++)
   {
     seqFrames.push_back(create_sub_bitmap(seqBmp, x, 1, framesLen[i], seqBmp->h));

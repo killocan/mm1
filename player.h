@@ -24,7 +24,6 @@ class Player : public Character
     virtual bool collisionStair(int x, int y, int &tilecoordx, int &tilecoordy, int &tiletype, bool grabing = false);
 
     virtual bool checkStair();
-    //virtual bool handleAnimation(); // Avoid animation when over stair.
     virtual bool handleAnimation(bool * bAnimationEnded = NULL);
     virtual void checkOnCamera(); // megaman never leaves the camera.
     virtual void hit(mm_weapons::weapon_st * pWeapon);

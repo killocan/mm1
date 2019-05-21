@@ -23,6 +23,7 @@ class AnimSequence
     {
       int frameNumber;
       int frameDuration;
+	  bool frameLoop;
     };
 
     AnimSequence(const char * seqFile, bool keepCopy = false);

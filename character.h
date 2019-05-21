@@ -118,6 +118,8 @@ class Character
     Stage        * cur_stage;
     AnimSequence * spriteSheet;
     std::vector<std::vector<AnimSequence::FrameInfoSt> > anim_seqs;
+    bool animationFirstPass; // True every first iteration of a animation, false otherwise.
+
 
     int type; // So i can guess subclass without RTI.
     // Collision x,y

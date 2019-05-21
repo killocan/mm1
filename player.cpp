@@ -491,14 +491,15 @@ void Player::normalLogic()
       else 
         x -= velx;
 
-  velx += accelx;
-  if (velx >= mm_player_defs::VELMOVING) velx = mm_player_defs::VELMOVING;
-  else if (velx <= 0.0f) velx = 0.0f;
+      velx += accelx;
+      if (velx >= mm_player_defs::VELMOVING) velx = mm_player_defs::VELMOVING;
+      else if (velx <= 0.0f) velx = 0.0f;
     }
   }
-else
-{
-velx=accelx=0.0f;}
+  else
+  {
+    velx = accelx = 0.0f;
+  }
 
   if (cur_stage->horz_scroll == false)
   {
@@ -638,7 +639,6 @@ velx=accelx=0.0f;}
       if (isGettingOut == false)
         setAnimSeq(Player::UPDOWNSTAIR);
     }
-
 
     //TODO: Should group those two(up,down) under firing = false hehehe...
     if (firing==false && holdingGutsmanRock==false)
