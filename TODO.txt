@@ -3,7 +3,7 @@
   evitando que o mm fique preso.
 X Corrida do megaman aceleracao gradual. (Ajustar corrida para comecar com 1 px depois passar para 3 quando ja correndo.)
   -- Mudar sequencia de animacao para ter frames que nao fazem parte do loop.
-- mudar struct do mapa, chao de gelo e agua, acelerecao correpondente para fase do iceman
+X mudar struct do mapa, chao de gelo e agua, acelerecao correpondente para fase do iceman
 - Waypoints
 - Fases do cutman, bombman, electman, iceman - IA dos chefes
 - Fases do DR WILLY (gutsman gun muda numa fase do castelo)

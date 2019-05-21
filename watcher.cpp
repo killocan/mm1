@@ -282,6 +282,7 @@ Watcher::Watcher(const Stage & stage, int x, int y)
   fragments[1] = cur_stage->createCharacter(mm_tile_actions::WATCHER_FRAGMENT, x,y, 0,0);
   fragments[2] = cur_stage->createCharacter(mm_tile_actions::WATCHER_FRAGMENT, x,y, 0,0);
 
+  // Incluir na lista normal, se n vai quebrar.
   TemporaryCharacterList::mm_tempCharacterLst.push_back(fragments[0]);
   TemporaryCharacterList::mm_tempCharacterLst.push_back(fragments[1]);
   TemporaryCharacterList::mm_tempCharacterLst.push_back(fragments[2]);
@@ -302,6 +303,7 @@ void Watcher::doLogic()
   // right left center -> up - down
   if (childAlive == false)
   {
+	// Usar a camera como referencia
     float yini = this->y;
 
     float xpos[] =
