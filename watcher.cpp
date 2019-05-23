@@ -282,10 +282,9 @@ Watcher::Watcher(const Stage & stage, int x, int y)
   fragments[1] = cur_stage->createCharacter(mm_tile_actions::WATCHER_FRAGMENT, x,y, 0,0);
   fragments[2] = cur_stage->createCharacter(mm_tile_actions::WATCHER_FRAGMENT, x,y, 0,0);
 
-  // Incluir na lista normal, se n vai quebrar.
-  TemporaryCharacterList::mm_tempCharacterLst.push_back(fragments[0]);
-  TemporaryCharacterList::mm_tempCharacterLst.push_back(fragments[1]);
-  TemporaryCharacterList::mm_tempCharacterLst.push_back(fragments[2]);
+  CurrentCharacterList::mm_characterLst->push_back(fragments[0]);
+  CurrentCharacterList::mm_characterLst->push_back(fragments[1]);
+  CurrentCharacterList::mm_characterLst->push_back(fragments[2]);
 
   childAlive = false;
   alive = false;
@@ -303,8 +302,8 @@ void Watcher::doLogic()
   // right left center -> up - down
   if (childAlive == false)
   {
-	// Usar a camera como referencia
-    float yini = this->y;
+    float yini = GlobalCamera::mm_camera->y;
+	float yend = GlobalCamera::mm_camera->y + GlobalCamera::mm_camera->h;
 
     float xpos[] =
     {
@@ -313,8 +312,8 @@ void Watcher::doLogic()
     };
     float ypos[] =
     {
-      yini+(2*mm_graphs_defs::TILE_SIZE), y+(6*mm_graphs_defs::TILE_SIZE), y+(12*mm_graphs_defs::TILE_SIZE), // DOWN 
-      yini-(2*mm_graphs_defs::TILE_SIZE), y-(6*mm_graphs_defs::TILE_SIZE), y-(12*mm_graphs_defs::TILE_SIZE)  // UP
+      yend+(2*mm_graphs_defs::TILE_SIZE), yend+(6*mm_graphs_defs::TILE_SIZE), yend+(12*mm_graphs_defs::TILE_SIZE), // DOWN 
+      yini-(2*mm_graphs_defs::TILE_SIZE), yini-(6*mm_graphs_defs::TILE_SIZE), yini-(12*mm_graphs_defs::TILE_SIZE)  // UP
     };
     float px = cur_stage->m_player->x;
     float *ptsx = px < x ? xpos : &xpos[3];

@@ -482,6 +482,8 @@ void StageManager::play()
 
           mm_weapons::updateWeapons(stage);
 
+          stage->checkForWaypoint(player);
+
           doStageSpecifics();
         }
 

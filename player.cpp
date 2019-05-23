@@ -62,6 +62,7 @@ Player::Player(const Stage & stage) : Character(stage, 0)
   this->holdingGutsmanRock = false;
   this->isStunned = false;
   this->lockmoves = false;
+  this->justLeaveStair = false;
 }
 
 void Player::reset()
@@ -109,6 +110,8 @@ void Player::reset()
 
   holdingGutsmanRock = false;
   isStunned = false;
+  
+  justLeaveStair = false;
 }
 
 void Player::forceAnimation()
@@ -599,6 +602,7 @@ void Player::normalLogic()
     else
     {
       if (velx > 0.0f) accelx = -.35f;
+
       //if (lockjump == false && grabstair == false)
       if (onground == true && grabstair == false)
       {
@@ -606,12 +610,16 @@ void Player::normalLogic()
         //This makes megaman kind of pose like it's starting to run after hit the ground,
         //the original game has this, but it's not almost not noticiable and i think 
         //it is a side effect of the original game control logic. keep turned off.
+        // curAnimSeq == Player::HITGROUND) //true) //fallRuning == 5)
         static int fallRuning = 0;
-        if (true) //fallRuning == 5)
+        if (curAnimSeq != Player::HITGROUND || fallRuning == 6)
         {
           fallRuning = 0;
           if (firing == false)
+		  {
             setAnimSeq(Player::STANDSTILL);
+			if (justLeaveStair) { animationFirstPass = false; justLeaveStair = false; }
+		  }
           else
           {
             if (handType())
@@ -647,7 +655,7 @@ void Player::normalLogic()
       {
         if(collisionStair(x+utilX, y, tilecoordx, tilecoordy, tiletype, true) == true)
         {
-          vely = 0;
+          vely = 0.0f;
 
           Character::handleAnimation(); // While on stairs auto animation is off
           grabstair = true;
@@ -662,14 +670,18 @@ void Player::normalLogic()
               if ((( ((int)y) % mm_graphs_defs::TILE_SIZE) < 4) ||
                   (cur_stage->tileActionUnnormalized(x+utilX, y+mm_graphs_defs::TILE_SIZE) != mm_tile_actions::TILE_STAIR_BEGIN))
               {
-                y-= 6;
+                y-= 6.0f;
                 y-= ((int)y)%mm_graphs_defs::TILE_SIZE;
                 y = (y / mm_graphs_defs::TILE_SIZE) * mm_graphs_defs::TILE_SIZE;
+				
                 isGettingOut = false;
                 onground  = true;
                 grabstair = false;
-                vely = 8.0f;
+				justLeaveStair = true;
+                
+				vely = 8.0f;
                 setAnimSeq(Player::STANDSTILL);
+				animationFirstPass = false;
               }
             }
             else
@@ -679,7 +691,7 @@ void Player::normalLogic()
           }
 
           x    = (tilecoordx * mm_graphs_defs::TILE_SIZE+1) - utilX;
-          y   -= 2;
+          y   -= 2.0f;
           isFacingDown  = true;
         }
       }
@@ -692,7 +704,7 @@ void Player::normalLogic()
           (( (int)(x+utilX+(isFacingRight?8:0)) % mm_graphs_defs::TILE_SIZE) < (mm_graphs_defs::TILE_SIZE/2))) ||
           (overstair == true && tiletype == 0))
         {
-          vely = 0;
+          vely = 0.0f;
 
           Character::handleAnimation(); // While on stairs auto animation is off
           grabstair    = true;
@@ -700,7 +712,7 @@ void Player::normalLogic()
 
           if (tiletype == mm_tile_actions::TILE_STAIR_BEGIN)
           {
-            y+=16;
+            y+=16.0f;
             if (isGettingIn == false)
             {
               isGettingIn  = true;
@@ -715,10 +727,11 @@ void Player::normalLogic()
           isFacingDown = true;
           collisionStair(x+utilX, y, tilecoordx, tilecoordy, tiletype, true);
           x = (tilecoordx * mm_graphs_defs::TILE_SIZE+1) - utilX;
-          y += 2;
+          y += 2.0f;
         }
         else if (grabstair == true)
         {
+          justLeaveStair = true;
           grabstair = false;
         }
       }
@@ -1195,7 +1208,9 @@ void Player::touchGround()
   if (lockmoves == false)
     setAnimSeq(Player::RUNNING);
   else
-    setAnimSeq(Player::STANDSTILL);
+  {
+    setAnimSeq(Player::HITGROUND);
+  }
 
   if (onPlatform == false)
   {

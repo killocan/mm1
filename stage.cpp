@@ -228,7 +228,12 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
       if (map[y][x].action == mm_tile_actions::TILE_MEGAMAN_WAYPOINT)
       {
         int waypointX = x*mm_graphs_defs::TILE_SIZE+map[y][x].xOffset;
-        waypoint_t waypoint = {waypointX, y*mm_graphs_defs::TILE_SIZE};
+		
+		int ydesl = y / mm_graphs_defs::TILES_Y;
+        int xdesl = x / mm_graphs_defs::TILES_X;
+        int sector = ydesl*(max_x/mm_graphs_defs::TILES_X)+xdesl;
+		
+        waypoint_t waypoint = {waypointX, y*mm_graphs_defs::TILE_SIZE, sector};
         waypoints.push_back(waypoint);
       }
       else if (map[y][x].action == mm_tile_actions::TILE_MAP_BEGIN)
@@ -405,6 +410,9 @@ int Stage::calculateHeight(float x, float w, float y)
   int tilecoordx, tilecoordy;
 
   int i = 0;
+  
+  //for (;genericColHor(x, w, y, tilecoordx, tilecoordy, true) == false;++i,y+=1.0f);
+  
   for (;;++i)
   {
     if (genericColHor(x, w, y, tilecoordx, tilecoordy, true) == false)
@@ -692,6 +700,22 @@ bool Stage::checkForBoss(int x, int y)
   int sector = ydesl*(max_x/mm_graphs_defs::TILES_X)+xdesl;
 
   return (sectors[sector].has_boss);
+}
+
+void Stage::checkForWaypoint(Player * player)
+{
+  int yd = ((int)player->y)/mm_graphs_defs::TILE_SIZE;
+  int xd = ((int)player->x)/mm_graphs_defs::TILE_SIZE;
+  int ydesl =  yd / mm_graphs_defs::TILES_Y;
+  int xdesl =  xd / mm_graphs_defs::TILES_X;
+  int sector = ydesl*(stage->max_x / mm_graphs_defs::TILES_X) + xdesl;
+  for (int i = 0; i < waypoints.size(); i++)
+  {
+	if (waypoints[i].sector == sector)
+	{
+	  cur_waypoint = MAX(cur_waypoint, i);
+	}
+  }
 }
 
 bool Stage::cameraSectorHasFgTiles(Camera & camera, Player & player)

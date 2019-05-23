@@ -56,6 +56,7 @@ class Stage
 
     void defineCameraSector(int x, int y, bool state);
     bool checkForBoss(int x, int y);
+	void checkForWaypoint(Player * player);
 
     bool has_fg_tiles;
     int max_x, max_y;
@@ -95,6 +96,7 @@ class Stage
     struct waypoint_t
     {
       int x,y;
+	  int sector;
     };
     std::vector<waypoint_t> waypoints;
 

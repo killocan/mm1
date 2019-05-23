@@ -67,6 +67,7 @@ class Player : public Character
           STANDSTILLROCK,
           JUMPINGROCK,
           STUNNED,
+		  HITGROUND,
          };
 
     std::map<mm_weapons::WEAPONS, int> weapons; // WEAPON, ENERGY LEVEL
@@ -92,4 +93,5 @@ class Player : public Character
     int dieStep;
     //boss stuff
     bool lockmoves;
+	bool justLeaveStair;
 };
