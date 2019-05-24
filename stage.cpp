@@ -228,11 +228,11 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
       if (map[y][x].action == mm_tile_actions::TILE_MEGAMAN_WAYPOINT)
       {
         int waypointX = x*mm_graphs_defs::TILE_SIZE+map[y][x].xOffset;
-		
-		int ydesl = y / mm_graphs_defs::TILES_Y;
+        
+        int ydesl = y / mm_graphs_defs::TILES_Y;
         int xdesl = x / mm_graphs_defs::TILES_X;
         int sector = ydesl*(max_x/mm_graphs_defs::TILES_X)+xdesl;
-		
+        
         waypoint_t waypoint = {waypointX, y*mm_graphs_defs::TILE_SIZE, sector};
         waypoints.push_back(waypoint);
       }
@@ -708,13 +708,13 @@ void Stage::checkForWaypoint(Player * player)
   int xd = ((int)player->x)/mm_graphs_defs::TILE_SIZE;
   int ydesl =  yd / mm_graphs_defs::TILES_Y;
   int xdesl =  xd / mm_graphs_defs::TILES_X;
-  int sector = ydesl*(stage->max_x / mm_graphs_defs::TILES_X) + xdesl;
-  for (int i = 0; i < waypoints.size(); i++)
+  int sector = ydesl*(this->max_x / mm_graphs_defs::TILES_X) + xdesl;
+  for (unsigned i = 0; i < waypoints.size(); i++)
   {
-	if (waypoints[i].sector == sector)
-	{
-	  cur_waypoint = MAX(cur_waypoint, i);
-	}
+    if (waypoints[i].sector == sector)
+    {
+      cur_waypoint = MAX(cur_waypoint, i);
+    }
   }
 }
 
@@ -844,8 +844,8 @@ bool Stage::doCamera(Camera & camera)
     if (dir == 1 && cameraForbiden(m_player->x, m_player->y + m_player->h))
     {
       scrollDelay = 7;
-	    horz_scroll = false;
-	    scroll_count = (mm_graphs_defs::TILES_Y * 2);
+        horz_scroll = false;
+        scroll_count = (mm_graphs_defs::TILES_Y * 2);
     }
 
     if (scrollDelay == 7)
@@ -1181,11 +1181,11 @@ Character * Stage::createCharacter(int TYPE, int x, int y, int vx, int vy, void 
       cur_character = new DisappearingBlock::DisappearingBlockFragment(*this, x, y, param);
     }
     break;
-	  case mm_tile_actions::MAGNET_BEAM:
-	  {
-		  cur_character = new MagneticBeam(*this, x, y);
-	  }
-	  break;
+      case mm_tile_actions::MAGNET_BEAM:
+      {
+          cur_character = new MagneticBeam(*this, x, y);
+      }
+      break;
     case mm_tile_actions::GUTSMAN_GUN:
     {
       cur_character = new GutsmanGun(*this, x, y, param);

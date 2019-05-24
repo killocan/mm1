@@ -303,7 +303,7 @@ void Watcher::doLogic()
   if (childAlive == false)
   {
     float yini = GlobalCamera::mm_camera->y;
-	float yend = GlobalCamera::mm_camera->y + GlobalCamera::mm_camera->h;
+    float yend = GlobalCamera::mm_camera->y + GlobalCamera::mm_camera->h;
 
     float xpos[] =
     {

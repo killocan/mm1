@@ -222,8 +222,8 @@ void Beak::adjustToWall(int x_map, int y_map)
       }
 
 #ifdef DEBUG
-	  std::cerr << "FINAL Beak: x=[" << x << " utilX=[" << utilX << "] y=[" << y << "] vely=[" << vely << "] h=[" << h <<"]"
-		        << std::endl;
+      std::cerr << "FINAL Beak: x=[" << x << " utilX=[" << utilX << "] y=[" << y << "] vely=[" << vely << "] h=[" << h <<"]"
+                << std::endl;
 #endif
       break;
     }

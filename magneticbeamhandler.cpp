@@ -41,7 +41,7 @@ int MagneticBeamHandler::addBeam(MagneticBeam * b)
   if (c == 0)
   {
     curStage->m_player->weapons[mm_weapons::W_PLATFORM_CREATOR]--;
-  	Sounds::mm_sounds->play(LIGHTNING);
+    Sounds::mm_sounds->play(LIGHTNING);
   }
 
   beams.push_back(b);

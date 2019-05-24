@@ -34,7 +34,7 @@ class Stage
 
     void draw(BITMAP * bmp, bool hasFg, bool bg_only=true, bool bg=true);
     void scrollForbid(Camera & camera);
-	  bool cameraForbiden(int x, int y);
+      bool cameraForbiden(int x, int y);
     bool doCamera(Camera & camera);
     bool cameraSectorHasFgTiles(Camera & camera, Player & player);
 
@@ -56,7 +56,7 @@ class Stage
 
     void defineCameraSector(int x, int y, bool state);
     bool checkForBoss(int x, int y);
-	void checkForWaypoint(Player * player);
+    void checkForWaypoint(Player * player);
 
     bool has_fg_tiles;
     int max_x, max_y;
@@ -96,7 +96,7 @@ class Stage
     struct waypoint_t
     {
       int x,y;
-	  int sector;
+      int sector;
     };
     std::vector<waypoint_t> waypoints;
 

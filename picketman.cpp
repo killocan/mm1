@@ -119,23 +119,23 @@ void PicketMan::doLogic()
   {
     case PicketMan::APPEARING:
     {
-	  int tilecoordx, tilecoordy, tiletype;
+      int tilecoordx, tilecoordy, tiletype;
       if (onground == false)
       {
-	    if (isFacingRight == true)
-		{
-		  if (collisionVer(x  + velx + w, y, tilecoordx, tilecoordy, tiletype) == false)
-		  {
-		    x += velx;
-		  }
-		}
-		else
-		{
-		  if (collisionVer(x - velx, y, tilecoordx, tilecoordy, tiletype) == false)
-		  {
-		    x -= velx;
-		  }
-		}
+        if (isFacingRight == true)
+        {
+          if (collisionVer(x  + velx + w, y, tilecoordx, tilecoordy, tiletype) == false)
+          {
+            x += velx;
+          }
+        }
+        else
+        {
+          if (collisionVer(x - velx, y, tilecoordx, tilecoordy, tiletype) == false)
+          {
+            x -= velx;
+          }
+        }
       }
       else
       {

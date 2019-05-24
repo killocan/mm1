@@ -487,13 +487,13 @@ void convert_map(char * stage)
   {
     converted_map[i] = (NEW_MAP_INFO*) malloc(sizeof(NEW_MAP_INFO) * max_x);
     for (int j = 0; j < max_x; j++)
-	{
-	  converted_map[i][j].tile_number  = map[i][j].tile_number;
-	  converted_map[i][j].action       = map[i][j].action;
-	  converted_map[i][j].xOffset      = map[i][j].xOffset;
-	  converted_map[i][j].isForeground = map[i][j].isForeground;
-	  converted_map[i][j].isIce        = false;
-	}
+    {
+      converted_map[i][j].tile_number  = map[i][j].tile_number;
+      converted_map[i][j].action       = map[i][j].action;
+      converted_map[i][j].xOffset      = map[i][j].xOffset;
+      converted_map[i][j].isForeground = map[i][j].isForeground;
+      converted_map[i][j].isIce        = false;
+    }
   }
   
   std::string stageOut = stage;
@@ -529,7 +529,7 @@ int main(int argc, char *argv[])
   if (convert.compare("convert") == 0)
   {
     convert_map(argv[2]);
-	exit(0);
+    exit(0);
   }
 
   set_color_depth(32);

@@ -43,7 +43,7 @@ class Player : public Character
 
     bool lockJumpAccel;
     bool fireKeyPressed;
-	float accelx;
+    float accelx;
 
     enum {
           SPAWNING, 
@@ -67,7 +67,7 @@ class Player : public Character
           STANDSTILLROCK,
           JUMPINGROCK,
           STUNNED,
-		  HITGROUND,
+          HITGROUND,
          };
 
     std::map<mm_weapons::WEAPONS, int> weapons; // WEAPON, ENERGY LEVEL
@@ -93,5 +93,5 @@ class Player : public Character
     int dieStep;
     //boss stuff
     bool lockmoves;
-	bool justLeaveStair;
+    bool justLeaveStair;
 };

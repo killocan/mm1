@@ -203,9 +203,9 @@ void Player::hit(Character * pCharacter)
   if (pCharacter->type == mm_spritefiles::MOVING_PLATFORM_SPRITES ||
       pCharacter->type == mm_spritefiles::FOOTHOLDER_SPRITES ||
       pCharacter->type == mm_spritefiles::TIMER_PLATFORM_SPRITES ||
-	    pCharacter->type == mm_spritefiles::WEAPONS_MAGNETIC)
+        pCharacter->type == mm_spritefiles::WEAPONS_MAGNETIC)
   {
-	  float diff = 15.0f;
+      float diff = 15.0f;
     if (pCharacter->type == mm_spritefiles::WEAPONS_MAGNETIC)
       diff = pCharacter->h*2.0f;
 
@@ -616,10 +616,10 @@ void Player::normalLogic()
         {
           fallRuning = 0;
           if (firing == false)
-		  {
+          {
             setAnimSeq(Player::STANDSTILL);
-			if (justLeaveStair) { animationFirstPass = false; justLeaveStair = false; }
-		  }
+            if (justLeaveStair) { animationFirstPass = false; justLeaveStair = false; }
+          }
           else
           {
             if (handType())
@@ -673,15 +673,15 @@ void Player::normalLogic()
                 y-= 6.0f;
                 y-= ((int)y)%mm_graphs_defs::TILE_SIZE;
                 y = (y / mm_graphs_defs::TILE_SIZE) * mm_graphs_defs::TILE_SIZE;
-				
+                
                 isGettingOut = false;
                 onground  = true;
                 grabstair = false;
-				justLeaveStair = true;
+                justLeaveStair = true;
                 
-				vely = 8.0f;
+                vely = 8.0f;
                 setAnimSeq(Player::STANDSTILL);
-				animationFirstPass = false;
+                animationFirstPass = false;
               }
             }
             else
@@ -741,17 +741,17 @@ void Player::normalLogic()
     if (key[KEY_SPACE])
     {
       if (grabstair == true)
-	    {
-		    if (!key[KEY_UP] && !key[KEY_DOWN])
-		    {
-		      grabstair = false;
-		      lockjump = true;
-		      spacePressed = true;
+        {
+            if (!key[KEY_UP] && !key[KEY_DOWN])
+            {
+              grabstair = false;
+              lockjump = true;
+              spacePressed = true;
           lockJumpAccel = true;
           if (onground == true) spacePressed = false;
 
-		      goto letgo;
-		    }
+              goto letgo;
+            }
       }
 
       isGettingOut = isGettingIn = false;
@@ -846,7 +846,7 @@ void Player::normalLogic()
     }
     else if ((!key[KEY_A]) && (fireKeyPressed == true))
     {
-	  MagneticBeamHandler::instance()->newBeams();
+      MagneticBeamHandler::instance()->newBeams();
       fireKeyPressed = false;
     }
   }
@@ -1117,13 +1117,13 @@ void Player::fire()
     break;
     case mm_weapons::W_PLATFORM_CREATOR:
     {
-	  if (weapons[mm_weapons::W_PLATFORM_CREATOR] > 0)
-  	  {
-		  mm_weapons::createMagnetBeam(this);
+      if (weapons[mm_weapons::W_PLATFORM_CREATOR] > 0)
+      {
+          mm_weapons::createMagnetBeam(this);
 
-  		  firing = true;
-		  lastShot = Clock::clockTicks;
-	  }
+          firing = true;
+          lastShot = Clock::clockTicks;
+      }
     }
     break;
     default:

@@ -348,10 +348,10 @@ void map_draw(BITMAP * bmp, const camera_t & camera, bool bg_only=true, bool bg=
         y = i * TILE_SIZE - map_yoff;
 
         tile_draw(bmp, stage.map[mapy + i][mapx + j].tile_number, x, y);
-		if (stage.map[mapy + i][mapx + j].action == 1)
+        if (stage.map[mapy + i][mapx + j].action == 1)
           rect(bmp, x,y, x+TILE_SIZE, y+TILE_SIZE, makecol(255,0,0));
-		if (stage.map[mapy + i][mapx + j].isIce)
-		  rect(bmp, x+2,y+2, x+TILE_SIZE-1, y+TILE_SIZE-1, makecol(0,0,255));
+        if (stage.map[mapy + i][mapx + j].isIce)
+          rect(bmp, x+2,y+2, x+TILE_SIZE-1, y+TILE_SIZE-1, makecol(0,0,255));
       }
     }
   }
@@ -370,11 +370,11 @@ void map_draw(BITMAP * bmp, const camera_t & camera, bool bg_only=true, bool bg=
 
         int tilenumber = stage.map[mapy + i][mapx + j].tile_number;
         masked_blit(tiles.tile_img[tilenumber], bmp, 0,0, x,y, TILE_SIZE,TILE_SIZE);
-		
-		if (stage.map[mapy + i][mapx + j].action == 1)
+        
+        if (stage.map[mapy + i][mapx + j].action == 1)
           rect(bmp, x,y, x+TILE_SIZE, y+TILE_SIZE, makecol(255,0,0));
-		if (stage.map[mapy + i][mapx + j].isIce)
-		  rect(bmp, x+2,y+2, x+TILE_SIZE-1, y+TILE_SIZE-1, makecol(0,0,255));
+        if (stage.map[mapy + i][mapx + j].isIce)
+          rect(bmp, x+2,y+2, x+TILE_SIZE-1, y+TILE_SIZE-1, makecol(0,0,255));
       }
     }
   }
@@ -735,7 +735,7 @@ int main(int argc, char *argv[])
       vsync();
       blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
     //}
-	/*
+    /*
     else
     {
       static int eq_x=-4, eq_y=4;

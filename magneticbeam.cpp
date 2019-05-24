@@ -75,17 +75,17 @@ void MagneticBeam::doLogic()
 
   if (commited && ((Clock::clockTicks - lifetime) > 220))
   {
-	  this->alive = false;
+      this->alive = false;
   }
 
   if (cur_stage->m_player->fireKeyPressed && !commited)
   {
-	  calculateXY();
+      calculateXY();
   }
   else if (commited == false)
   {
     MagneticBeamHandler::instance()->commit();
-	  if (!cur_stage->m_player->fireKeyPressed) MagneticBeamHandler::instance()->newBeams();
+      if (!cur_stage->m_player->fireKeyPressed) MagneticBeamHandler::instance()->newBeams();
   }
 
   int ta1 = cur_stage->tileActionUnnormalized(int(x) + 1.0f, int(y) + 1.0f);
@@ -94,7 +94,7 @@ void MagneticBeam::doLogic()
   {
     int xpos = int(this->x) & 0x1F;
     int offset = ta2 == mm_tile_actions::TILE_SOLID ? -xpos : 0x20-xpos;
-	  MagneticBeamHandler::instance()->commit(true, offset);
+      MagneticBeamHandler::instance()->commit(true, offset);
   }
 }
 
@@ -141,5 +141,5 @@ void MagneticBeam::calculateXY()
   if (cur_stage->m_player->isFacingRight)
     this->x += this->w * (this->pos - 1);
   else
-	this->x -= this->w * (this->pos - 1);
+    this->x -= this->w * (this->pos - 1);
 }

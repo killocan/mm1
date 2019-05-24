@@ -921,7 +921,7 @@ void mm_weapons::createFireStorm(Character * character, int x, int y, float vx, 
 void mm_weapons::createMagnetBeam(Player *player)
 {
   if (Clock::clockTicks - MagneticBeamHandler::instance()->lastInsert < 5)
-	return;
+    return;
 
   float x, y;
 
