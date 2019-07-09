@@ -23,6 +23,7 @@ class Stage
     void createEnemies(std::vector<Character *> & characters_vec);
     Character * createCharacter(int TYPE, int x, int y, int vx = 0, int vy = 0, void * param = NULL);
 
+    bool iceTile(int x, int y) const;
     unsigned char tileAction(int x, int y) const;
     unsigned char tileNumber(int x, int y) const;
 
@@ -34,7 +35,7 @@ class Stage
 
     void draw(BITMAP * bmp, bool hasFg, bool bg_only=true, bool bg=true);
     void scrollForbid(Camera & camera);
-      bool cameraForbiden(int x, int y);
+    bool cameraForbiden(int x, int y);
     bool doCamera(Camera & camera);
     bool cameraSectorHasFgTiles(Camera & camera, Player & player);
 
@@ -82,6 +83,7 @@ class Stage
       unsigned char action;
       int xOffset;
       bool isForeground;
+      bool isIce;
     };
     MAP_INFO ** map;
 
@@ -97,8 +99,10 @@ class Stage
     {
       int x,y;
       int sector;
+	  bool used;
     };
-    std::vector<waypoint_t> waypoints;
+    //std::vector<waypoint_t> waypoints;
+	std::map<int, waypoint_t> waypoints;
 
     struct tiles_t
     {
@@ -111,6 +115,7 @@ class Stage
 
     int default_tile;
 
+    int firstCameraSector;
     int cur_waypoint;
 
     bool reach_max_x;
@@ -122,4 +127,5 @@ class Stage
     void loadTiles(const std::string & stage_file);
     int load(const std::string & stage_path, Camera & camera, Player ** player);
     int unload();
+	int calcSector(int x, int y);
 };

@@ -411,7 +411,16 @@ void handle_click(int x, int y, int button)
       else
       {
         map[y][x].isForeground = false;
-      }        
+      }
+	  
+	  if (key[KEY_L])
+	  {
+		map[y][x].isIce = true;
+	  }
+	  else
+	  {
+		map[y][x].isIce = false;
+	  }
     }
     break;
   }

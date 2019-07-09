@@ -99,6 +99,14 @@ Stage::~Stage()
   unload();
 }
 
+bool Stage::iceTile(int x, int y) const
+{
+  if (x < 0 || y < 0) return false;
+  else if (x >= max_x || y >= max_y) return false;
+
+  return map[y][x].onIce;
+}
+
 unsigned char Stage::tileAction(int x, int y) const
 {
   if (x < 0 || y < 0) return mm_tile_actions::TILE_VOID;
@@ -173,8 +181,11 @@ int Stage::unload()
 
 void Stage::setWaypoint(Player * player)
 {
+  cur_waypoint = firstCameraSector;
+
   player->x = waypoints[cur_waypoint].x;
   player->y = waypoints[cur_waypoint].y;
+  waypoints[cur_waypoint].used = true;
   scroll_count = 0;
 }
 
@@ -185,6 +196,15 @@ void Stage::defineCameraSector(int x, int y, bool state)
   int sector = ydesl*(max_x/mm_graphs_defs::TILES_X)+xdesl;
 
   sectors[sector].scroll_forbid = state;
+}
+
+int Stage::calcSector(int x, int y)
+{
+    int ydesl = y / mm_graphs_defs::TILES_Y;
+    int xdesl = x / mm_graphs_defs::TILES_X;
+    int sector = ydesl*(max_x/mm_graphs_defs::TILES_X)+xdesl;
+
+    return sector;
 }
 
 #define TEST(r, c) if (r != (size_t)c){fprintf(stderr,"READ ERROR! Stage file corrupted. Line[%d]\n", __LINE__);}
@@ -228,43 +248,40 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
       if (map[y][x].action == mm_tile_actions::TILE_MEGAMAN_WAYPOINT)
       {
         int waypointX = x*mm_graphs_defs::TILE_SIZE+map[y][x].xOffset;
+
+        int sector = calcSector(x,y);
         
-        int ydesl = y / mm_graphs_defs::TILES_Y;
-        int xdesl = x / mm_graphs_defs::TILES_X;
-        int sector = ydesl*(max_x/mm_graphs_defs::TILES_X)+xdesl;
-        
-        waypoint_t waypoint = {waypointX, y*mm_graphs_defs::TILE_SIZE, sector};
-        waypoints.push_back(waypoint);
+        waypoint_t waypoint = {waypointX, y*mm_graphs_defs::TILE_SIZE, sector, false};
+        //waypoints.push_back(waypoint);
+		waypoints[sector] = waypoint;
       }
       else if (map[y][x].action == mm_tile_actions::TILE_MAP_BEGIN)
       {
         camera.x = x*mm_graphs_defs::TILE_SIZE;
         camera.y = y*mm_graphs_defs::TILE_SIZE;
+		
+        int sector = calcSector(x,y);
+		
+		firstCameraSector = sector;
 #ifdef DEBUG
         fprintf(stderr,"INITIAL CAMERA Y = [%d] X [%d]\n", camera.y, camera.x);
 #endif
       }
       else if (map[y][x].action == mm_tile_actions::TILE_SCROLL_LIMIT)
       {
-        int ydesl = y / mm_graphs_defs::TILES_Y;
-        int xdesl = x / mm_graphs_defs::TILES_X;
-        int sector = ydesl*(max_x/mm_graphs_defs::TILES_X)+xdesl;
+        int sector = calcSector(x,y);
 
         sectors[sector].scroll_forbid = true;
       }
       else if (map[y][x].action == mm_tile_actions::TILE_BOSS)
       {
-        int ydesl = y / mm_graphs_defs::TILES_Y;
-        int xdesl = x / mm_graphs_defs::TILES_X;
-        int sector = ydesl*(max_x/mm_graphs_defs::TILES_X)+xdesl;
+        int sector = calcSector(x,y);
 
         sectors[sector].has_boss = true;
       }
       else if (map[y][x].isForeground == true)
       {
-        int ydesl = y / mm_graphs_defs::TILES_Y;
-        int xdesl = x / mm_graphs_defs::TILES_X;
-        int sector = ydesl*(max_x/mm_graphs_defs::TILES_X)+xdesl;
+        int sector = calcSector(x,y);
 
         sectors[sector].has_fg_tiles = true;
         this->has_fg_tiles = true;
@@ -351,8 +368,14 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
 
   *player = new Player(*this);
   Player * cur_player = m_player = *player;
+  
+  setWaypoint(player);
+  /*
+  cur_waypoint = firstCameraSector;
   cur_player->x = waypoints[cur_waypoint].x;
   cur_player->y = waypoints[cur_waypoint].y;
+  waypoints[cur_waypoint].used = true;
+  */
   cur_player->old_x = cur_player->x;
   cur_player->old_y = cur_player->y;
 
@@ -711,9 +734,10 @@ void Stage::checkForWaypoint(Player * player)
   int sector = ydesl*(this->max_x / mm_graphs_defs::TILES_X) + xdesl;
   for (unsigned i = 0; i < waypoints.size(); i++)
   {
-    if (waypoints[i].sector == sector)
+    if (waypoints[i].sector == sector && waypoints[i].used == false)
     {
-      cur_waypoint = MAX(cur_waypoint, i);
+      cur_waypoint = i;
+	  break;
     }
   }
 }

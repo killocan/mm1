@@ -285,6 +285,7 @@ static void tvmode(BITMAP * bmp)
       bmp_write32(pxw+x, color);
 
       ++maskcounter;
+	  //maskcounter = maskcounter % 3;
       if (maskcounter == 3) maskcounter = 0;
     }
   }

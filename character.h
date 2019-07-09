@@ -125,6 +125,7 @@ class Character
 
     bool animationFirstPass; // True every first iteration of a animation, false otherwise.
 
+	bool onIce;
   private:
     void loadAnimSeqs(int TYPE);
 };

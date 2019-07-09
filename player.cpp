@@ -63,6 +63,7 @@ Player::Player(const Stage & stage) : Character(stage, 0)
   this->isStunned = false;
   this->lockmoves = false;
   this->justLeaveStair = false;
+  this->onIce = false;
 }
 
 void Player::reset()
@@ -112,6 +113,7 @@ void Player::reset()
   isStunned = false;
   
   justLeaveStair = false;
+  onIce = false;
 }
 
 void Player::forceAnimation()
@@ -601,7 +603,7 @@ void Player::normalLogic()
     }
     else
     {
-      if (velx > 0.0f) accelx = -.35f;
+      if (velx > 0.0f) accelx = onIce ? -.1f : -.35f;
 
       //if (lockjump == false && grabstair == false)
       if (onground == true && grabstair == false)
@@ -741,17 +743,17 @@ void Player::normalLogic()
     if (key[KEY_SPACE])
     {
       if (grabstair == true)
+      {
+        if (!key[KEY_UP] && !key[KEY_DOWN])
         {
-            if (!key[KEY_UP] && !key[KEY_DOWN])
-            {
-              grabstair = false;
-              lockjump = true;
-              spacePressed = true;
+          grabstair = false;
+          lockjump = true;
+          spacePressed = true;
           lockJumpAccel = true;
           if (onground == true) spacePressed = false;
 
-              goto letgo;
-            }
+          goto letgo;
+        }
       }
 
       isGettingOut = isGettingIn = false;
@@ -796,6 +798,7 @@ void Player::normalLogic()
         }
 
         vely     = -8.0f;
+		onIce    = false;
         onground = false;
         lockjump = true; 
       }

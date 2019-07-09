@@ -50,7 +50,8 @@ Character::Character(const Stage & stage, int TYPE) :
   spriteSheet(NULL),
   type(TYPE),
   xcol(0), ycol(0),
-  animationFirstPass(true)
+  animationFirstPass(true),
+  onIce(false)
 {
   cur_stage = const_cast<Stage*> (&stage);
   loadAnimSeqs(TYPE);
@@ -92,7 +93,8 @@ Character::Character() :
   spriteSheet(NULL),
   type(-1),
   xcol(0), ycol(0),
-  animationFirstPass(true)
+  animationFirstPass(true),
+  onIce(false)
 {
 }
 
@@ -276,7 +278,10 @@ bool Character::collisionHor(int x, int y, int &tilecoordx, int &tilecoordy, boo
       {
         if((tiletype == mm_tile_actions::TILE_SOLID) || 
            (tiletype == mm_tile_actions::TILE_STAIR_BEGIN))
-          return true;
+           {
+             onIce = cur_stage->iceTile(tilecoordx, tilecoordy);
+             return true;
+		   }
       }
     }
 
@@ -284,6 +289,8 @@ bool Character::collisionHor(int x, int y, int &tilecoordx, int &tilecoordy, boo
     tilexpixels += mm_graphs_defs::TILE_SIZE;
   }
 
+  onIce = false;
+  
   return false;
 }
 
