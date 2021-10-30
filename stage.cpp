@@ -104,7 +104,7 @@ bool Stage::iceTile(int x, int y) const
   if (x < 0 || y < 0) return false;
   else if (x >= max_x || y >= max_y) return false;
 
-  return map[y][x].onIce;
+  return map[y][x].isIce;
 }
 
 unsigned char Stage::tileAction(int x, int y) const
@@ -369,7 +369,7 @@ int Stage::load(const std::string & stage_path, Camera & camera, Player ** playe
   *player = new Player(*this);
   Player * cur_player = m_player = *player;
   
-  setWaypoint(player);
+  setWaypoint(*player);
   /*
   cur_waypoint = firstCameraSector;
   cur_player->x = waypoints[cur_waypoint].x;
