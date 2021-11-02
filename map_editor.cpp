@@ -23,6 +23,7 @@
 #include <cstdio>
 #include <cmath>
 
+#include <string>
 #include <vector>
 
 //NES RES: 256x240 MY RES: 512x480
@@ -110,8 +111,6 @@ void map_save(char * filename)
 
 int map_load(FILE * fp)
 {
-  int i;
-
   fread(&max_x, sizeof(int), 1, fp);
   fread(&max_y, sizeof(int), 1, fp);
   fread(&default_tile, sizeof(unsigned char), 1, fp);
@@ -412,15 +411,15 @@ void handle_click(int x, int y, int button)
       {
         map[y][x].isForeground = false;
       }
-	  
-	  if (key[KEY_L])
-	  {
-		map[y][x].isIce = true;
-	  }
-	  else
-	  {
-		map[y][x].isIce = false;
-	  }
+/*	  
+      if (key[KEY_L])
+      {
+        map[y][x].isIce = true;
+      }
+      else
+      {
+        map[y][x].isIce = false;
+      }*/
     }
     break;
   }
@@ -504,6 +503,20 @@ void convert_map(char * stage)
       converted_map[i][j].isIce        = false;
     }
   }
+
+  printf("OLD STRUCT SIZE:\n");
+  printf("FIELD SUM = %lu\n", sizeof(map[0][0].tile_number)+
+                             sizeof(map[0][0].action)+
+                             sizeof(map[0][0].xOffset)+
+                             sizeof(map[0][0].isForeground));
+  printf("STRUCT SIZE = %lu\n", sizeof(MAP_INFO));
+  printf("\nNEW STRUCT SIZE:\n");
+  printf("FIELD SUM = %lu\n", sizeof(converted_map[0][0].tile_number)+
+                             sizeof(converted_map[0][0].action)+
+                             sizeof(converted_map[0][0].xOffset)+
+                             sizeof(converted_map[0][0].isForeground)+
+                             sizeof(converted_map[0][0].isIce));
+  printf("STRUCT SIZE = %lu\n", sizeof(NEW_MAP_INFO));
   
   std::string stageOut = stage;
   stageOut += ".new";
@@ -515,7 +528,7 @@ void convert_map(char * stage)
 
   for (int i = 0; i < max_y; i++)
   {
-    fwrite(&converted_map[i][0], sizeof(MAP_INFO), max_x, fp);
+    fwrite(&converted_map[i][0], sizeof(NEW_MAP_INFO), max_x, fp);
   }
   fclose(fp);
 }
