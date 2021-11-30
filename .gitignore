@@ -5,6 +5,7 @@ megaman
 map_viewer
 map_test
 map_editor
+map_convert
 mm1.iml
 create_frames_bitmap
 test_animation

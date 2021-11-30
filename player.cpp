@@ -547,9 +547,10 @@ void Player::normalLogic()
         //  if (curAnimSeq != Player::FIRINGSTILLHAND)
         //  {
             //x += velx;
-            if (accelx <= 0.1) accelx = .1f;
-            else if (accelx <= 1.0f) accelx += .1f;
-            else accelx = 1.0f;
+//        if (accelx < 0.1) accelx = 0.1f;
+//        else if (accelx <= 1.0f) accelx +=  onIce ? 0.0000001 : 0.1f;
+        if (accelx < 1.0f) accelx += onIce ? 0.005 : 0.1f;
+        else accelx = 1.0f;
         //  }
         //}
       }
@@ -592,9 +593,10 @@ void Player::normalLogic()
         //{
           //if (curAnimSeq != Player::FIRINGSTILLHAND)
           //{
-            if (accelx <= 0.1) accelx = .1f;
-            else if (accelx <= 1.0f) accelx += .1f;
-            else accelx = 1.0f;
+//        if (accelx < 0.1) accelx = 0.1f;
+//        else if (accelx <= 1.0f) accelx += onIce ? 0.0000001 : 0.1f;
+        if (accelx < 1.0f) accelx += onIce ? 0.005 : 0.1f;
+        else accelx = 1.0f;
             //x -= velx;
             //accelx = .5f;
           //}
@@ -603,7 +605,7 @@ void Player::normalLogic()
     }
     else
     {
-      if (velx > 0.0f) accelx = onIce ? -.1f : -.35f;
+      if (velx > 0.0f) accelx = onIce ? -.05f : -.35f;
 
       //if (lockjump == false && grabstair == false)
       if (onground == true && grabstair == false)
@@ -798,7 +800,7 @@ void Player::normalLogic()
         }
 
         vely     = -8.0f;
-		onIce    = false;
+        onIce    = false;
         onground = false;
         lockjump = true; 
       }

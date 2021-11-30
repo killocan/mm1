@@ -42,18 +42,10 @@ typedef struct
   unsigned char action;
   int xOffset;
   bool isForeground;
+  bool isIce;
 } MAP_INFO;
 
 MAP_INFO **map;
-
-typedef struct 
-{
-  unsigned char tile_number;
-  unsigned char action;
-  int xOffset;
-  bool isForeground;
-  bool isIce;
-} NEW_MAP_INFO;
 
 int x_desloc = 0;
 int cur_tile = 0;
@@ -187,6 +179,10 @@ void map_draw(BITMAP * bmp, int map_drawx, int map_drawy, bool draw_actions, boo
         if (map[mapy + i][mapx + j].isForeground)
         {
           textprintf_ex(bmp, font, x+24, y, color[2], color[1], "F");
+        }
+        else if (map[mapy + i][mapx + j].isIce)
+        {
+          textprintf_ex(bmp, font, x+24, y, makecol(20,20,230), color[1], "I");
         }
       }
     }
@@ -411,7 +407,6 @@ void handle_click(int x, int y, int button)
       {
         map[y][x].isForeground = false;
       }
-/*	  
       if (key[KEY_L])
       {
         map[y][x].isIce = true;
@@ -419,7 +414,7 @@ void handle_click(int x, int y, int button)
       else
       {
         map[y][x].isIce = false;
-      }*/
+      }
     }
     break;
   }
@@ -480,59 +475,6 @@ void draw_grid(BITMAP * bmp)
     hline(bmp, 0, i, SCREEN_W, color);
 }
 
-void convert_map(char * stage)
-{
-  FILE * fp = NULL;
-  if ((fp = fopen(stage, "rb")) != NULL)
-  {
-    map_load(fp);
-  }
-  
-  NEW_MAP_INFO ** converted_map;
-  converted_map = (NEW_MAP_INFO**) malloc(sizeof(NEW_MAP_INFO*) * max_y);
-
-  for(int i = 0; i < max_y; i++)
-  {
-    converted_map[i] = (NEW_MAP_INFO*) malloc(sizeof(NEW_MAP_INFO) * max_x);
-    for (int j = 0; j < max_x; j++)
-    {
-      converted_map[i][j].tile_number  = map[i][j].tile_number;
-      converted_map[i][j].action       = map[i][j].action;
-      converted_map[i][j].xOffset      = map[i][j].xOffset;
-      converted_map[i][j].isForeground = map[i][j].isForeground;
-      converted_map[i][j].isIce        = false;
-    }
-  }
-
-  printf("OLD STRUCT SIZE:\n");
-  printf("FIELD SUM = %lu\n", sizeof(map[0][0].tile_number)+
-                             sizeof(map[0][0].action)+
-                             sizeof(map[0][0].xOffset)+
-                             sizeof(map[0][0].isForeground));
-  printf("STRUCT SIZE = %lu\n", sizeof(MAP_INFO));
-  printf("\nNEW STRUCT SIZE:\n");
-  printf("FIELD SUM = %lu\n", sizeof(converted_map[0][0].tile_number)+
-                             sizeof(converted_map[0][0].action)+
-                             sizeof(converted_map[0][0].xOffset)+
-                             sizeof(converted_map[0][0].isForeground)+
-                             sizeof(converted_map[0][0].isIce));
-  printf("STRUCT SIZE = %lu\n", sizeof(NEW_MAP_INFO));
-  
-  std::string stageOut = stage;
-  stageOut += ".new";
-  fp = fopen(stageOut.c_str(), "wb+");
-
-  fwrite(&max_x, sizeof(int), 1, fp);
-  fwrite(&max_y, sizeof(int), 1, fp);
-  fwrite(&default_tile, sizeof(unsigned char), 1, fp);
-
-  for (int i = 0; i < max_y; i++)
-  {
-    fwrite(&converted_map[i][0], sizeof(NEW_MAP_INFO), max_x, fp);
-  }
-  fclose(fp);
-}
-
 int main(int argc, char *argv[])
 {
   BITMAP * buffer;
@@ -546,13 +488,6 @@ int main(int argc, char *argv[])
   install_timer();
   install_mouse();
   install_keyboard();
-
-  std::string convert = argv[1];
-  if (convert.compare("convert") == 0)
-  {
-    convert_map(argv[2]);
-    exit(0);
-  }
 
   set_color_depth(32);
   set_gfx_mode(GFX_AUTODETECT_WINDOWED, 1024, 768, 0, 0);

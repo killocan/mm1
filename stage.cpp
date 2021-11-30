@@ -581,6 +581,7 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
 
 #ifdef DEBUG
   int tile_action = 0;
+  int tile_ice    = 0;
 #endif
 
   if (hasFg == false)
@@ -596,45 +597,57 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
       {
 #ifdef DEBUG
         tile_action = (*(map_line)).action;
+        tile_ice = (*(map_line)).isIce;
 #endif
         tile_number = (*(map_line++)).tile_number;
         blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
 #ifdef DEBUG
         if (tile_action == mm_tile_actions::TILE_SOLID)
           rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(255,0,0));
+        if (tile_ice)
+          rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(55,55,255));
 #endif
         x += mm_graphs_defs::TILE_SIZE;
 
 #ifdef DEBUG
         tile_action = (*(map_line)).action;
+        tile_ice = (*(map_line)).isIce;
 #endif
         tile_number = (*(map_line++)).tile_number;
         blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
 #ifdef DEBUG
         if (tile_action == mm_tile_actions::TILE_SOLID)
           rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(255,0,0));
+        if (tile_ice)
+          rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(55,55,255));
 #endif
         x += mm_graphs_defs::TILE_SIZE;
 
 #ifdef DEBUG
         tile_action = (*(map_line)).action;
+        tile_ice = (*(map_line)).isIce;
 #endif
         tile_number = (*(map_line++)).tile_number;
         blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
 #ifdef DEBUG
         if (tile_action == mm_tile_actions::TILE_SOLID)
           rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(255,0,0));
+        if (tile_ice)
+          rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(55,55,255));
 #endif
         x += mm_graphs_defs::TILE_SIZE;
 
 #ifdef DEBUG
         tile_action = (*(map_line)).action;
+        tile_ice = (*(map_line)).isIce;
 #endif
         tile_number = (*(map_line++)).tile_number;
         blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
 #ifdef DEBUG
         if (tile_action == mm_tile_actions::TILE_SOLID)
           rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(255,0,0));
+        if (tile_ice)
+          rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(55,55,255));
 #endif
         x += mm_graphs_defs::TILE_SIZE;
       }
@@ -642,12 +655,15 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
       {
 #ifdef DEBUG
         tile_action = (*(map_line)).action;
+        tile_ice = (*(map_line)).isIce;
 #endif
         tile_number = (*(map_line++)).tile_number;
         blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
 #ifdef DEBUG
         if (tile_action == mm_tile_actions::TILE_SOLID)
           rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(255,0,0));
+        if (tile_ice)
+          rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(55,55,255));
 #endif
       }
 
@@ -667,12 +683,15 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
         {
 #ifdef DEBUG
           tile_action = (*(map_line)).action;
+          tile_ice = (*(map_line)).isIce;
 #endif
           tile_number = (*(map_line++)).tile_number;
           masked_blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
 #ifdef DEBUG
           if (tile_action == mm_tile_actions::TILE_SOLID)
             rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(255,0,0));
+          if (tile_ice)
+            rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(55,55,255));
 #endif
           x += mm_graphs_defs::TILE_SIZE;
         }
@@ -698,12 +717,15 @@ void Stage::draw(BITMAP * bmp, bool hasFg, bool bg_only, bool bg)
 
 #ifdef DEBUG
           tile_action = (*(map_line)).action;
+          tile_ice = (*(map_line)).isIce;
 #endif
           tile_number = (*(map_line++)).tile_number;
           masked_blit(tiles.tile_img[tile_number], bmp, 0,0, x,y, mm_graphs_defs::TILE_SIZE,mm_graphs_defs::TILE_SIZE);
 #ifdef DEBUG
           if (tile_action == mm_tile_actions::TILE_SOLID)
             rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(255,0,0));
+          if (tile_ice)
+            rectfill(bmp, x, y, x+mm_graphs_defs::TILE_SIZE, y+6, makecol(55,55,255));
 #endif
           x += mm_graphs_defs::TILE_SIZE;
         }
