@@ -183,12 +183,10 @@ void Character::doGravitation()
     }
     else
     {
-      //TODO: USAR PARA CORRIGIR BUG QUANDO COLIDE E TEM ESCADA LOGO ABAIXO
-      int current_height = h;
       // If outside map don't test collision, just pretend its all void out there :)
       float scrypos = (y+vely+h) - GlobalCamera::mm_camera->y;
       if((scrypos >= 0.0f) &&
-        ((collisionHor(x+utilX, y+vely+current_height, tilecoordx, tilecoordy, !overstair, tiletype)) || (onPlatform == true)))
+        ((collisionHor(x+utilX, y+vely+h, tilecoordx, tilecoordy, !overstair, tiletype)) || (onPlatform == true)))
       {
         if (onground == false)
         {

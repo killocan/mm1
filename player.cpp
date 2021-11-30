@@ -964,15 +964,16 @@ bool Player::collisionVer(int x, int yp, int &tilecoordx, int &tilecoordy, int &
   return false;
 }
 
-bool Player::collisionStair(int x, int y, int &tilecoordx, int &tilecoordy, int &tiletype, bool grabing)
+bool Player::collisionStair(int px, int py, int &tilecoordx, int &tilecoordy, int &tiletype, bool grabing)
 {
   int realFrameHeight = getFrameH();
-  y = (y + (h-realFrameHeight));
+  int highDiff = (h-realFrameHeight);
+  py += highDiff;
 
-  int tileypixels = y-(y%mm_graphs_defs::TILE_SIZE);
-  int testend     = y + realFrameHeight;//y + getFrameH();
+  int tileypixels = py-(py%mm_graphs_defs::TILE_SIZE);
+  int testend     = py + (realFrameHeight-highDiff);
 
-  tilecoordx = x + (utilXLen / 2.0f);
+  tilecoordx = px + (utilXLen / 2.0f);
   tilecoordx /= mm_graphs_defs::TILE_SIZE;
 
   tilecoordy = tileypixels/mm_graphs_defs::TILE_SIZE;

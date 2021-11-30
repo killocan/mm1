@@ -13,3 +13,4 @@ class Camera
     int old_x;
     int w, h;
 };
+
