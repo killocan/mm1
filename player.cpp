@@ -475,12 +475,6 @@ void Player::normalLogic()
   
   checkStair();
 
-/*
-  velx += accelx;
-  if (velx >= mm_player_defs::VELMOVING) velx = mm_player_defs::VELMOVING;
-  else if (velx <= 0.0f) velx = 0.0f;
-*/
-
   float coloffset = 0.0f;
   if (isFacingRight)
     coloffset = (x+utilX)+velx+utilXLen;
@@ -510,6 +504,8 @@ void Player::normalLogic()
   {
     if (key[KEY_RIGHT])
     {
+      if (isFacingRight == false) velx = accelx = 0.0f;
+
       isFacingRight = true;
 
       if (grabstair == false)
@@ -542,21 +538,14 @@ void Player::normalLogic()
           }
         }
 
-        //if(!collisionVer((x+utilX)+velx+utilXLen, y, tilecoordx, tilecoordy, tiletype))
-        //{
-        //  if (curAnimSeq != Player::FIRINGSTILLHAND)
-        //  {
-            //x += velx;
-//        if (accelx < 0.1) accelx = 0.1f;
-//        else if (accelx <= 1.0f) accelx +=  onIce ? 0.0000001 : 0.1f;
         if (accelx < 1.0f) accelx += onIce ? 0.005 : 0.1f;
         else accelx = 1.0f;
-        //  }
-        //}
       }
     }
     else if (key[KEY_LEFT] )
     {
+      if (isFacingRight == true) velx = accelx = 0.0f;
+
       isFacingRight = false;
 
       if (grabstair == false)
@@ -589,18 +578,8 @@ void Player::normalLogic()
           }
         }
 
-        //if(!collisionVer((x+utilX)-velx, y, tilecoordx, tilecoordy, tiletype))
-        //{
-          //if (curAnimSeq != Player::FIRINGSTILLHAND)
-          //{
-//        if (accelx < 0.1) accelx = 0.1f;
-//        else if (accelx <= 1.0f) accelx += onIce ? 0.0000001 : 0.1f;
         if (accelx < 1.0f) accelx += onIce ? 0.005 : 0.1f;
         else accelx = 1.0f;
-            //x -= velx;
-            //accelx = .5f;
-          //}
-        //}
       }
     }
     else

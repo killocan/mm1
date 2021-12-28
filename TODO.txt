@@ -6,11 +6,9 @@ XX Waypoints
 - Fases do cutman, bombman, electman, iceman - IA dos chefes
 - Fases do DR WILLY (gutsman gun muda numa fase do castelo)
 - Teletransportar (FASE WILLY)
-- ajustar magnetic beam SE estiver atrapalhando, verificar se esta dentro de tiles e jogar para dentro 100%
-  evitando que o mm fique preso.
+- ajustar magnetic beam SE estiver atrapalhando, verificar se esta dentro de tiles e jogar para dentro 100% evitando que o mm fique preso. ????
 - ajustar pontos, uso de arma e damage de tudo.
 - Ajustar quanto de life cada char tira do megaman.
 - Add 10,000 points to score if it was a rematch (FROM ASM finlandes)
-- ver se vale a pena remover todos hit e jogar para um so em character e so usar o array de dano.
 - animacao de teletransporte quando sai do menu de escolha de armas
 X Parar de cair da escada se colisao com o teto for muito perto da escada (fireman por exemplo)
