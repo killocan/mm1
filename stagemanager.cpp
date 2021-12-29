@@ -379,6 +379,10 @@ void StageManager::play()
         playing = !(game_over = true);
         break;
       }
+      if (key[KEY_K])
+      {
+        exit(0);
+      }
 #endif
 
       if (key[KEY_P] && weapon_menu == false)
