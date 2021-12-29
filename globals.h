@@ -52,7 +52,7 @@ class Clock
 
     // Gets incremented Ticks times a sec.
     static unsigned long clockTicks;
-    static const unsigned long ticks = 61;
+    static const unsigned long ticks = 60;
 };
 
 class GlobalCamera
