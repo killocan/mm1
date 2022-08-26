@@ -12,3 +12,4 @@ XX Waypoints
 - Add 10,000 points to score if it was a rematch (FROM ASM finlandes)
 - animacao de teletransporte quando sai do menu de escolha de armas
 X Parar de cair da escada se colisao com o teto for muito perto da escada (fireman por exemplo)
+- quando tá no pulo a velocidade horizontal é = a máxima
