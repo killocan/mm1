@@ -139,7 +139,9 @@ void Player::hit(mm_weapons::weapon_st * pWeapon)
     return;
   }
 
+#ifdef DEBUG
   fprintf(stderr,"> Player HIT! By bullet[%d]\n", pWeapon->weapon);
+#endif
 }
 
 void Player::hit(Character * pCharacter)
@@ -1142,6 +1144,8 @@ void Player::drawCharacter(BITMAP * bmp)
 
   int xpos = this->sx;
 
+/*
+  // gato para alinhar sprite quando correndo, nao precisa mais.
   switch(tempCurAnimSeq)
   {
     case Player::FIRINGRUNNING:
@@ -1152,6 +1156,7 @@ void Player::drawCharacter(BITMAP * bmp)
     }
     break;
   }
+*/
 
   if (isFacingRight == true)
   {
