@@ -56,7 +56,7 @@ class Character
     virtual bool handleAnimation(bool * bAnimationEnded = NULL);
     bool nextAnimFrame();
     int getCurrFrameDuration();
-    virtual void setAnimSeq(int newAnimSeq, bool reset = true);
+    virtual void setAnimSeq(int newAnimSeq, bool reset = true, bool jumpnloopframes=false);
     void resetAnimSeq(int animSeq);
 
     virtual void loadWeapon();

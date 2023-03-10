@@ -25,7 +25,7 @@ class Player : public Character
 
     virtual bool checkStair();
     virtual bool handleAnimation(bool * bAnimationEnded = NULL);
-    virtual void checkOnCamera(); // megaman never leaves the camera.
+    virtual void checkOnCamera(); 
     virtual void hit(mm_weapons::weapon_st * pWeapon);
     virtual void hit(Character * pCharacter);
     virtual void drawCharacter(BITMAP * bmp);
@@ -35,7 +35,7 @@ class Player : public Character
     virtual void touchCelling();
     virtual void firingOnJump();
     virtual void changeWeapon();
-    virtual void setAnimSeq(int newAnimSeq, bool reset = true);
+    virtual void setAnimSeq(int newAnimSeq, bool reset = true, bool jumpnloopframes=false);
     void getStunned();
     
     void reset();

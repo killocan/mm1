@@ -316,11 +316,19 @@ void Player::checkOnCamera()
   return;
 }
 
-void Player::setAnimSeq(int newAnimSeq, bool reset)
+void Player::setAnimSeq(int newAnimSeq, bool reset, bool jumpnloopframes)
 {
   if (isHitAnimOn == false)
   {
-    Character::setAnimSeq(newAnimSeq, reset);
+    if (curAnimSeq == Player::HITGROUND && newAnimSeq == Player::STANDSTILL)
+      jumpnloopframes = true;
+    if (curAnimSeq == Player::FIRINGSTILL && newAnimSeq == Player::STANDSTILL)
+      jumpnloopframes = true;
+
+    if (curAnimSeq != Player::HITGROUND)
+      Character::setAnimSeq(newAnimSeq, reset, jumpnloopframes);
+    else if(animationFirstPass == false || newAnimSeq == Player::FIRINGRUNNING || key[KEY_RIGHT] || key[KEY_LEFT]) 
+      Character::setAnimSeq(newAnimSeq, reset, jumpnloopframes);
   }
 }
 
@@ -1157,6 +1165,7 @@ void Player::drawCharacter(BITMAP * bmp)
     break;
   }
 */
+  if (tempCurAnimSeq == Player::FIRINGSTILL) xpos += isFacingRight ? 15 : -15;
 
   if (isFacingRight == true)
   {
@@ -1195,12 +1204,14 @@ void Player::firingOnJump()
 
 void Player::touchGround()
 {
-  if (lockmoves == false)
+ /* if (lockmoves == false)
     setAnimSeq(Player::RUNNING);
   else
   {
-    setAnimSeq(Player::HITGROUND);
-  }
+  }*/
+
+  setAnimSeq(Player::HITGROUND);
+
 
   if (onPlatform == false)
   {

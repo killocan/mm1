@@ -470,14 +470,22 @@ int Character::getCurrFrameDuration()
   return anim_seqs[curAnimSeq][curAnimFrame].frameDuration;
 }
 
-void Character::setAnimSeq(int newAnimSeq, bool reset)
+void Character::setAnimSeq(int newAnimSeq, bool reset, bool jumpnloopframes)
 {
   if ((unsigned int)newAnimSeq < anim_seqs.size() && newAnimSeq != curAnimSeq)
   {
     animationFirstPass = true;
 
     curAnimSeq = newAnimSeq;
-    if (reset == true) curAnimFrame = 0;
+    if (reset == true) 
+    {
+      curAnimFrame = 0;
+      if (jumpnloopframes)
+      {
+        for (; curAnimFrame < anim_seqs[curAnimSeq].size(); ++curAnimFrame)
+          if(anim_seqs[curAnimSeq][curAnimFrame].frameLoop) break;
+      }
+    }
     curAnimFrameDuration = getCurrFrameDuration();
   }
 }
