@@ -1,5 +1,5 @@
 - Finalizar fases 
-X Corrida do megaman aceleracao gradual. (Ajustar corrida para comecar com 1 px depois passar para 3 quando ja correndo.)
+X Corrida do megaman aceleracao gradual. (Ajustar corrida para comecar com 1 px depois passar para 3 quando ja correndo.) (quando cair segurando pedra do gutsman tbm não pode fazer a dancinha)
   X Mudar sequencia de animacao para ter frames que nao fazem parte do loop.
 X mudar struct do mapa, chao de gelo e agua, acelerecao correpondente para fase do iceman
 XX Waypoints
