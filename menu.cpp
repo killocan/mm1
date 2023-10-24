@@ -446,6 +446,12 @@ static void goToStage()
 
 void menu()
 {
+#ifdef DEBUG
+  curSelection = 2;
+  goToStage();
+  return;
+#endif
+
   BITMAP * buffer  = Buffer::buffer;
   FONT   * mm_font = Font::mm_font;
   int colorIndex = 0;

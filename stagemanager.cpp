@@ -92,7 +92,7 @@ void StageManager::doMegamanSpawning(BITMAP * buffer, FONT * mm_font)
 {
   bool played_teletransport_sound = false;
 
-  int y_goal = player->y;
+  int y_goal = player->y-1;
   player->y = ((y_goal / mm_graphs_defs::UTIL_H) * mm_graphs_defs::UTIL_H)- (int)player->h;
 
   int animCount = 0;
@@ -114,8 +114,7 @@ void StageManager::doMegamanSpawning(BITMAP * buffer, FONT * mm_font)
   rest(3000);
 #endif
 
-  bool goingToCheckpoint = true;
-  while(goingToCheckpoint == true && animCount < 4)
+  while(animCount < 4)
   {
     if (GlobalGameState::game_logic_tick == 1)
     {
@@ -148,7 +147,7 @@ void StageManager::doMegamanSpawning(BITMAP * buffer, FONT * mm_font)
     if (stage->has_fg_tiles == false)
     {
       stage->draw(buffer, false);
-      player->calcScreenCoords();//*camera);
+      player->calcScreenCoords();
       player->drawCharacter(buffer);
     }
     else
@@ -159,14 +158,14 @@ void StageManager::doMegamanSpawning(BITMAP * buffer, FONT * mm_font)
       stage->draw(m_buffer, true, false, false);
     }
 
+    textprintf_ex(buffer, font, 10, 10, makecol(255,255,255), 0, "y = [%f]", player->y);
     Vsync::Sync();
     blit(buffer,screen,0,0,0,0,SCREEN_W,SCREEN_H);
     clear_bitmap(buffer);
   }
 
   player->y = y_goal;
-  //Stand still sequence.
-  player->setAnimSeq(Player::STANDSTILL);
+  player->justWarped = true;
 }
 
 /**

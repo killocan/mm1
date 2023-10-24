@@ -1,15 +1,23 @@
+ajustar tiro assim q sai do warp
+velocidade do pulo estranha
+validar/fazer pulo com pedra na mão
+validar entrada saída todos casos na escada
+validar com o original quando pula a escada toda e sai no solo
+ajustar contador de pontos apos derrotar chefe
+
+- quando tá no pulo a velocidade horizontal é = a máxima
+X Corrida do megaman aceleracao gradual. (Ajustar corrida para comecar com 1 px depois passar para 3 quando ja correndo.)
+- Quando cair segurando pedra do gutsman não pode fazer a dancinha
+- animacao de teletransporte quando sai do menu de escolha de armas
+
 - Finalizar fases 
-X Corrida do megaman aceleracao gradual. (Ajustar corrida para comecar com 1 px depois passar para 3 quando ja correndo.) (quando cair segurando pedra do gutsman tbm não pode fazer a dancinha)
-  X Mudar sequencia de animacao para ter frames que nao fazem parte do loop.
-X mudar struct do mapa, chao de gelo e agua, acelerecao correpondente para fase do iceman
-XX Waypoints
-- Fases do cutman, bombman, electman, iceman - IA dos chefes
+-- ? mudar struct do mapa, chao de gelo e agua, acelerecao correpondente para fase do iceman
+-- ? Waypoints
+
+- IA dos chefes - Fases do cutman, bombman, electman, iceman
 - Fases do DR WILLY (gutsman gun muda numa fase do castelo)
 - Teletransportar (FASE WILLY)
 - ajustar magnetic beam SE estiver atrapalhando, verificar se esta dentro de tiles e jogar para dentro 100% evitando que o mm fique preso. ????
 - ajustar pontos, uso de arma e damage de tudo.
 - Ajustar quanto de life cada char tira do megaman.
 - Add 10,000 points to score if it was a rematch (FROM ASM finlandes)
-- animacao de teletransporte quando sai do menu de escolha de armas
-X Parar de cair da escada se colisao com o teto for muito perto da escada (fireman por exemplo)
-- quando tá no pulo a velocidade horizontal é = a máxima

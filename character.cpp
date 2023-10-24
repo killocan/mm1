@@ -477,12 +477,12 @@ void Character::setAnimSeq(int newAnimSeq, bool reset, bool jumpnloopframes)
     animationFirstPass = true;
 
     curAnimSeq = newAnimSeq;
-    if (reset == true) 
+    if (reset == true)
     {
       curAnimFrame = 0;
       if (jumpnloopframes)
       {
-        for (; curAnimFrame < anim_seqs[curAnimSeq].size(); ++curAnimFrame)
+        for (; curAnimFrame < (int)anim_seqs[curAnimSeq].size(); ++curAnimFrame)
           if(anim_seqs[curAnimSeq][curAnimFrame].frameLoop) break;
       }
     }

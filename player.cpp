@@ -64,6 +64,7 @@ Player::Player(const Stage & stage) : Character(stage, 0)
   this->lockmoves = false;
   this->justLeaveStair = false;
   this->onIce = false;
+  this->justWarped = false;
 }
 
 void Player::reset()
@@ -318,16 +319,38 @@ void Player::checkOnCamera()
 
 void Player::setAnimSeq(int newAnimSeq, bool reset, bool jumpnloopframes)
 {
+#ifdef DEBUG
+  //if (newAnimSeq != Player::STANDSTILL)
+  {
+    fprintf(stderr, "Player::setAnimSeq(newAnimSeq=%d, reset=%d, jumpnloopframes=%d)\n",
+            newAnimSeq, reset, jumpnloopframes);
+  }
+#endif
+  if (newAnimSeq == Player::HITGROUND && curAnimSeq == Player::SPAWNING) return;
+
   if (isHitAnimOn == false)
   {
-    if (curAnimSeq == Player::HITGROUND && newAnimSeq == Player::STANDSTILL)
+    if ((curAnimSeq == Player::HITGROUND || curAnimSeq == Player::HITGROUNDFIRING) && newAnimSeq == Player::STANDSTILL)
       jumpnloopframes = true;
     if (curAnimSeq == Player::FIRINGSTILL && newAnimSeq == Player::STANDSTILL)
+{
       jumpnloopframes = true;
+fprintf(stderr, "curAnimSeq == Player::FIRINGSTILL && newAnimSeq == Player::STANDSTILL)\n");
+}
 
-    if (curAnimSeq != Player::HITGROUND)
+    if (justWarped == true)
+    {
+fprintf(stderr, "    if (justWarped == true)\n");
+      jumpnloopframes = true;
+      justWarped = false;
+    }
+
+    if ((curAnimSeq != Player::HITGROUND && curAnimSeq != Player::HITGROUNDFIRING))
       Character::setAnimSeq(newAnimSeq, reset, jumpnloopframes);
-    else if(animationFirstPass == false || newAnimSeq == Player::FIRINGRUNNING || key[KEY_RIGHT] || key[KEY_LEFT]) 
+    else if(animationFirstPass == false || 
+            newAnimSeq == Player::FIRINGRUNNING ||
+            newAnimSeq == Player::JUMPING || newAnimSeq == Player::FIRINGJUMP ||
+            key[KEY_RIGHT] || key[KEY_LEFT]) 
       Character::setAnimSeq(newAnimSeq, reset, jumpnloopframes);
   }
 }
@@ -460,6 +483,7 @@ void Player::normalLogic()
     }
   }
 
+  //TODO acho q o erro do tiro é aqui, 16 frames do começo é negativo
   if (Clock::clockTicks-16 > lastShot && firing == true)
   {
     firing = false;
@@ -597,20 +621,16 @@ void Player::normalLogic()
       if (velx > 0.0f) accelx = onIce ? -.05f : -.35f;
 
       //if (lockjump == false && grabstair == false)
+
       if (onground == true && grabstair == false)
       {
-        //TODO: only fire again after already still, so you cant stop and continue firing without stop.
-        //This makes megaman kind of pose like it's starting to run after hit the ground,
-        //the original game has this, but it's not almost not noticiable and i think 
-        //it is a side effect of the original game control logic. keep turned off.
-        // curAnimSeq == Player::HITGROUND) //true) //fallRuning == 5)
         static int fallRuning = 0;
-        if (curAnimSeq != Player::HITGROUND || fallRuning == 6)
+        if ((curAnimSeq != Player::HITGROUND && curAnimSeq != Player::HITGROUNDFIRING) || fallRuning == 1)
         {
           fallRuning = 0;
           if (firing == false)
           {
-            setAnimSeq(Player::STANDSTILL);
+            setAnimSeq(Player::STANDSTILL, true, justLeaveStair);
             if (justLeaveStair) { animationFirstPass = false; justLeaveStair = false; }
           }
           else
@@ -641,7 +661,6 @@ void Player::normalLogic()
         setAnimSeq(Player::UPDOWNSTAIR);
     }
 
-    //TODO: Should group those two(up,down) under firing = false hehehe...
     if (firing==false && holdingGutsmanRock==false)
     {
       if (key[KEY_UP])
@@ -652,6 +671,7 @@ void Player::normalLogic()
 
           Character::handleAnimation(); // While on stairs auto animation is off
           grabstair = true;
+          velx = accelx = 0.0f;
 
           if (tiletype == mm_tile_actions::TILE_STAIR_BEGIN)
           {
@@ -702,6 +722,7 @@ void Player::normalLogic()
           Character::handleAnimation(); // While on stairs auto animation is off
           grabstair    = true;
           isGettingOut = false;
+          velx = accelx = 0.0f;
 
           if (tiletype == mm_tile_actions::TILE_STAIR_BEGIN)
           {
@@ -752,10 +773,11 @@ void Player::normalLogic()
       spacePressed = true;
 
       static int jumpHigh = 0;
-      //Cur: 56 Shold be: 65??
       if (isFacingDown == false && lockJumpAccel == false && (jumpHigh-y < 65))
       {
         onPlatform = false;
+
+        vely = -8.0f;
 
         if (firing == false)
           setAnimSeq(Player::JUMPING);
@@ -766,8 +788,6 @@ void Player::normalLogic()
           else
             setAnimSeq(Player::FIRINGJUMPHAND);
         }
-
-        vely = -8.0f;
       }
       else
       {
@@ -804,7 +824,8 @@ void Player::normalLogic()
     }
   letgo:
 
-    if (key[KEY_A] &&
+    //TODO: hehehe must be a way to solve this without a complete rewrite
+    if (key[KEY_A] && Clock::clockTicks > 15 &&
        (fireKeyPressed == false || (curWeapon == mm_weapons::W_PLATFORM_CREATOR && MagneticBeamHandler::instance()->canCreateAgain())))
     {
       fireKeyPressed = true;
@@ -1004,6 +1025,7 @@ bool Player::canJumpAgain()
 void Player::fire()
 {
   //TODO: Check if we are shoting in the air (sync animation and bullet)
+  //fix this, it's ugly af...
   switch(curWeapon)
   {
     case mm_weapons::W_MEGA_BUSTER:
@@ -1165,7 +1187,7 @@ void Player::drawCharacter(BITMAP * bmp)
     break;
   }
 */
-  if (tempCurAnimSeq == Player::FIRINGSTILL) xpos += isFacingRight ? 15 : -15;
+  if (tempCurAnimSeq == Player::FIRINGSTILL && onground) xpos += isFacingRight ? 13 : -15;
 
   if (isFacingRight == true)
   {
@@ -1204,14 +1226,17 @@ void Player::firingOnJump()
 
 void Player::touchGround()
 {
- /* if (lockmoves == false)
-    setAnimSeq(Player::RUNNING);
-  else
+  if (onground) return;
+
+  if (!key[KEY_RIGHT] && !key[KEY_LEFT] && !justLeaveStair)
   {
-  }*/
-
-  setAnimSeq(Player::HITGROUND);
-
+    if (!firing)
+      setAnimSeq(Player::HITGROUND);
+    else
+      setAnimSeq(Player::HITGROUNDFIRING);
+  }
+  else
+    setAnimSeq(Player::RUNNING);
 
   if (onPlatform == false)
   {

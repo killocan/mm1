@@ -68,6 +68,7 @@ class Player : public Character
           JUMPINGROCK,
           STUNNED,
           HITGROUND,
+          HITGROUNDFIRING,
          };
 
     std::map<mm_weapons::WEAPONS, int> weapons; // WEAPON, ENERGY LEVEL
@@ -94,4 +95,6 @@ class Player : public Character
     //boss stuff
     bool lockmoves;
     bool justLeaveStair;
+    //control animation after warp animation
+    bool justWarped;
 };
