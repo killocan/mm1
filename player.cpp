@@ -571,6 +571,11 @@ void Player::normalLogic()
               setAnimSeq(Player::FIRINGSTILLHAND);
           }
         }
+	else 
+        {
+          accelx = 1.0f; // on jump horizontal velocity = MAX
+          velx = mm_player_defs::VELMOVING;
+        }
 
         if (accelx < 1.0f) accelx += onIce ? 0.005 : 0.1f;
         else accelx = 1.0f;
@@ -611,6 +616,11 @@ void Player::normalLogic()
               setAnimSeq(Player::FIRINGSTILLHAND);
           }
         }
+	else 
+        {
+          accelx = 1.0f; // on jump horizontal velocity = MAX
+          velx = mm_player_defs::VELMOVING;
+        }
 
         if (accelx < 1.0f) accelx += onIce ? 0.005 : 0.1f;
         else accelx = 1.0f;
@@ -650,7 +660,7 @@ void Player::normalLogic()
 
     if (isGettingIn == true)
     {
-      if (Character::handleAnimation() == true)
+      if (Character::handleAnimation() == true || grabstair == false)
       {
         isGettingIn = false;
       }
@@ -673,6 +683,10 @@ void Player::normalLogic()
           grabstair = true;
           velx = accelx = 0.0f;
 
+          x = (tilecoordx * mm_graphs_defs::TILE_SIZE+1) - utilX;
+          y -= 2.0f;
+          isFacingDown  = true;
+
           if (tiletype == mm_tile_actions::TILE_STAIR_BEGIN)
           {
             // if next up tile is not an stair tile.
@@ -683,17 +697,19 @@ void Player::normalLogic()
               if ((( ((int)y) % mm_graphs_defs::TILE_SIZE) < 4) ||
                   (cur_stage->tileActionUnnormalized(x+utilX, y+mm_graphs_defs::TILE_SIZE) != mm_tile_actions::TILE_STAIR_BEGIN))
               {
-                y-= 6.0f;
+                y-= 4.0f;//mm_graphs_defs::TILE_SIZE/2.0f;//6.0f;
                 y-= ((int)y)%mm_graphs_defs::TILE_SIZE;
                 y = (y / mm_graphs_defs::TILE_SIZE) * mm_graphs_defs::TILE_SIZE;
+                y-= 1.0f;
                 
                 isGettingOut = false;
                 onground  = true;
                 grabstair = false;
                 justLeaveStair = true;
                 
-                vely = 8.0f;
-                setAnimSeq(Player::STANDSTILL);
+                // forces megaman to stick to the ground :D
+                vely = 2.0f;
+                setAnimSeq(Player::STANDSTILL, true, true);
                 animationFirstPass = false;
               }
             }
@@ -703,9 +719,10 @@ void Player::normalLogic()
             }
           }
 
-          x    = (tilecoordx * mm_graphs_defs::TILE_SIZE+1) - utilX;
-          y   -= 2.0f;
-          isFacingDown  = true;
+/*
+          x = (tilecoordx * mm_graphs_defs::TILE_SIZE+1) - utilX;
+          y -= 2.0f;
+          isFacingDown  = true;*/
         }
       }
       else if (key[KEY_DOWN])
@@ -729,7 +746,7 @@ void Player::normalLogic()
             y+=16.0f;
             if (isGettingIn == false)
             {
-              isGettingIn  = true;
+              isGettingIn = true;
               setAnimSeq(Player::ENTERINGSTAIR);
             }
           }
@@ -1241,6 +1258,8 @@ void Player::touchGround()
   if (onPlatform == false)
   {
     Sounds::mm_sounds->play(MM_JUMP);
+    // don't move horizontally once megaman touch the ground.
+    velx = accelx = 0.0f; 
   }
 }
 
